@@ -96,7 +96,7 @@ Route::prefix('reports')->group(function(){
 });
 
 // posicion excel
-Route::get('/posicionalmacen', [App\Http\Controllers\ProductController::class, 'posicionexport']);
+Route::get('/posicionalmacen', [App\Http\Controllers\ProductController::class, 'posicionexport'])->name('posicion.almacen');
 
 
     

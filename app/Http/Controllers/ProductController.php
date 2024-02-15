@@ -209,21 +209,24 @@ class ProductController extends Controller
     } // function
     
     // reporte posicion excel
-    public function posicionExport(){
-        return Excel::download(new PosicionExport, 'posicionAlmacen.xls');
+    public function posicionExport()    
+    {
+        date_default_timezone_set('America/Mexico_City');
+        $fecha  = date('Y-m-d\TH:i:s');
+        return Excel::download(new PosicionExport, 'posicionAlmacen'.$fecha.'.xls');
         // return (new PosicionExport)->download('PosicionExport.csv', Excel::CSV, ['Content-Type' => 'text/csv']);
         // return (new posicionExport)->store('invoices.xlsx', 's3');
         // return new CatalogoExport();
     }
     
 
-    // formulario reportes diarios
+    // vista reportes diarios
     function reportsDiarios()
     {
         return view('reports.diarios');
     }    
 
-    // formulario reportes diarios
+    // vista reportes diarios
     function reportsDescendente()
     {
         return view('reports.inventarios');
