@@ -29,7 +29,7 @@
 
                     <div class="form-group">
 						<label for="artganancia">Ganancia</label>
-						<input type="number" name="artganancia" id="artganancia" class="form-control">
+						<input type="number" name="artganancia" id="artganancia" onchange="artGanancia()" class="form-control">
 					</div>					
 
                     <div class="form-group">

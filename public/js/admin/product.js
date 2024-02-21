@@ -137,8 +137,7 @@ function find(id){
         method:'get',
         url:url,
         success:function(response){            
-			$('#artdesc').focus();
-			$('#artdesc').select();
+			$('#artdesc').focus();			
             $('#artdesc').val(response.artdesc);			
 			$('#codbarras').val(response.codbarras);            
             $('#artprcosto').val(parseFloat(response.artprcosto).toFixed(2));

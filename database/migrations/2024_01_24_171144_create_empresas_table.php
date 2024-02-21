@@ -22,7 +22,7 @@ class CreateEmpresasTable extends Migration
             $table->string('regcp')->nullable();
             $table->string('regtel')->nullable();            
             $table->string('regemail',65)->nullable();            
-            $table->string('regmun')->nullable();
+            
             $table->string('regloc')->nullable();
             $table->string('regedo')->nullable();
             $table->string('regleyenda')->nullable();

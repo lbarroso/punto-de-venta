@@ -60,13 +60,6 @@ Route::get('productcreate',[App\Http\Controllers\ProductController::class,'produ
 Route::post('productstore',[App\Http\Controllers\ProductController::class,'productstore'])->name('product.store')->middleware('auth');
 
 Route::get('productvalidate',[App\Http\Controllers\ProductController::class,'productvalidate'])->name('product.validation');
-	
-
-//Route::get('properties/product/table/{product}',[PropertyController::class,'table'])->name('properties.table');
-
-//Route::post('properties/store',[PropertyController::class,'store'])->name('properties.store');
-
-//Route::delete('properties/{property}',[PropertyController::class,'destroy'])->name('properties.destroy');
 
 
 Route::resource('categories',App\Http\Controllers\CategoryController::class)->middleware('auth');
@@ -98,5 +91,7 @@ Route::prefix('reports')->group(function(){
 // posicion excel
 Route::get('/posicionalmacen', [App\Http\Controllers\ProductController::class, 'posicionexport'])->name('posicion.almacen');
 
+// punto de venta
+Route::apiResource('pvproducts',App\Http\Controllers\PvproductController::class)->middleware('auth');
 
     

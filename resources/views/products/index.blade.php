@@ -92,6 +92,7 @@
 <script src="{{ asset('js/admin/discount.js') }}"></script>
 <script src="{{ asset('js/admin/property.js') }}"></script>
 <script src="{{ asset('js/admin/image.js') }}"></script>
+<script src="{{ asset('js/admin/ganancia.js') }}"></script>
 @endsection
 <!--Agregado rapido nuevo producto-->
 @section('modal')
