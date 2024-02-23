@@ -36,32 +36,49 @@ class VentaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $total = Docdeta::where('movcve', 51)
+        ->where('user_id', Auth::user()->id)
+        ->where('docord', 0)
+        ->sum('importe'); 
+        
+        if($total <= 0 ) return redirect()->route('pvproducts.index', ['docord' => 0]);
+
+        // Actualizar el stock de los productos vendidos
+        $docdetas = Docdeta::where('movcve', 51)
+        ->where('user_id', Auth::user()->id)
+        ->where('docord', 0)
+        ->get();
+
+        foreach ($docdetas as $docdeta) {
+            $product = Product::find($docdeta->product_id);
+            if ($product) {
+                // Restar la cantidad vendida del stock
+                $product->stock -= $docdeta['doccant'];
+                $product->save();
+            }
+        }
 
         // guardar venta registrada
         $venta = new Venta();        
         $venta->fecha = now();
-        $venta->ctecve = 0;
-        $venta->pvtotal = 0;
-        $venta->pvcash = 0;
-        $venta->user_id = 0;
-        $venta->pvtipopago = 0;
+        $venta->ctecve = 1;
+        $venta->pvtotal = $total;
+        $venta->pvcash = $request->input('pvcash');
+        $venta->user_id = Auth::user()->id;
+        $venta->pvtipopago = $request->input('pvtipopago');
         $venta->save();
 
         // Obtener el último ID insertado
-        $ultimoIdInsertado = $venta->id;        
-        
-        // Actualizar el stock de los productos vendidos
-        $productosVendidos = $request->input('productos'); // Supongamos que es un array de productos
-        foreach ($productosVendidos as $producto) {
-            $productoModel = Product::find($producto['id']);
-            if ($productoModel) {
-                // Restar la cantidad vendida del stock
-                $productoModel->stock -= $producto['cantidad'];
-                $productoModel->save();
-            }
-        }        
+        $ID = $venta->id;
 
+        // guardar
+        Docdeta::where('movcve', 51)
+        ->where('user_id', Auth::user()->id)
+        ->where('docord', 0)
+        ->update(['docord' => $ID]);
+
+        return redirect()->route('pvproducts.index', ['docord' => $ID]);
     }
 
     /**
