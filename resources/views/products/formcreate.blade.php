@@ -46,7 +46,7 @@
 							<div class="form-group">
 								<div class="mb-3">
 									<label for="codbarras" class="form-label">Código de Barras</label>
-									<input value="{{ old('codbarras') }}" type="text" class="form-control" id="codbarras" name="codbarras" placeholder="Ingrese el código de barras">
+									<input value="{{ old('codbarras') }}" type="text" class="form-control" id="codbarras" name="codbarras" placeholder="Ingrese el código de barras" onKeyPress="return handleEnter(this, event)">
 								</div>
 							</div>
 						   </div>
@@ -60,65 +60,69 @@
 								<div class="form-group">
 									<div class="mb-3">
 										<label for="artdesc" class="form-label">Descripción del Artículo*</label>
-										<input onkeyup="this.value = this.value.toUpperCase();" value="{{ old('artdesc') }}" type="text" class="form-control" id="artdesc" name="artdesc" placeholder="Ingrese la descripción del artículo" >
+										<input onkeyup="this.value = this.value.toUpperCase();" value="{{ old('artdesc') }}" type="text" class="form-control" id="artdesc" name="artdesc" placeholder="Ingrese la descripción del artículo" onKeyPress="return handleEnter(this, event)">
 									</div>			
 								</div>            
 							</div>
 						</div>
 
 						<div class="row mb-3">
-							<div class="col-10">
+							<div class="col-11">					
 								<div class="form-group">
-									<div class="mb-3">
-										<label for="codbarras" class="form-label">Categoría*</label>
-										<select name="category_id" id="category_id" class="form-control select2bs4" style="width: 100%;">
-											<option value="">Selecciona una opción</option>
-								
-										</select>										
+									<div class="input-group mb-3">
+										<label for="category_id" class="form-label">Categoría*</label>
+										<select name="category_id" id="category_id" class="form-control select2bs4" style="width: 100%;" onKeyPress="return handleEnter(this, event)">
+											<option value="">Selecciona una opción</option>								
+										</select>	                                             
 									</div>
+
 								</div>            
 							</div>
-							<div class="col-2"> v*</div>
+							<div class="col-1"> 
+								<label for="categorylink" class="form-label"> &nbsp; </label>
+								<span  id="categorylink" class="input-group-text"><i class="nav-icon fas fa-plus"></i></span>
+							</div>				
 						</div>                    
 
 						<div class="row">
 							<div class="col">
 								<div class="form-group">
 									<label for="artmarca" class="form-label">Marca</label>
-									<input onkeyup="this.value = this.value.toUpperCase();" value="{{ old('artmarca') }}" type="text" class="form-control" id="artmarca" name="artmarca" placeholder="Ingrese la marca">
-								</div>
-							</div>
-							<div class="col-2">        
-								<div class="form-group">
-									<label for="artpesogrm" class="form-label">Peso </label>
-									<input value="{{ old('artpesogrm') == '' ? '1' : old('artpesogrm') }}" type="number" min="0" step="1" class="form-control" id="artpesogrm" name="artpesogrm" placeholder="Ingrese grm" >
+									<input onkeyup="this.value = this.value.toUpperCase();" value="{{ old('artmarca') }}" type="text" class="form-control" id="artmarca" name="artmarca" placeholder="Ingrese la marca" onKeyPress="return handleEnter(this, event)">
 								</div>
 							</div>
 							<div class="col-2">
 								<div class="form-group">
 									<label for="artpesoum" class="form-label">U.M.</label>
-									<input  onkeyup="this.value = this.value.toUpperCase();" value="{{ old('artpesoum') == '' ? 'PZA' : old('artpesoum') }}" type="text" class="form-control" id="artpesoum" name="artpesoum" placeholder="Ingrese um" value="PZA">
+									<input  onkeyup="this.value = this.value.toUpperCase();" value="{{ old('artpesoum') == '' ? 'PZA' : old('artpesoum') }}" type="text" class="form-control" id="artpesoum" name="artpesoum" placeholder="Ingrese um" value="PZA" onKeyPress="return handleEnter(this, event)">
 								</div>            
-							</div>        
+							</div>        							
+							<div class="col-2">        
+								<div class="form-group">
+									<label for="artpesogrm" class="form-label">Peso </label>
+									<input value="{{ old('artpesogrm') == '' ? '1' : old('artpesogrm') }}" type="number" min="0" step="1" class="form-control" id="artpesogrm" name="artpesogrm" placeholder="Ingrese grm" onKeyPress="return handleEnter(this, event)">
+								</div>
+							</div>
+
 						</div>    
 
 						<div class="row">
 							<div class="col">
 								<div class="form-group">
 									<label for="artprcosto" class="form-label">Precio costo</label>
-									<input value="{{ old('artprcosto') == '' ? '0' : old('artprcosto') }}" type="number" min="0" step="0.01" class="form-control" id="artprcosto" name="artprcosto" onchange="ganancia()" value="0.00">
+									<input value="{{ old('artprcosto') == '' ? '0' : old('artprcosto') }}" type="number" min="0" step="0.01" class="form-control" id="artprcosto" name="artprcosto" onchange="artGanancia()" value="0.00" onKeyPress="return handleEnter(this, event)">
 								</div>            
 							</div>
 							<div class="col-2">
 								<div class="form-group">
 									<label for="artganancia" class="form-label"> %</label>
-									<input value="{{ old('artganancia') == '' ? '0' : old('artganancia') }}" type="number" min="0" step="5" class="form-control" id="artganancia" name="artganancia" onchange="ganancia()" value="15">					  
+									<input value="{{ old('artganancia') == '' ? '0' : old('artganancia') }}" type="number" min="0" step="5" class="form-control" id="artganancia" name="artganancia" onchange="artGanancia()" value="15" onKeyPress="return handleEnter(this, event)">					  
 								</div>            
 							</div>
 							<div class="col">
 								<div class="form-group">
 									<label for="artprventa" class="form-label">Precio venta*</label>
-									<input value="{{ old('artprventa') == '' ? '0' : old('artprventa') }}" type="number" min="0.01" step="0.01" class="form-control" id="artprventa" name="artprventa"  value="0.00">
+									<input value="{{ old('artprventa') == '' ? '0' : old('artprventa') }}" type="number" min="0.01" step="0.01" class="form-control" id="artprventa" name="artprventa"  value="0.00" onKeyPress="return handleEnter(this, event)">
 								</div>            
 							</div>
 						</div>    
@@ -128,21 +132,9 @@
 							<div class="col-6">
 								<div class="form-group">
 									<label for="stock" class="form-label">Existencia actual</label>
-									<input value="{{ old('stock') == '' ? '0' : old('stock') }}" min="0" type="number" class="form-control" id="stock" name="stock" value="0.00" >														
+									<input value="{{ old('stock') == '' ? '0' : old('stock') }}" min="0" type="number" class="form-control" id="stock" name="stock" value="0.00" onKeyPress="return handleEnter(this, event)">														
 								</div>            
-							</div>
-							<div class="col-3">
-								<div class="form-group">
-									<label for="eximin" class="form-label"> Min.</label>
-									<input value="{{ old('eximin') == '' ? '0' : old('eximin') }}" min="0" type="number" class="form-control" id="eximin" name="eximin" value="0.00" >
-								</div>            
-							</div>
-							<div class="col-3">
-								<div class="form-group">
-									<label for="eximax" class="form-label">Max.</label>
-									<input value="{{ old('eximax') == '' ? '0' : old('eximax') }}" min="0" type="number" class="form-control" id="eximax" name="eximax" value="0.00" >							
-								</div>            
-							</div>							
+							</div>												
 						</div>    
 
 						<button type="button" id="submitBtn" class="btn btn-primary"> Guardar producto</button>
@@ -169,13 +161,12 @@
 		<span aria-hidden="true">&times;</span>
 	  </button>
 	</div>
-	<div class="modal-body">
+	<div class="modal-body" id="modal-body-create">
 	  <p> &nbsp; </p>
 	</div>
 	<div class="modal-footer justify-content-between">
 	  <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 	  <button type="button" id="modalBtn" class="btn btn-success">Aceptar</button>
-
 	</div>
   </div>
   <!-- /.modal-content -->
@@ -183,7 +174,9 @@
 <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
-    
+
+
+
 @endsection
 
 @section('styles')
@@ -197,74 +190,12 @@
 
 	<!--cargar categorias-->
 	<script> var urlCategories = '{{ route("products.categories") }}'; </script>
-	<script> var urlProductValidation = '{{ route("product.validation") }}'; </script>
-	<script src="{{ asset('js/admin/productcreate.js') }}"></script>
+	<script> var urlProductValidation = '{{ route("product.validation") }}'; </script>	
+	<script> var urlCategoryStore = '{{ route("categories.store") }}'; </script>	
 	<script src="{{ asset('admin/plugins/select2/js/select2.full.min.js') }}"></script> 
-	
-	<script>
-	// Manejar el evento keypress en formulario
-	function manejarKeyPress(event) 
-	{
-		// Verificar si la tecla presionada es "Enter"
-		if (event.key === "Enter") 
-		{
-			// Obtener el formulario y sus campos
-			const formulario = document.getElementById("formProductCreate");
-			const codbarrasInput = document.getElementById("codbarras");
-			const artdescInput = document.getElementById("artdesc");				
-			const artmarca = document.getElementById("artmarca");
-			const artpesogrm = document.getElementById("artpesogrm");
-			const artpesoum = document.getElementById("artpesoum");
-			const artprcosto = document.getElementById("artprcosto");
-			const artganancia = document.getElementById("artganancia");
-			const artprventa = document.getElementById("artprventa");
-			const stock = document.getElementById("stock");
-			const eximin = document.getElementById("eximin");
-			const eximax = document.getElementById("eximax");
-			// submit
-			const submitBtn = document.getElementById("submitBtn");
-
-			// Verificar cuál es el campo actual y pasar al siguiente
-			switch(document.activeElement)
-			{
-				case codbarrasInput: 
-					// Enter codigo duplicado
-					artdescInput.focus();
-					artdescInput.select();
-				break;
-				case artdescInput: category_id.focus(); break;
-				case category_id: artmarca.focus(); artmarca.select(); break;
-				case artmarca: artpesogrm.focus(); artpesogrm.select(); break;
-				case artpesogrm: artpesoum.focus(); artpesoum.select(); break;					
-				case artpesoum: artprcosto.focus(); artprcosto.select(); break;
-				case artprcosto: 
-					ganancia();
-					artganancia.focus(); 
-					artganancia.select(); 
-				break;
-				case artganancia:		    
-					ganancia();
-					artprventa.focus(); 
-					artprventa.select();
-				break;
-				case artprventa: stock.focus(); stock.select(); break;
-				case stock: eximin.focus(); eximin.select(); break;
-				case eximin: eximax.focus(); eximax.select(); break;
-				// submitBtn
-				case eximax: 
-					submitBtn.focus(); 
-					formvalidation(event);
-				break;
-			}//
-			
-			// Evitar que se realice la acción por defecto del Enter en un formulario
-			event.preventDefault();
-		}
-	} // function
-
-	// Asignar la función al evento keypress del formulario
-	document.getElementById("formProductCreate").addEventListener("keypress", manejarKeyPress);
-	</script>
+	<script src="{{ asset('js/admin/ganancia.js') }}"></script>
+	<script src="{{ asset('js/admin/category.js') }}"></script>
+	<script src="{{ asset('js/admin/productcreate.js') }}"></script>
 
 	<script>
 		/********************
@@ -282,10 +213,11 @@
 				url: urlProductValidation,
 				success: function(response){
 					$('#modal-formCreate').modal({backdrop: 'static', keyboard: false}); // bloquear modal
+					$('#modal-formCreate').modal("hide");
 					$("#modal-formCreate").modal("show"); // abrir modal		
 					
 					if(response == 'success'){
-						$('.modal-body').html('<div class="alert alert-success"> ¿Confirma agregar nuevo producto?</div>'); // success
+						$('#modal-body-create').html('<div class="alert alert-success"> ¿Confirma agregar nuevo producto?</div>'); // success
 						$('#modalBtn').prop('disabled', false); // habilitar boton					
 					}else{				
 						$('.modal-body').html('<div class="alert alert-danger">'+response+'</div>'); // error
@@ -319,17 +251,9 @@
 			}
 	</script>
 
-	<script>
-	function ganancia()
-	{
-		var costo = parseFloat(document.getElementById("artprcosto").value);
-		var venta = parseFloat(document.getElementById("artprventa").value);
-		var ganancia = parseFloat(document.getElementById("artganancia").value);
-		venta = (costo * ganancia / 100) + costo;
-		document.getElementById("artprventa").value = venta.toFixed(2);	
-	}
+@endsection
 
-	</script>
-
+@section('modal')
+    @include('products.modalCategory')	
 @endsection
 

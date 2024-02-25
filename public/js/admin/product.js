@@ -14,14 +14,20 @@ $(document).ready(function(){
             { data:'artmarca' },
             { data:'codbarras' },
             { 
+				data:'artprcosto',
+				"render": function (data, type, row) {
+					// Formatear el número con dos decimales
+					return parseFloat(data).toFixed(2);
+				}				
+			},            
+            { 
 				data:'artprventa',
 				"render": function (data, type, row) {
 					// Formatear el número con dos decimales
 					return parseFloat(data).toFixed(2);
 				}				
 			},
-            { data:'stock' },           
-            { data:'category.name' },
+            { data:'stock' },            
             { 
                 data:'id',
                 render: function(data,type,row){
@@ -31,13 +37,13 @@ $(document).ready(function(){
 					var pProperty = ''					
                     var pImages = ''
 
-                    edit = '<button data-id="'+data+'" data-toggle="modal" data-target="#modal-product" class="btn btn-warning btn-sm mr-1"><i class="fas fa-edit"></i></button>';
-                    pDelete = '<button onclick="if(confirm(\'eliminar\')) deleteModel('+data+'); else return false;"  class="btn btn-danger btn-sm mr-1"><i class="fas fa-trash"></i></button>';
+                    edit = '<button title="editar" data-id="'+data+'" data-toggle="modal" data-target="#modal-product" class="btn btn-warning btn-sm mr-1"><i class="fas fa-edit"></i></button>';
+                    pDelete = '<button title="eliminar" onclick="if(confirm(\'eliminar\')) deleteModel('+data+'); else return false;"  class="btn btn-danger btn-sm mr-1"><i class="fas fa-trash"></i></button>';
                     pDiscount = '<button data-product_id="'+data+'" data-toggle="modal" data-target="#modal-discount" class="btn btn-secondary btn-sm mr-1"><i class="fas fa-table"></i></button>';                    
                     pProperty = '<button data-name="'+row.name+'" data-product_id="'+data+'" data-toggle="modal" data-target="#modal-property" class="btn btn-info btn-sm mr-1"><i class="fas fa-table"></i></button>';
-					pImages = '<button data-name="'+row.name+'" data-product_id="'+data+'" data-toggle="modal" data-target="#modal-images" class="btn btn-info btn-sm mr-1"><i class="fa fa-image"></i></button>';
-
-                    return edit+pDelete+pImages;
+					pImages = '<button title="imagen" data-name="'+row.name+'" data-product_id="'+data+'" data-toggle="modal" data-target="#modal-images" class="btn btn-info btn-sm mr-1"><i class="fa fa-image"></i></button>';
+					pCodes = '<a href="codigos/'+data+'" title="claves" class="btn btn-secondary btn-sm mr-1"><i class="fas fa-barcode"></i></a>';
+                    return edit+pDelete+pImages+pCodes;
                 }
             }
         ]

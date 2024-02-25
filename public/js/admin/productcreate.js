@@ -16,7 +16,6 @@ $(document).ready(function(){
 	}
 
     getCategories();
-		
 	
 }) // document.ready
 
@@ -46,3 +45,20 @@ function getCategories(){
     })
 }
 
+
+
+// Manejar el evento keypress en formulario
+function handleEnter(field, event)
+{	
+    var tecla = event.keyCode;
+    
+    if(tecla == 13){
+        event.preventDefault();
+        for (i = 0; i < field.form.elements.length; i++) if (field == field.form.elements[i]) break;
+        i = (i + 1) % field.form.elements.length;
+        field.form.elements[i].focus();
+        field.form.elements[i].select();
+        return false;				
+    }else return true;
+    
+} 

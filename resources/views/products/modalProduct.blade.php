@@ -1,6 +1,7 @@
 <div class="modal" id="modal-product" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
 	<div class="modal-dialog ">
 		<div class="modal-content">
+		
 			<form id="formProduct">
 				<div class="modal-header">
 					<h4 class="modal-title">Producto</h4>
@@ -62,6 +63,7 @@
 					<button type="submit" class="btn btn-primary">Guardar</button>
 				</div>
 			</form>
+		
 		</div>
 	</div>
 </div>

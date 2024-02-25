@@ -305,9 +305,11 @@
 	
 			break;
 			
-            default:  console.log(tecla);  break;
+            default:  ; break;
         }        
     }
+	
+	
 </script>
 
 </html>

@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('codigos', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->foreignIdFor(Product::class)->constrained();
             $table->string('codigo',25)->nullable()->unique();            
             // $table->timestamps();

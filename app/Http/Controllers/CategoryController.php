@@ -47,9 +47,18 @@ class CategoryController extends Controller
 
         $category = Category::create($request->all());
 
-        return redirect()->route('categories.index')
+        if($request->agregado_rapido == 'si'){
+            
+            return  $category->id ;
+        }else{
+            return redirect()->route('categories.index')
             ->with('success', 'Category created successfully.');
+        }
+
+
     }
+
+
 
     /**
      * Display the specified resource.

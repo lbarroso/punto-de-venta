@@ -43,9 +43,9 @@
                                   <th>Descripci&oacute;n</th>
                                   <th>Marca</th>
                                   <th>codbarras</th>
-                                  <th>Precio</th>
-                                  <th>Stock</th>
-                                  <th>Categor&iacute;a</th>
+                                  <th>Costo</th>
+                                  <th>Venta</th>
+                                  <th>Stock</th>                                  
                                   <th>Acciones</th>
                               </tr>
                           </thead>                        
@@ -99,7 +99,7 @@
     @include('products.modalProduct')
     @include('products.modalDiscount')
     @include('products.modalProperty')	
-    @include('products.modalImage')
+    @include('products.modalImage')	
 @endsection
 
 

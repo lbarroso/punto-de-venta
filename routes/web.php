@@ -94,4 +94,4 @@ Route::get('/posicionalmacen', [App\Http\Controllers\ProductController::class, '
 // punto de venta
 Route::apiResource('pvproducts',App\Http\Controllers\PvproductController::class)->middleware('auth');
 
-    
+// claves genericas
