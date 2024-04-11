@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PvproductController extends Controller
 {
@@ -20,17 +21,18 @@ class PvproductController extends Controller
      */
     public function index(Request $request)
     {
-        $docord = !empty($request->docord) ? $request->docord : 0;
+        $docord = !empty($request->session()->get('docord')) ? $request->session()->get('docord') : 0;
         
+        // datatable:pvproducts.js
         if($request->ajax()){
             return response()->json(['data' => Docdeta::where('movcve', 51)
-                ->where('user_id', Auth::user()->id)
-                ->where('docord', $docord)
-                ->get()
-            ]);
+            ->where('user_id', Auth::user()->id)
+            ->where('docord', 0)
+            ->get() ]);
         }
         
-        return view('pventa.index');
+        // Mostrar ventana emergente ticket
+        return view('pventa.index', compact('docord'));
     } // index
 
     /**
@@ -44,7 +46,7 @@ class PvproductController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * buscar codigo
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -75,13 +77,16 @@ class PvproductController extends Controller
             $docdeta->artprventa = !empty($product->artprventa) ? $product->artprventa : 0;
             $docdeta->docimporte = !empty($product->artprventa) ? $product->artprventa : 0;
             $docdeta->user_id = Auth::user()->id;
+            $docdeta->docsession = Auth::user()->name;
             // $docdeta->docsession = $sesionActual['_token'];
             $docdeta->save();
         }elseif($codigo[0] == '+'){
             $docdeta = new Docdeta();
             $docdeta->artdesc = "PRODUCTO SIN DESCRIPCION";
             $docdeta->artprventa = $codigo;
+            $docdeta->docimporte = $codigo;
             $docdeta->user_id = Auth::user()->id;
+            $docdeta->docsession = Auth::user()->name;
             $docdeta->save();
         }
         
@@ -90,7 +95,33 @@ class PvproductController extends Controller
     } // store
 
     /**
-     * Display the specified resource.
+     * crear registro
+     * al dar clic en la descripcion del producto
+     */
+    public function docdetaStore(Request $request)
+    {
+        $id = !empty($request->id) ? $request->id : 0;
+
+        $product = Product::find($id);
+
+        $docdeta = new Docdeta();
+        $docdeta->artdesc = $product->artdesc;
+        $docdeta->product_id = $product->id;
+        $docdeta->artcve = $product->artcve;
+        $docdeta->codbarras = $product->codbarras;
+        $docdeta->artpesoum = $product->artpesoum;
+        $docdeta->artpesogrm = $product->artpesogrm;
+        $docdeta->artprcosto = $product->artprcosto;
+        $docdeta->artprventa = $product->artprventa;
+        $docdeta->docimporte = $product->artprventa;
+        $docdeta->user_id = Auth::user()->id;
+        $docdeta->docsession = Auth::user()->name;
+        $docdeta->save();
+
+    } // function
+
+    /**
+     * obtener todos los registros
      *
      * @param  \App\Models\Venta  $venta
      * @return \Illuminate\Http\Response
@@ -115,7 +146,7 @@ class PvproductController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * editar cantidad
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Venta  $venta
@@ -150,4 +181,7 @@ class PvproductController extends Controller
         return response()->json(['success'=>'Producto eliminado']);
 
     }
-}
+
+
+
+} //

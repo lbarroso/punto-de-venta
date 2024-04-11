@@ -6,11 +6,14 @@ $(document).ready(function(){
 	
 	link.addEventListener("click",modalCategory);
 
+
 	function modalCategory(e){
-		e.preventDefault();
+
 		$('#modal-category-create').modal("hide"); // oculta la ventana
 		$('.modal-body').html(''); // 
-		$('#modal-category-create').modal(); // muestra la ventana		
+		
+		$('#modal-category-create').modal(); // muestra la ventana	
+		document.getElementById("name").focus();
 	}	
 	
 	// nueva categoria
@@ -33,9 +36,7 @@ $(document).ready(function(){
 					
 					$('#modal-category-create').modal('hide');
 					
-                    $.notify("Se guardo correctamente", "success");  
-					
-					console.log("valor id:" + res)
+                    $.notify("Se guardo correctamente", "success");
 					
                 },
                 error:function(res){
@@ -45,3 +46,4 @@ $(document).ready(function(){
 	}		
 
 })
+

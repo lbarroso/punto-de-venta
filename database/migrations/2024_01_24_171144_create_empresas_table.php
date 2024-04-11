@@ -15,14 +15,14 @@ class CreateEmpresasTable extends Migration
     {
         Schema::create('empresas', function (Blueprint $table) {
             $table->id();
-            $table->string('regnom');
+            $table->string('regnom')->nullable();
             $table->string('regrfc')->nullable();
             $table->string('regcalle')->nullable();            
             $table->string('regnum')->nullable();
             $table->string('regcp')->nullable();
             $table->string('regtel')->nullable();            
             $table->string('regemail',65)->nullable();            
-            
+            $table->string('regmun')->nullable();
             $table->string('regloc')->nullable();
             $table->string('regedo')->nullable();
             $table->string('regleyenda')->nullable();

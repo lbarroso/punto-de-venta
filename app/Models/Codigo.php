@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -26,6 +27,9 @@ class Codigo extends Model
 
     protected $perPage = 20;
 
+    // desactivar timestamps
+    public $timestamps = false;
+
     /**
      * Attributes that should be mass-assignable.
      *
@@ -35,12 +39,11 @@ class Codigo extends Model
 
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function product()
-    {
-        return $this->hasOne('App\Models\Product', 'id', 'product_id');
-    }
-    
+    *public function product()
+    *{
+    *   return $this->hasOne('App\Models\Product', 'id', 'product_id');
+    *}
+    */
+
 
 }

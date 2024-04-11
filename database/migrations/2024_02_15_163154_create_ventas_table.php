@@ -21,6 +21,7 @@ return new class extends Migration
             $table->decimal('pvcash', 10, 2)->default(0);                                
             $table->string('pvtipopago', 25)->default('efectivo');
             $table->integer('user_id')->default(0);
+            $table->string('user_name')->nullable();
             $table->uuid('uuid')->nullable();            
             $table->string('pvstatus', 2)->default('A');
             $table->timestamps();

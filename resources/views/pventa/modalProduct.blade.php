@@ -3,7 +3,7 @@
 		<div class="modal-content">
 			<form id="formProduct">
 				<div class="modal-header">
-					<h4 class="modal-title">Producto</h4>
+					<h4 class="modal-title" id="product-title">Producto</h4>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -14,7 +14,7 @@
 
                     <div class="form-group">
 						<label for="doccant">Cantidad</label>
-						<input type="number" onKeyPress="return enterCantidad(this, event)"  name="doccant" id="doccant" class="form-control">
+						<input type="number" onKeyPress="return enterCantidad(this, event)" name="doccant" id="doccant" class="form-control">
 					</div>
 				
 										

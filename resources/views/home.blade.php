@@ -17,32 +17,24 @@
 
 @section('content')
 
+<div class="row-md-12">
 
-<div class="row">
-  <div class="col-12">
-      <div class="card card-default">
-          <div class="card-header">
-              <h3 class="card-title">Situacion actual de inventario</h3>
-          </div>
-
-          <div class="card-body">
-    
-              <div class="row">
-                  <div class="col">
-
-                    <div class="table-responsive-sm">  
-						cotenido tabla
-                    </div>
-
-                  </div>
-              </div>
-
-          </div>
-
-      </div>
-
+  <div class="col-md-6">
+	  <div class="card" >
+		<img src="{{ asset('admin/dist/img/welcome.jpg') }}" class="rounded" width="210"/>
+		<div class="card-body">
+		  <h4 class="card-title">Sistema Punto de Venta</h4>
+		  <p class="card-text"> &nbsp; </p>
+		  <a href="{{ route('pvproducts.index') }}" class="btn btn-primary">Iniciar sesi&oacute;n</a>
+		</div>
+	  </div>
   </div>
+  
+  <div class="col-md-6"></div>
+  
 </div>
+  
+
 
 
 @endsection

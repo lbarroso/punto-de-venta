@@ -36,12 +36,13 @@
                   <div class="col">
 
                     <div class="table-responsive-sm">  
-                      <table class="table table-hover" id="table" class="display" style="width:100%">                        
+                      <table class="table table-hover" id="table" class="display" style="width:100%; font-size:11pt">                        
                           <thead>
                               <tr>
                                   <th>Id</th>                                  
                                   <th>Descripci&oacute;n</th>
                                   <th>Marca</th>
+								  <th>Detalle</th>
                                   <th>codbarras</th>
                                   <th>Costo</th>
                                   <th>Venta</th>
@@ -85,7 +86,12 @@
 	var showUrl = '{{ route("products.show",["product" => 0]) }}';
     var deleteUrl = '{{ route("products.destroy",["product" => 0]) }}';
     var urlCategories = '{{ route("products.categories") }}';
+	var urlProveedores = '{{ route("products.proveedores") }}';
     var urlImageStore = '{{ route("images.store") }}';
+    var urlProductCodes = '{{ route("product.codes",["id" => 0]) }}';
+	var urlDeleteCodes = '{{ route("delete.codes",["id" => 0]) }}';
+	var urlStoreCodes = '{{ route("store.codes") }}';
+
 </script>
 <!--contiene el metodo buscar data tables-->
 <script src="{{ asset('js/admin/product.js') }}"></script>
@@ -93,6 +99,8 @@
 <script src="{{ asset('js/admin/property.js') }}"></script>
 <script src="{{ asset('js/admin/image.js') }}"></script>
 <script src="{{ asset('js/admin/ganancia.js') }}"></script>
+
+
 @endsection
 <!--Agregado rapido nuevo producto-->
 @section('modal')
@@ -100,6 +108,7 @@
     @include('products.modalDiscount')
     @include('products.modalProperty')	
     @include('products.modalImage')	
+	@include('products.modalCode')	
 @endsection
 
 

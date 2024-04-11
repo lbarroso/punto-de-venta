@@ -4,7 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Venta;
 use App\Models\Product;
+use App\Models\Docdeta;
+use App\Models\Empresa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\ImporteLetra;
+use Illuminate\Support\Facades\DB;
 
 class VentaController extends Controller
 {
@@ -29,7 +34,7 @@ class VentaController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Guardar venta y actualizar stock
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -40,8 +45,8 @@ class VentaController extends Controller
         $total = Docdeta::where('movcve', 51)
         ->where('user_id', Auth::user()->id)
         ->where('docord', 0)
-        ->sum('importe'); 
-        
+        ->sum('docimporte');
+
         if($total <= 0 ) return redirect()->route('pvproducts.index', ['docord' => 0]);
 
         // Actualizar el stock de los productos vendidos
@@ -61,12 +66,13 @@ class VentaController extends Controller
 
         // guardar venta registrada
         $venta = new Venta();        
-        $venta->fecha = now();
+        $venta->pvfecha = now();
         $venta->ctecve = 1;
         $venta->pvtotal = $total;
-        $venta->pvcash = $request->input('pvcash');
+        $venta->pvcash = $request->input('cash');
         $venta->user_id = Auth::user()->id;
-        $venta->pvtipopago = $request->input('pvtipopago');
+        $venta->user_name = Auth::user()->name;
+        $venta->pvtipopago = !empty($request->input('tipopago')) ? $request->input('tipopago') : 'efectivo';
         $venta->save();
 
         // Obtener el último ID insertado
@@ -78,8 +84,9 @@ class VentaController extends Controller
         ->where('docord', 0)
         ->update(['docord' => $ID]);
 
-        return redirect()->route('pvproducts.index', ['docord' => $ID]);
-    }
+        // confirmar venta
+        return redirect()->route('pvproducts.index')->with('docord', $ID);
+    } // function
 
     /**
      * Display the specified resource.
@@ -87,10 +94,82 @@ class VentaController extends Controller
      * @param  \App\Models\Venta  $venta
      * @return \Illuminate\Http\Response
      */
-    public function show(Venta $venta)
+    public function ventaTotal(Request $request)
     {
-        //
+        $id = !empty($request->id) ? $request->id : 0;
+
+        $total = Docdeta::where('movcve', 51)
+        ->where('user_id', Auth::user()->id)
+        ->where('docord', $id)
+        ->sum('docimporte');
+                
+        if($request->ajax()) return response()->json(['total' => number_format($total,2)]);
+        
+        return $total;
     }
+
+    /**
+     * importe total
+     *
+     * @param  \App\Models\Venta  $venta
+     * @return \Illuminate\Http\Response
+     */
+    public function ventaCash(Request $request)
+    {        
+        $total = Docdeta::where('movcve', 51)
+        ->where('user_id', Auth::user()->id)
+        ->where('docord', 0)
+        ->sum('docimporte');
+
+        $cash = $request->cash - $total;
+
+        return response()->json(['cash' => number_format($cash,2) ]);
+    }
+
+    // ticket
+    public function ticket(Request $request)
+    {
+
+        $id = !empty($request->id) ? $request->id : 0;
+
+        $empresa = Empresa::find(1);
+
+        $total = Docdeta::where('movcve', 51)
+        ->where('docord', $id)
+        ->sum('docimporte');
+
+        $docdetas = Docdeta::where('movcve', 51)
+        ->where('docord', $id)
+        ->get();
+        
+        $articulos = Docdeta::where('docord', $id)->sum('doccant');
+
+        $venta = Venta::find($id);
+
+        return view('pventa.ticket', compact('docdetas','total','empresa','id','articulos','venta') );
+    }
+
+    // buscar producto
+    public function buscar(Request $request)
+    {
+        $texto = !empty($request->texto) ? $request->texto : 'xxx';
+
+        if($request->ajax()){
+
+            $products = Product::select('id', 'artdesc', 'codbarras', 'stock', 'artprventa', 'artpesoum', 'artpesogrm')
+            ->where(function ($query) use ($texto) {
+                $query->where('artdesc', 'like', '%' . $texto . '%')
+                    ->orWhere('codbarras', 'like', '%' . $texto . '%');
+            })
+            ->where('artstatus', 'A')
+            ->orderBy('artdesc')
+            ->get();     
+
+            return response()->json(['data' => $products]);
+        }
+       
+    }
+
 
     /**
      * Show the form for editing the specified resource.

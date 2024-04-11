@@ -16,11 +16,11 @@ $(document).ready(function(){
 	}
 
     getCategories();
+	getProveedores();
 	
 }) // document.ready
 
 // listado categorias 
-// pantalla nuevo producto
 function getCategories(){
     $.ajax({
         method: 'get',
@@ -45,7 +45,31 @@ function getCategories(){
     })
 }
 
+// listado proveedores
+function getProveedores(){
+    $.ajax({
+        method: 'get',
+        url: urlProveedores,
+        success:function(response){
+            var proveedores = "";
 
+            for (let index = 0; index < response.length; index++){
+                const element = response[index];
+
+				// categoria predeterminada
+				if(element["prvrazon"] == 'TODOS LOS PROVEEDORES'){
+					proveedores += "<option value = '"+ element['id'] +"' selected> " + element["prvrazon"] + "</option>";
+				}		
+				else{
+					proveedores += "<option value = '"+ element['id'] +"' > " + element["prvrazon"] + "</option>";
+				}
+
+            }
+
+            $('#prvcve').append(proveedores);
+        }
+    })
+}
 
 // Manejar el evento keypress en formulario
 function handleEnter(field, event)
@@ -57,7 +81,7 @@ function handleEnter(field, event)
         for (i = 0; i < field.form.elements.length; i++) if (field == field.form.elements[i]) break;
         i = (i + 1) % field.form.elements.length;
         field.form.elements[i].focus();
-        field.form.elements[i].select();
+        
         return false;				
     }else return true;
     

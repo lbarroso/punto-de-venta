@@ -9,6 +9,6 @@ class Venta extends Model
 {
     use HasFactory;
     
-    protected $fillable = ['pvfecha', 'ctecve', 'pvtotal', 'pvcash', 'pvtipopago', 'user_id', 'uuid', 'pvstatus'];
+    protected $fillable = ['pvfecha', 'ctecve', 'pvtotal', 'pvcash', 'pvtipopago', 'user_id', 'user_name', 'uuid', 'pvstatus'];
     
 }

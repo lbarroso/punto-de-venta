@@ -16,7 +16,7 @@
 			<div class="col-12">
 				<div class="form-group">
 					<label for="name">Nombre:</label>
-					<input type="text" onkeyup="this.value = this.value.toUpperCase();" name="name" id="name" class="form-control" value="" required>
+					<input type="text" onkeyup="this.value = this.value.toUpperCase();" name="name" id="name" class="form-control"  required>
 				</div>
 			</div>
 		</form>	

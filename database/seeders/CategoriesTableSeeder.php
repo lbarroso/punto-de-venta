@@ -17,8 +17,8 @@ class CategoriesTableSeeder extends Seeder
     public function run()
     {
        // Limpiar la tabla antes de sembrar nuevos datos
-       Category::truncate();
-
+       
+       Category::where('name')->delete();
        // Datos de ejemplo para las categorías
        $data = [
             ['name' => 'AZUCAR'],

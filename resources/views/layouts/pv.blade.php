@@ -11,7 +11,7 @@
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="{{ asset('admin/plugins/fontawesome-free/css/all.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('admin/plugins/fontawesome-free/css/all.min.css') }}">  
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('admin/dist/css/adminlte.min.css') }}">
    
@@ -85,7 +85,7 @@
    
 </head>
 
-<body onkeyup="teclaPresionada(event);" class="hold-transition sidebar-mini sidebar-collapse layout-footer-fixed">
+<body  class="hold-transition sidebar-mini sidebar-collapse layout-footer-fixed">
 <!-- Site wrapper -->
 <div class="wrapper">
   <!-- Navbar -->
@@ -96,11 +96,17 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Home</a>
+        <a href="{{ url('/pvproducts') }}" class="nav-link">Home</a>
       </li>
+	  
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Contact</a>
-      </li>
+        <a href="#" onClick="openModalConfirm()" class="nav-link"> [F2] Confirmar venta</a>
+      </li>	  
+	  
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="#" onClick="openModalFindProduct()" class="nav-link"> [F9] Buscar producto</a>
+      </li>	  	  
+
     </ul>
 
     <!-- Right navbar links -->
@@ -118,9 +124,9 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-lightblue elevation-4">
     <!-- Brand Logo -->
-    <a href="#" class="brand-link">
+    <a href="{{ url('/pvproducts') }}" class="brand-link">
       <img src="{{ asset('admin/dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">AdminLTE 3</span>
+      <span class="brand-text font-weight-light">{{ config('app.name', 'Laravel') }}</span>
     </a>
 
     <!-- Sidebar -->
@@ -128,10 +134,10 @@
       <!-- Sidebar user (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="{{ asset('admin/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
+          <img src="{{ asset('admin/dist/img/almacen.jpg') }}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Alexander Pierce</a>
+          <a href="{{ route('password.change') }}" class="d-block">{{ Auth::user()->name }}</a>
         </div>
       </div>
 
@@ -152,33 +158,41 @@
               <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v1</p>
+                  <p>Pagina inicio</p>
                 </a>
               </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v2</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v3</p>
-                </a>
-              </li>
+
             </ul>
           </li>
           
 		  <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-th"></i>
+		  
+            <a href="{{ route('password.change') }}" class="nav-link">
+              <i class="fas fa-key"></i>
               <p>
-                Widgets
-                <span class="right badge badge-danger">New</span>
+                Cambiar contraseña
               </p>
             </a>
+						
+          </li>				  
+		  
+		  <li class="nav-item">
+		  
+            <a href="{{ route('logout') }}" class="nav-link"
+				onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+              <i class="fas fa-sign-out-alt"></i>
+              <p>
+                Cerrar sesi&oacute;n
+              </p>
+            </a>
+			
+			<form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+				@csrf
+			</form>					
+			
           </li>
+		   
+		  
         </ul>		
       </nav>
       <!-- /.sidebar-menu -->
@@ -229,28 +243,8 @@
 
 @yield('modal')
 
+
 </body>
 
-<!--interactuar con el teclado-->
-<script>
-    function teclaPresionada(event)
-    {
-        var tecla = event.keyCode;
-
-        switch(tecla)
-        {
-            // tecla funcion F2
-            case 120: 
-				// Cambiar la URL por la que desees cargar
-				
-				$('#modal-findproduct').modal(); // abrir modal
-				$('#palabra').focus(); 
-	
-			break;
-			
-            default:  console.log(tecla);  break;
-        }        
-    }
-</script>
 
 </html>

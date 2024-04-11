@@ -15,51 +15,57 @@
 
 					<div class="form-group">
 						<label for="artdesc">Descripción </label>
-						<input type="text" name="artdesc" id="artdesc" class="form-control">
+						<input type="text" name="artdesc" id="artdesc" class="form-control" onKeyPress="return handleEnter(this, event)">
 					</div>
-
+					
 					<div class="form-group">
-						<label for="codbarras">Código</label>
-						<input type="text" name="codbarras" id="codbarras" class="form-control">
-					</div>
+						<label for="artdetalle">Detalle </label>
+						<input type="text" name="artdetalle" id="artdetalle" class="form-control" onKeyPress="return handleEnter(this, event)">
+					</div>					
+
 
                     <div class="form-group">
 						<label for="artprcosto">Costo</label>
-						<input type="number" name="artprcosto" id="artprcosto" class="form-control">
+						<input type="number" name="artprcosto" id="artprcosto" class="form-control" onKeyPress="return handleEnter(this, event)">
 					</div>
 
                     <div class="form-group">
 						<label for="artganancia">Ganancia</label>
-						<input type="number" name="artganancia" id="artganancia" onchange="artGanancia()" class="form-control">
+						<input type="number" name="artganancia" id="artganancia" onchange="artGanancia()" class="form-control" onKeyPress="return handleEnter(this, event)">
 					</div>					
 
                     <div class="form-group">
-						<label for="artprventa">Precio</label>
-						<input type="number" name="artprventa" id="artprventa" class="form-control">
+						<label for="artprventa">Precio</label> 
+						<input type="number" name="artprventa" id="artprventa" class="form-control" onKeyPress="return handleEnter(this, event)">
 					</div>
 
                     <div class="form-group">
 						<label for="stock">Stock</label>
-						<input type="number" name="stock" id="stock" class="form-control">
+						<input type="number" name="stock" id="stock" class="form-control" onKeyPress="return handleEnter(this, event)">
 					</div>
 					
 					<div class="form-group">
 						<label for="artmarca">Marca </label>
-						<input type="text" name="artmarca" id="artmarca" class="form-control">
+						<input type="text" name="artmarca" id="artmarca" class="form-control" onKeyPress="return handleEnter(this, event)">
 					</div>					
 
                     <div class="form-group">
 						<label for="category_id">Categoria</label>
-						<select name="category_id" id="category_id" class="form-control select2bs4" style="width: 100%;" >
+						<select name="category_id" id="category_id" class="form-control" style="width: 100%;" onKeyPress="return handleEnter(this, event)">
                             <option value="">Selecciona una opción</option>
                         </select>
-					</div>
-
-
-		
+					</div>			
+					
+                    <div class="form-group">
+						<label for="proveedor_id">Proveedor</label>
+						<select name="proveedor_id" id="proveedor_id" class="form-control" style="width: 100%;" onKeyPress="return handleEnter(this, event)">
+                            <option value="">Selecciona una opción</option>
+                        </select>
+					</div>						
+					
 				</div>
 				<div class="modal-footer justify-content-between">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+					<button type="button" class="btn btn-default" onKeyPress="return handleEnter(this, event)" data-dismiss="modal">Cerrar</button>
 					<button type="submit" class="btn btn-primary">Guardar</button>
 				</div>
 			</form>

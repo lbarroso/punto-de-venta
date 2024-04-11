@@ -67,7 +67,7 @@
 						</div>
 
 						<div class="row mb-3">
-							<div class="col-11">					
+							<div class="col-10">					
 								<div class="form-group">
 									<div class="input-group mb-3">
 										<label for="category_id" class="form-label">Categoría*</label>
@@ -78,10 +78,12 @@
 
 								</div>            
 							</div>
-							<div class="col-1"> 
+							
+							<div class="col-2"> 
 								<label for="categorylink" class="form-label"> &nbsp; </label>
-								<span  id="categorylink" class="input-group-text"><i class="nav-icon fas fa-plus"></i></span>
-							</div>				
+								<span id="categorylink" class="btn btn-info btn-sm mr-1"> <i class="nav-icon fas fa-plus"></i> nueva </span>
+							</div>
+							
 						</div>                    
 
 						<div class="row">
@@ -107,22 +109,32 @@
 						</div>    
 
 						<div class="row">
+						
+							<div class="col">
+								<div class="form-group">
+									<label for="prvcve" class="form-label">Proveedor</label>
+									<select name="prvcve" id="prvcve" class="form-control" onKeyPress="return handleEnter(this, event)">
+										<option value="">Selecciona una opción</option>	
+									</select>
+								</div>            
+							</div>
+							
 							<div class="col">
 								<div class="form-group">
 									<label for="artprcosto" class="form-label">Precio costo</label>
-									<input value="{{ old('artprcosto') == '' ? '0' : old('artprcosto') }}" type="number" min="0" step="0.01" class="form-control" id="artprcosto" name="artprcosto" onchange="artGanancia()" value="0.00" onKeyPress="return handleEnter(this, event)">
+									<input type="number" min="0" step="0.01" class="form-control" id="artprcosto" name="artprcosto" onchange="artGanancia()" onKeyPress="return handleEnter(this, event)">
 								</div>            
 							</div>
-							<div class="col-2">
+							<div class="col-1">
 								<div class="form-group">
 									<label for="artganancia" class="form-label"> %</label>
-									<input value="{{ old('artganancia') == '' ? '0' : old('artganancia') }}" type="number" min="0" step="5" class="form-control" id="artganancia" name="artganancia" onchange="artGanancia()" value="15" onKeyPress="return handleEnter(this, event)">					  
+									<input type="number" value="0" min="0" step="5" class="form-control" id="artganancia" name="artganancia" onchange="artGanancia()" onKeyPress="return handleEnter(this, event)">					  
 								</div>            
 							</div>
 							<div class="col">
 								<div class="form-group">
 									<label for="artprventa" class="form-label">Precio venta*</label>
-									<input value="{{ old('artprventa') == '' ? '0' : old('artprventa') }}" type="number" min="0.01" step="0.01" class="form-control" id="artprventa" name="artprventa"  value="0.00" onKeyPress="return handleEnter(this, event)">
+									<input type="number" min="0.01" step="0.01" class="form-control" id="artprventa" name="artprventa"  onKeyPress="return handleEnter(this, event)">
 								</div>            
 							</div>
 						</div>    
@@ -132,7 +144,7 @@
 							<div class="col-6">
 								<div class="form-group">
 									<label for="stock" class="form-label">Existencia actual</label>
-									<input value="{{ old('stock') == '' ? '0' : old('stock') }}" min="0" type="number" class="form-control" id="stock" name="stock" value="0.00" onKeyPress="return handleEnter(this, event)">														
+									<input type="number" class="form-control" id="stock" name="stock"  onKeyPress="return handleEnter(this, event)">														
 								</div>            
 							</div>												
 						</div>    
@@ -190,6 +202,7 @@
 
 	<!--cargar categorias-->
 	<script> var urlCategories = '{{ route("products.categories") }}'; </script>
+	<script> var urlProveedores = '{{ route("products.proveedores") }}'; </script>
 	<script> var urlProductValidation = '{{ route("product.validation") }}'; </script>	
 	<script> var urlCategoryStore = '{{ route("categories.store") }}'; </script>	
 	<script src="{{ asset('admin/plugins/select2/js/select2.full.min.js') }}"></script> 
@@ -217,11 +230,12 @@
 					$("#modal-formCreate").modal("show"); // abrir modal		
 					
 					if(response == 'success'){
-						$('#modal-body-create').html('<div class="alert alert-success"> ¿Confirma agregar nuevo producto?</div>'); // success
-						$('#modalBtn').prop('disabled', false); // habilitar boton					
+						$('#modal-body-create').html('<div class="alert alert-success"> ¿Confirma agregar nuevo producto?</div>'); // success						
+						$('#modalBtn').prop('disabled', false);
+						$('#modalBtn').focus();
 					}else{				
 						$('.modal-body').html('<div class="alert alert-danger">'+response+'</div>'); // error
-						$('#modalBtn').prop('disabled', true); // Deshabilitar botón									
+						$('#modalBtn').prop('disabled', true);
 					}
 					
 				} // success	

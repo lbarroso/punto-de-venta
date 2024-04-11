@@ -23,7 +23,7 @@ class Category extends Model
 		'name' => 'required',
     ];
 
-    protected $perPage = 20;
+    protected $perPage = 15;
 
     /**
      * Attributes that should be mass-assignable.

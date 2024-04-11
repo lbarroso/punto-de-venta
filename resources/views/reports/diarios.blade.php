@@ -28,9 +28,9 @@
 
               <div class="row">
                 
-                  <div class="col">
+           
 
-						<div class="col-lg-6">
+						<div class="col-md-6">
 							
 							<div class="card card-primary card-outline">
 								<div class="card-header">
@@ -46,7 +46,25 @@
 
 						</div>
 
-                  </div>
+
+						<div class="col-md-6">
+							
+							<div class="card card-primary card-outline">
+								<div class="card-header">
+								  <h5 class="card-title m-0">Reporte</h5>
+								</div>
+								<div class="card-body">
+								  <h6 class="card-title">Productos</h6>
+				  
+								  <p class="card-text"> Con existencia </p>
+								  <a href="{{ route('catalogo.pdf') }}" class="btn btn-primary"><i class="fas fa-download"></i> Descargar PDF</a>
+								</div>
+							</div>                        
+
+						</div>                        
+                        
+
+   
 				  
               </div>
 

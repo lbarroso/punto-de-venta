@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 use App\Http\Requests\ProductRequest;
 use App\Models\Category;
+use App\Models\Proveedor;
 use App\Models\Product;
+use App\Models\Codigo;
+use App\Models\Empresa;
 use App\Service\ProductService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -11,19 +14,20 @@ use Illuminate\Validation\Rule;
 use Excel;
 use App\Exports\PosicionExport;
 use App\Exports\CatalogoExport;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ProductController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * cargar todo
      */
     public function index(Request $request)
     {
-        //
+        
         if($request->ajax()){
+               
             return response()->json(['data' => Product::with('category')->Where('artstatus','A')->orderByDesc('id')->get()]);
+
         }
 
         return view('products.index');        
@@ -64,26 +68,24 @@ class ProductController extends Controller
     /**
      * agregar nuevo producto
      *
-     * forma personalizada
+     * formulario personalizado formcreate.blade.php
      * 
      */    
     public function productStore(Request $request)
     {
-
-        //
+        
         $reglas = [
             'artdesc' => 'required|max:255|unique:products,artdesc',
             'category_id' => 'required',
             'artprventa' => 'required|gt:artprcosto'
         ];
+        
         $request->validate($reglas);
 
-        // dd($request);
         $data = $request->all();
 
         Product::create($data);
         
-        // regresar
         return redirect()->route('products.index')->with('success', 'Nuevo producto agregado correctamente');
     } // productStore
 
@@ -162,6 +164,13 @@ class ProductController extends Controller
     }
 
     /**
+     * listado proveedores llamada desde product.js
+     */
+    public function proveedores(){
+        return response()->json(Proveedor::orderBy('prvrazon')->get());
+    }
+
+    /**
      * codigo barras duplicado
      */
     public function existeCodigo($codbarras)
@@ -219,10 +228,37 @@ class ProductController extends Controller
         // return new CatalogoExport();
     }
     
+    // claves genericas
+    public function productCodes(Request $request)
+    {    
+                
+        return response()->json( Codigo::Where('product_id',$request->id)->orderBy('id')->get() );
+    }
+
+    // crear code
+    public function storeCodes(Request $request)
+    {
+
+        $data = $request->all();
+        Codigo::create($data);    
+
+        return response()->json( Codigo::Where('product_id',$request->product_id)->orderBy('id')->get() );
+    }
+
+    // eleminar clave generica
+    public function deleteCodes(Request $request)
+    {    
+        
+        $codigo = Codigo::find($request->id);
+        $codigo->delete();
+
+        return response()->json( Codigo::Where('product_id',$request->product_id)->orderBy('id')->get() );
+    }    
+
 
     // vista reportes diarios
     function reportsDiarios()
-    {
+    {        
         return view('reports.diarios');
     }    
 
@@ -231,5 +267,39 @@ class ProductController extends Controller
     {
         return view('reports.inventarios');
     }        
+
+    // Catalogo Pdf
+    public function downloadDompdf( )
+    {
+        date_default_timezone_set('America/Mexico_City');
+        $fecha  = date('d-m-Y\TH:i:s');
+
+        $empresa = Empresa::find(1);
+
+        $products = Product::select('products.codbarras','products.artseccion', 'products.artdesc', 'products.artpesoum', 'products.stock', 'media.id', \DB::raw('media.name AS image'), 'categories.name')
+        ->leftJoin('media', 'products.id', '=', 'media.model_id')
+        ->join('categories', 'products.category_id', '=', 'categories.id')
+        ->where('products.artstatus', 'A')
+        ->where('stock', '>', 20)
+        ->orderBy('products.category_id')
+        ->orderBy('products.artcve')
+        ->groupBy('products.artcve') // Agrupar por products.artcve para evitar duplicados
+        ->get();
+
+       // familias
+       $categories = Product::select('name')        
+       ->join('categories', 'products.category_id', '=', 'categories.id')
+       ->where('stock', '>', 20)    
+       ->orderBy('categories.name')
+       ->distinct()
+       ->get();           
+       
+        // novedades
+        $releases = false;       
+        
+        $pdf = Pdf::loadView('pdf.catalogo',['products' => $products, 'categories'=>$categories, 'empresa'=>$empresa, 'releases'=>$releases]);
+        
+        return $pdf->stream('CatalogDigital'.$fecha.'.pdf');
+    }    
 
 } // class

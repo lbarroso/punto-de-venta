@@ -16,7 +16,7 @@ class Product extends Model implements HasMedia
     use HasFactory, InteractsWithMedia;
 
     protected $fillable = ['artcve','artdesc','category_id','codbarras','rtcolor','artestilo','artmarca','stock',
-		'artimg','artprcosto','artprventa','artpesogrm','artpesoum','artganancia','eximin','eximax'
+		'artimg','artprcosto','artprventa','artpesogrm','artpesoum','artganancia', 'proveedor_id'
 	];   
     
     protected function slug(): Attribute{
@@ -30,7 +30,14 @@ class Product extends Model implements HasMedia
 
         return $this->belongsTo(Category::class);
     }
-	
+
+    //
+    public function proveedor(){
+        
+        
+        return $this->belongsTo(Proveedor::class);
+    }
+
 	// conversion de media
 	// cambiar tamaños de imagenes
     public function registerMediaConversions(Media $media = null): void
@@ -45,5 +52,6 @@ class Product extends Model implements HasMedia
             ->height(232)
             ->sharpen(10);
     }
+  
 
 } // class

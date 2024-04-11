@@ -25,7 +25,7 @@ class Proveedore extends Model
 
     ];
 
-    protected $perPage = 20;
+    protected $perPage = 15;
 
     /**
      * Attributes that should be mass-assignable.
