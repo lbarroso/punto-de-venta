@@ -100,9 +100,11 @@ Route::prefix('reports')->group(function(){
 Route::apiResource('pvproducts',App\Http\Controllers\PvproductController::class)->middleware('auth');
 Route::get('docdetastore',[App\Http\Controllers\PvproductController::class,'docdetaStore'])->name('docdeta.store');
 Route::get('venta/total',[App\Http\Controllers\VentaController::class,'ventatotal'])->name('venta.total');
+Route::get('venta/totalproducts',[App\Http\Controllers\VentaController::class,'totalproducts'])->name('venta.totalproducts');
 Route::get('venta/{cash}',[App\Http\Controllers\VentaController::class,'ventacash'])->name('venta.cash');
 Route::post('ventastore',[App\Http\Controllers\VentaController::class,'store'])->name('venta.store');
 Route::get('venta/ticket/{id}',[App\Http\Controllers\VentaController::class,'ticket'])->name('venta.ticket');
+Route::get('dailysales',[App\Http\Controllers\VentaController::class,'dailysales'])->name('daily.sales');
 Route::get('pvproducts/find/{texto}',[App\Http\Controllers\VentaController::class,'buscar'])->name('pvproducts.find');
 
 // catalogo con imagenes
@@ -114,3 +116,24 @@ Route::get('/posicionalmacen', [App\Http\Controllers\ProductController::class, '
 // users
 Route::get('/change-password',[App\Http\Controllers\UserController::class,'passwordForm'])->name('password.change');
 Route::post('/change-password',[App\Http\Controllers\UserController::class,'changePassword'])->name('password.update');
+Route::get('profile/edit', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+Route::post('profile/update', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+
+// cajas
+Route::get('cash',[App\Http\Controllers\CashRegisterController::class,'index'])->name('cash.index');
+Route::post('/cash/start', [App\Http\Controllers\CashRegisterController::class, 'startcash'])->name('cash.start');
+Route::post('/cash/withdraw', [App\Http\Controllers\CashRegisterController::class, 'withdrawCash'])->name('cash.withdraw');
+Route::post('/cash/sale', [App\Http\Controllers\CashRegisterController::class, 'recordsale'])->name('cash.sale');
+
+// cierres
+Route::get('cierre',[App\Http\Controllers\CierreController::class,'index'])->name('cierre.index');
+Route::post('cierre/store',[App\Http\Controllers\CierreController::class,'store'])->name('cierre.store');
+
+// entradas y salidas inventario
+Route::prefix('inventario')->group(function(){
+    Route::get('entrada/index',[App\Http\Controllers\DocdetaController::class,'entradaindex'])->name('entrada.index');
+    Route::get('salida/index',[App\Http\Controllers\DocdetaController::class,'salidaindex'])->name('salida.index');
+});
+
+Route::get('entrada/find/{code}',[App\Http\Controllers\DocdetaController::class,'findcode'])->name('entrada.find.code');
+Route::get('entrada/index/table',[App\Http\Controllers\DocdetaController::class,'entradaindex'])->name('entrada.index.table');

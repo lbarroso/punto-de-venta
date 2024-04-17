@@ -68,22 +68,24 @@
                 <li class="nav-item dropdown">
 					&nbsp;
                 </li>
-
+				@php
+					$imagePath = Auth::user()->profile_image ? 'images/' . Auth::user()->profile_image : 'admin/dist/img/almacen.jpg';
+				@endphp
                 <li class="dropdown user user-menu">
                     <a href="#" class="nav-link" data-toggle="dropdown">
-                        <img src="{{ asset('admin/dist/img/avatar.png') }}" class="user-image" alt="User Image">
+                        <img src="{{ asset('admin/dist/img/almacen.jpg') }}" class="user-image" alt="User Image">
                         &nbsp;
                     </a>
                     <ul class="dropdown-menu">
                         <li class="user-header">
-                            <img src="{{ asset('admin/dist/img/avatar.png') }}" class="img-circle" alt="User Image">
+                            <img src="{{ asset($imagePath) }}" class="img-circle" alt="User Image">
                             <p>
-                                #
+                                {{ Auth::user()->name }}
                             </p>
                         </li>
                         <li class="user-footer">
                             <div class="float-left">
-                                <a href="#" class="btn btn-default btn-flat">Perfil</a>
+                                <a href="{{ route('profile.edit') }}" class="btn btn-default btn-flat">Perfil</a>
                             </div>
                             <div class="float-right">
 							
@@ -115,8 +117,7 @@
             <div class="sidebar">
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        <img src="{{ asset('admin/dist/img/avatar.png') }}" class="img-circle elevation-2"
-                            alt="User Image">
+                        <img src="{{ asset($imagePath) }}" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
                         <a href="#" class="d-block">{{ Auth::user()->name }}</a>
@@ -147,7 +148,8 @@
 							</a>
 						</li>	
 	
-	
+						@if(Auth::user()->role > 0)
+							
 						<li class="nav-item ">
 							<a href="{{ route('products.index') }}" class="nav-link {{ active_menu(route('products.index')) }}">
 								<i class="nav-icon fas fa-box"></i>
@@ -174,8 +176,7 @@
 								</p>
 							</a>
 						</li>	
-						
-						
+									
 						<li class="nav-item ">
 							<a href="{{ route('proveedores.index') }}" class="nav-link {{ active_menu(route('proveedores.index')) }}">
 								<i class="nav-icon fas fa-truck"></i>
@@ -185,7 +186,6 @@
 							</a>
 						</li>	
 						
-						
 						<li class="nav-item ">
 							<a href="{{ route('empresas.index') }}" class="nav-link {{ active_menu(route('empresas.index')) }}">
 								<i class="nav-icon fas fa-building"></i>
@@ -194,7 +194,35 @@
 								</p>
 							</a>
 						</li>	
-			
+
+
+						<!--Inventario-->
+                        <li class="nav-item {{ menu_open('inventario/*',1) }}">
+                            <a href="#" class="nav-link {{ menu_open('inventario/*',2) }}">
+                              <i class="fas fa-boxes nav-icon"></i>
+                              <p>
+                                Inventario
+                                <i class="fas fa-angle-left right"></i>
+                              </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                              <li class="nav-item">
+                                <a href="{{ route('entrada.index') }}" class="nav-link {{ active_menu(route('entrada.index')) }}" >
+                                  <i class="fas fa-plus-square nav-icon"></i>
+                                  <p>Entradas</p>
+                                </a>
+                              </li>
+                            </ul>
+                            <ul class="nav nav-treeview">
+                              <li class="nav-item">
+                                <a href="{{ route('salida.index') }}"  class="nav-link {{ active_menu(route('salida.index')) }}">
+                                  <i class="fas fa-minus-square nav-icon"></i>
+                                  <p>Salidas</p>
+                                </a>
+                              </li>
+                            </ul>							
+                        </li>		
+
 						
 						<!--reportes-->
                         <li class="nav-item {{ menu_open('reports/*',1) }}">
@@ -223,7 +251,7 @@
                             </ul>							
                         </li>					
 						
-						
+						@endif
 					</ul>
                 </nav>
             </div>

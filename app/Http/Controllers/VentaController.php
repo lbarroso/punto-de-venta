@@ -42,12 +42,14 @@ class VentaController extends Controller
     public function store(Request $request)
     {
 
+        date_default_timezone_set('America/Mexico_City');
+        
         $total = Docdeta::where('movcve', 51)
         ->where('user_id', Auth::user()->id)
         ->where('docord', 0)
         ->sum('docimporte');
 
-        if($total <= 0 ) return redirect()->route('pvproducts.index', ['docord' => 0]);
+        if($total <= 0 || $total < $request->input('cash')) return redirect()->route('pvproducts.index', ['docord' => 0]);        
 
         // Actualizar el stock de los productos vendidos
         $docdetas = Docdeta::where('movcve', 51)
@@ -108,6 +110,20 @@ class VentaController extends Controller
         return $total;
     }
 
+    // total articulos
+    public function totalProducts(Request $request)
+    {
+        $id = !empty($request->id) ? $request->id : 0;
+
+        $articulos = Docdeta::where('docord', $id)
+        ->where('user_id', Auth::user()->id)
+        ->sum('doccant');
+                
+        if($request->ajax()) return response()->json(['articulos' => number_format($articulos,2)]);
+        
+        return $articulos;
+    }    
+
     /**
      * importe total
      *
@@ -162,8 +178,10 @@ class VentaController extends Controller
                     ->orWhere('codbarras', 'like', '%' . $texto . '%');
             })
             ->where('artstatus', 'A')
+            ->orderByRaw("CASE WHEN artdesc LIKE '$texto%' THEN 1 ELSE 2 END")
             ->orderBy('artdesc')
             ->get();     
+          
 
             return response()->json(['data' => $products]);
         }
@@ -177,9 +195,18 @@ class VentaController extends Controller
      * @param  \App\Models\Venta  $venta
      * @return \Illuminate\Http\Response
      */
-    public function edit(Venta $venta)
+    public function dailySales()
     {
         //
+        date_default_timezone_set('America/Mexico_City');
+
+        $ventas = Venta::whereDate('created_at', now()->toDateString())
+        ->get();
+
+        $total = Venta::whereDate('created_at', now()->toDateString())
+        ->sum('pvtotal');        
+
+        return view('pventa.ventas-diarias', compact('ventas','total'));
     }
 
     /**

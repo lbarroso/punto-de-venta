@@ -27,7 +27,7 @@ class PvproductController extends Controller
         if($request->ajax()){
             return response()->json(['data' => Docdeta::where('movcve', 51)
             ->where('user_id', Auth::user()->id)
-            ->where('docord', 0)
+            ->where('docord', $docord)
             ->get() ]);
         }
         
@@ -46,8 +46,8 @@ class PvproductController extends Controller
     }
 
     /**
-     * buscar codigo
-     *
+     * registrando codigos
+     * 
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
@@ -56,7 +56,7 @@ class PvproductController extends Controller
         
         $codigo = trim($request->codigo);
                 
-        $resultado = DB::select(" SELECT p.id, p.artcve, p.codbarras, p.artdesc, p.artpesoum, p.artpesogrm, p.artprcosto, p.artprventa
+        $resultado = DB::select(" SELECT p.id, p.artcve, p.codbarras, p.artdesc, p.artpesoum, p.artpesogrm, p.artprcosto, p.artprventa, p.stock
         FROM products p
         LEFT JOIN codigos c ON p.id = c.product_id
         WHERE (p.id ='$codigo' OR p.artcve ='$codigo' OR p.codbarras = '$codigo') OR  c.codigo ='$codigo' LIMIT 1 ");
@@ -76,6 +76,7 @@ class PvproductController extends Controller
             $docdeta->artprcosto = !empty($product->artprcosto) ? $product->artprcosto : 0;
             $docdeta->artprventa = !empty($product->artprventa) ? $product->artprventa : 0;
             $docdeta->docimporte = !empty($product->artprventa) ? $product->artprventa : 0;
+            $docdeta->stock = !empty($product->stock) ? $product->stock : 0;
             $docdeta->user_id = Auth::user()->id;
             $docdeta->docsession = Auth::user()->name;
             // $docdeta->docsession = $sesionActual['_token'];
@@ -114,6 +115,7 @@ class PvproductController extends Controller
         $docdeta->artprcosto = $product->artprcosto;
         $docdeta->artprventa = $product->artprventa;
         $docdeta->docimporte = $product->artprventa;
+        $docdeta->stock = $product->stock;
         $docdeta->user_id = Auth::user()->id;
         $docdeta->docsession = Auth::user()->name;
         $docdeta->save();
@@ -146,7 +148,7 @@ class PvproductController extends Controller
     }
 
     /**
-     * editar cantidad
+     * editar cantidad y artdescto
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Venta  $venta
@@ -156,9 +158,15 @@ class PvproductController extends Controller
     {
         
         $docdeta = Docdeta::find($request->id);
-        $docimporte = $request->input('doccant') * $docdeta->artprventa;
+        // Calcular el descuento
+        $descuento = $docdeta->artprventa * ($request->input('artdescto') / 100);
+        // Calcular el subtotal
+        $subtotal = $docdeta->artprventa - $descuento;        
+        $docimporte = $request->input('doccant') * $subtotal;
+
         $docdeta->update([
             'doccant' => $request->input('doccant'),
+            'artdescto' => $request->input('artdescto'),
             'docimporte' =>  $docimporte
         ]);
 

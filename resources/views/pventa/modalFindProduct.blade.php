@@ -31,13 +31,13 @@
 					
 				  </div>
 				  
-				  <div class="card-footer">Footer</div>
+				  <div class="card-footer">&nbsp;</div>
 				</div>
 					
             </div>
 			
             <div class="modal-footer justify-content-between">
-              <button type="button" class="btn btn-default" onclick=" return document.getElementById('codigo').focus();" data-dismiss="modal">Cerrar</button>
+              <button type="button" class="btn btn-danger" onclick=" return document.getElementById('codigo').focus();" data-dismiss="modal">Cerrar</button>
               <!--<button type="button" class="btn btn-primary">Save changes</button>-->
             </div>
 			

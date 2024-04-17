@@ -31,6 +31,7 @@ $(document).ready(function(){
 					return parseFloat(data).toFixed(2);
 				}
 			},
+			{ data:'stock' },
             {
                 data:'id',
                 render: function(data,type,row){
@@ -78,6 +79,7 @@ $(document).ready(function(){
 				$('#modal-product').modal('hide');		        
 				
 				datatable.ajax.reload();
+				total();
 				document.getElementById("codigo").focus();
 			}
 		});
@@ -88,7 +90,7 @@ $(document).ready(function(){
 	
 }) // document.ready
 
-// modificar cantidad
+// modificar cantidad y artdescto
 function find(id){
     let url = showUrl.replace("/0","/"+id);
 	
@@ -98,11 +100,12 @@ function find(id){
 		data: { 'id' : id },
         success:function(response){	
 			$('#product-title').html(response.artdesc);
+			$('#artdescto').val(response.artdescto);
             $('#doccant').val(parseFloat(response.doccant).toFixed(2));
             $('#id').val(response.id);
 			$('#doccant').focus();
 			$('#doccant').select();		
-			total();			
+			total();
         }
     })
 }
@@ -201,7 +204,21 @@ function total(){
 		url: totalUrl,
 		success: function(response){				
 			
-			$('#total').html(response.total);				
+			$('#total').html("$" + response.total);
+			totalProducts()			
+		}			
+	});	
+}
+
+// total productos
+function totalProducts(){
+	$.ajax({
+		type: 'GET',
+		data: { "id" : 0 },
+		url: totalProductsUrl,
+		success: function(response){				
+			
+			$('#total-products').html("Productos "+response.articulos);			
 		}			
 	});	
 }
@@ -274,6 +291,7 @@ function findProduct(event, flat){
 				tableBody +='<table class="table table-striped table-bordered table-hover" id="tablaProducts">';
 				tableBody +='<thead class="thead-dark">';
 				tableBody +='<tr class="text-center">';
+				tableBody +='<th> # </th>';
 				tableBody +='<th> codbarras </th>';
 				tableBody +='<th> Descripci&oacute;n </th>';
 				tableBody +='<th> $ </th>';
@@ -286,7 +304,7 @@ function findProduct(event, flat){
 				// Recorrer los productos y agregarlos a la tabla
 				for (var i = 0; i < products.length; i++){
 					var product = products[i];
-					tableBody +='<tr> <td>'+product.codbarras+'</td> <td> <a onClick="docdetaStore('+product.id+')" href="#" title="insertar">'+product.artdesc+'</a></td> <td>'+product.artprventa+'</td> <td>'+product.stock+'</td> </tr>';
+					tableBody +='<tr> <td> <i class="fa fa-check-square"></i> </td> <td>'+product.codbarras+'</td> <td> <a onClick="docdetaStore('+product.id+')" href="#" title="insertar">'+product.artdesc+'</a></td> <td align="right">'+parseFloat(product.artprventa).toFixed(2)+'</td> <td align="right">'+product.stock+'</td> </tr>';
 				}
 				
 				tableBody +='</tbody>';
@@ -320,12 +338,29 @@ function docdetaStore(id){
 			
 			datatable.ajax.reload();
 			total();
-			$('#codigo').focus();
-			return  $('#modal-findproduct').modal("hide");
 
+			$('#codigo').focus();
+			$('#modal-findproduct').modal("hide");
+		
 		},
 		error:function(res){
 			console.log(res);
 		}
 	});
 }
+
+// Manejar el evento keypress en formulario
+function handleEnter(field, event)
+{	
+    var tecla = event.keyCode;
+    
+    if(tecla == 13){
+        event.preventDefault();
+        for (i = 0; i < field.form.elements.length; i++) if (field == field.form.elements[i]) break;
+        i = (i + 1) % field.form.elements.length;
+        field.form.elements[i].focus();
+        
+        return false;				
+    }else return true;
+    
+} 

@@ -30,6 +30,7 @@ return new class extends Migration
             $table->smallInteger('artganancia')->default(0);
             $table->float('doccant')->default(1);
             $table->string('docstatus',2)->default('A');
+            $table->integer('stock')->default(0);
             $table->string('docsession')->nullable();
             $table->integer('numberid')->default(0);
             $table->integer('user_id')->default(0);

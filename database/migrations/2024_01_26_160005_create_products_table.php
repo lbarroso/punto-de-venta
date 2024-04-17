@@ -57,7 +57,7 @@ class CreateProductsTable extends Migration
 /***INICIAR INVENTARIO LA PIÑATA
 CREATE VIEW products_ini AS
 SELECT p.id, p.clave, p.descripcion, '1', p.stado, p.nfam, p.codigo, p.marca, '','','','', p.neto, 
-t.costo, t.venta, p.gramaje, p.umedida, t.utilida, p.detalle, '2024-03-05','2024-03-05'
+t.costo, t.venta, p.gramaje, p.umedida, t.utilida, p.detalle, '2024-04-12','2024-04-12'
 FROM productos p
 INNER JOIN precios t ON p.id = t.id_pto
 GROUP BY p.descripcion 
@@ -67,17 +67,17 @@ GROUP BY p.descripcion
  * CARGAR CLAVES GENERICAS
 SELECT codigo, id,gen_1,gen_2,gen_3,gen_4,gen_5,gen_6,gen_7,gen_8,gen_9,gen_10,gen_11,gen_12
 FROM productos 
-WHERE gen_1 !='NULL' AND
-gen_2 !='NULL' AND
-gen_3 !='NULL' AND
-gen_4 !='NULL' AND
-gen_5 !='NULL' AND
-gen_6 !='NULL' AND
-gen_7 !='NULL' AND
-gen_8 !='NULL' AND
-gen_9 !='NULL' AND
-gen_10 !='NULL' AND
-gen_11 !='NULL' AND
+WHERE gen_1 !='NULL' OR
+gen_2 !='NULL' OR
+gen_3 !='NULL' OR
+gen_4 !='NULL' OR
+gen_5 !='NULL' OR
+gen_6 !='NULL' OR
+gen_7 !='NULL' OR
+gen_8 !='NULL' OR
+gen_9 !='NULL' OR
+gen_10 !='NULL' OR
+gen_11 !='NULL' OR
 gen_12 !='NULL'
 GROUP BY descripcion
  */

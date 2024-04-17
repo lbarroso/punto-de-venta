@@ -27,7 +27,7 @@
 
 						  <!--listado productos solo encabazados-->	
 						  <div class="table-responsive-sm">
-						  <table class="table table-hover" id="table" class="display" style="width:100%">                        
+						  <table class="table table-hover" id="table" class="display" style="width:100% ">                        
 							  <thead>
 								  <tr>
 									  <th>#</th>                                  
@@ -36,10 +36,11 @@
 									  <th>Precio</th>
 									  <th>-%</th>
 									  <th>Importe</th>
+									  <th>Stock</th>
 									  <th>Acciones</th>
 								  </tr>
 							  </thead>
-							  <!-- tbody:datatable /puntoventa.js -->
+							  <!-- tbody:datatable /pvproducts.js -->
 
 						  </table>
 						  </div>
@@ -48,9 +49,9 @@
 				</div>
 
 				<div id="total-section">
-
+					<!-- Totales -->
 					<div id="total"> </div>
-					
+					<div id="total-products" class="text-muted"></div>
 					<!-- Agrega anuncios aquí -->
 					<div id="ad-container">
 						<img class="ad" src="{{ asset('admin/dist/img/welcome.jpg') }}" alt="Anuncio 1">
@@ -58,13 +59,14 @@
 					</div>
 
 					<img id="logo" src="{{ asset('admin/dist/img/credit/visa.png') }}" alt="Logo de la Empresa">
+				
 				</div>
 			</div>
 						
 		  </div>
 		  <!-- /.card-body -->
 		  <div class="card-footer">
-			Footer
+			&nbsp;
 		  </div>
 		  <!-- /.card-footer-->
 		</div>
@@ -102,6 +104,8 @@
 	var cashUrl = '{{ route("venta.cash",["cash" => 0]) }}';
 	var findUrl = '{{ route("pvproducts.find",["texto" => 0]) }}';
 	var docdetaStoreUrl = '{{ route("docdeta.store") }}';
+	var totalProductsUrl = '{{ route("venta.totalproducts") }}';
+	
 	
 </script>
 <!--contiene el metodo buscar data tables-->
@@ -112,8 +116,9 @@
             // Mostrar ventana emergente al cargar la página
             console.log('Mostrar ventana emergente');
 			// Abre una ventana emergente con el nombre 'ticketWindow' y el URL de la página de ticket
-			var ticketWindow = window.open('http://localhost/puntoventa/public/venta/ticket/{{ $docord }}', 'ticketWindow', 'width=400,height=500');
+			var ticketWindow = window.open('https://puntoventa.sistemasloop.com/public/venta/ticket/{{ $docord }}', 'ticketWindow', 'width=400,height=500');
 			// En caso de que el navegador bloquee la ventana emergente, puedes mostrar un mensaje de alerta
+			// https://puntoventa.sistemasloop.com/public/pvproducts
 			if (ticketWindow === null || typeof(ticketWindow) === "undefined") {
 				alert('¡Por favor, habilite las ventanas emergentes para ver el ticket de venta!');
 			}			

@@ -11,6 +11,11 @@
 				<div class="modal-body">
 					
 					<input type="hidden" name="id" id="id">
+					
+                    <div class="form-group">
+						<label for="doccant">Descto.</label>
+						<input type="number" value="0" min="0" step="1" max="15" onKeyPress="return handleEnter(this, event)" name="artdescto" id="artdescto" class="form-control">
+					</div>					
 
                     <div class="form-group">
 						<label for="doccant">Cantidad</label>

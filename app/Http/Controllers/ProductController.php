@@ -15,9 +15,25 @@ use Excel;
 use App\Exports\PosicionExport;
 use App\Exports\CatalogoExport;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
+
 
 class ProductController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            // Verifica si el usuario está autenticado y su rol es el deseado
+            if (Auth::check() && Auth::user()->role == 1) {
+                return $next($request);
+            }
+
+            // Redirige si el usuario no cumple con el rol necesario
+            return redirect('/home')->with('error', 'No tiene permiso para acceder a esta sección.');
+        });
+    }
+
     /**
      * cargar todo
      */

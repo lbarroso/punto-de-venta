@@ -59,6 +59,7 @@
 		#total {
 			font-size: 50px;
 			font-weight: bold;
+			color:#002040;
 			margin-bottom: 20px;
 		}
 
@@ -96,7 +97,7 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="{{ url('/pvproducts') }}" class="nav-link">Home</a>
+        <a href="{{ url('/pvproducts') }}" class="nav-link"> <i class="fa fa-home"></i> </a>
       </li>
 	  
       <li class="nav-item d-none d-sm-inline-block">
@@ -134,10 +135,13 @@
       <!-- Sidebar user (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="{{ asset('admin/dist/img/almacen.jpg') }}" class="img-circle elevation-2" alt="User Image">
+		@php
+			$imagePath = Auth::user()->profile_image ? 'images/' . Auth::user()->profile_image : 'admin/dist/img/almacen.jpg';
+		@endphp
+          <img src="{{ asset($imagePath) }}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="{{ route('password.change') }}" class="d-block">{{ Auth::user()->name }}</a>
+          <a href="#" class="d-block">{{ Auth::user()->name }}</a>
         </div>
       </div>
 
@@ -148,23 +152,39 @@
                with font-awesome or any other icon font library -->
           <li class="nav-item">
             <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <i class="fas fa-cash-register"></i>
               <p>
-                Dashboard
+                Caja
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
+			
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Pagina inicio</p>
+                <a href="{{ route('cash.index') }}" class="nav-link">
+                  <i class="fas fa-exchange-alt"></i>
+                  <p>Movimientos de caja</p>
                 </a>
               </li>
-
+              <li class="nav-item">
+                <a href="{{ route('cierre.index') }}" class="nav-link">
+                  <i class="fas fa-wallet"></i>
+                  <p>Cierres de caja</p>
+                </a>
+              </li>			  
             </ul>
+			
           </li>
-          
+		  
+		  <li class="nav-item">
+            <a href="{{ route('daily.sales') }}" class="nav-link">
+              <i class="fas fa-shopping-cart"></i>
+              <p>
+                Ventas diarias
+              </p>
+            </a>
+		  </li>
+		  
 		  <li class="nav-item">
 		  
             <a href="{{ route('password.change') }}" class="nav-link">

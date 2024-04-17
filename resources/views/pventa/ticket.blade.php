@@ -6,17 +6,27 @@
 		body {
 			text-transform: uppercase; /* Convertir todas las letras a mayúsculas */
 			font-family: Arial, sans-serif; /* Usar la fuente Arial */
-			font-size: 11px; /* Tamaño de fuente de 11 puntos */
-		}		
+			font-size: 8pt; /* Tamaño de fuente de 11 puntos */
+		}
+        .precio {
+            /* Estilo predeterminado para el precio */
+            color: black;
+        }		
+        .precio.descuento {
+            /* Estilo para el precio con descuento */
+            color: red;
+			font-size: 7pt;
+            text-decoration: line-through; /* Subrayado para indicar descuento */
+        }		
 		</style>
 	</head>
 	<!-- window.self.close();-->
-	<body onLoad=" window.print(); ">
+	<body onLoad=" window.print(); window.self.close(); " style=" font-size:10pt; font-family:arial; ">
 	
 		<center>
-			<p><img src="{{ asset('admin/dist/img/lapinata.jpg') }}" alt="ticket" width='210' height='135' border='0'></p>
+			<p><img src="{{ asset('admin/dist/img/pvticket.jpg') }}" alt="ticket" width='210' height='135' border='0'></p>
 		
-			<table>
+			<table style=" font-size:7pt; font-family:arial; ">
 				<tr> <td align='center'> {{ $empresa->regnom }}</td> </tr>
 				<tr> <td align='center'> {{ $empresa->regmun }}</td> </tr>
 				<tr> <td align='center'> {{ $empresa->regtel }}</td> </tr>
@@ -24,7 +34,7 @@
 			</table>
 		</center>
 		
-		<table border="0" width="100%">
+		<table border="0" width="100%" style=" font-size:9pt; font-family:arial; ">
 
 			<thead>
 				<tr> <th>Cant.</th> <th>Producto</th> <th align='right'>Importe</th> </tr>
@@ -33,7 +43,7 @@
 			<tbody>
 				@foreach ($docdetas as $row)
 					@php
-						$descripcion = substr($row->artdesc, 0, 30)."...";
+						$descripcion = substr($row->artdesc, 0, 35)."...";
 					@endphp				
 					<tr>
 						<td> {{ $row->doccant }} </td>
@@ -41,16 +51,29 @@
 						
 					</tr>
 					<tr>
-						<td colspan="2" align='right'> $ {{ number_format( $row->artprventa, 2,'.','') }} </td>
+						<td colspan="2" align='right'>
+							@if($row->artdescto > 0)
+								<span class="precio descuento"> $ {{ number_format( $row->artprventa, 2,'.','') }}  </span>							
+								@php
+									$descuento = $row->artprventa * ($row->artdescto / 100);
+									$subtotal = $row->artprventa- $descuento;
+								@endphp
+								
+								$ {{ number_format( $subtotal, 2,'.','') }}
+							@else
+								$ {{ number_format( $row->artprventa, 2,'.','') }}
+							@endif							
+						</td>
 						<td align='right' width="20%"> {{ number_format( $row->docimporte, 2,'.','') }} </td>
 					</tr>
 				@endforeach
 			</tbody>
 			
-			<tfoot>
-				<tr>
-					<td colspan="3"> &nbsp; </td>
-				</tr>			
+		</table>	
+		
+        <center>
+			<table style=" font-size:8pt; font-family:arial; ">
+	
 				<tr>
 					<td></td>
 					<td align="right"> Total </td>
@@ -66,17 +89,17 @@
 					<td align="right"> Cambio </td>
 					<td align="right">  {{ number_format( $venta->pvcash - $venta->pvtotal, 2,'.','') }} </td>
 				</tr>				
-			</tfoot>
-			
-		</table>		
-		<p><center>  &nbsp; </center></p>
-		<center>
-			<table>
+			</table>            
+        </center>
+
+		<center >
+			<table style=" font-size:8pt; font-family:arial; ">
 				<tr> <td align='center'>Articulos: {{ $articulos }}</td> </tr>
 				<tr> <td align='center'>Fecha venta: {{ date('d-m-Y', strtotime($venta->pvfecha)) }}</td> </tr>
 				<tr> <td align='center'>Folio venta: {{ $id }}</td> </tr>
 				<tr> <td align='center'> Le atendio: {{ $venta->user_name }}</td> </tr>
 				<tr> <td align='center'> {{ $empresa->regleyenda }}</td> </tr>
+				
 				
 			</table>
 		</center>
