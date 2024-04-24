@@ -11,15 +11,18 @@
 					</button>
 				</div>
 				
-				<div class="modal-body">
-				
+				<div class="modal-body">				
 					<div class="row">
 					  <div class="col-6">
 						   <div class="form-group">
-							  <label for="tipopago"> Metodo de pago  </label> 
-								<div class="custom-control custom-checkbox">
-								  <input class="custom-control-input custom-control-input-danger" type="checkbox" id="customCheckbox4" checked>
-								  <label for="customCheckbox4" class="custom-control-label">Efectivo</label>									  
+							  <label for="metodo_pago"> Metodo de pago  </label>
+								<div class="custom-control custom-checkbox">           
+									<input type="checkbox" name="metodo_pago" value="efectivo" id="efectivo" onclick="uncheckOther(this); $('#tipopago').val('efectivo'); $('#cash').val(0); $('#cash').focus(); " class="custom-control-input custom-control-input-danger" checked>                
+									<label for="efectivo" class="custom-control-label">Pago en efectivo</label>           
+								</div>		
+								<div class="custom-control custom-checkbox">           
+									<input type="checkbox" name="metodo_pago" value="tarjeta" id="tarjeta" onclick="uncheckOther(this);" class="custom-control-input custom-control-input-danger" >                
+									<label for="tarjeta" class="custom-control-label">Pago con tarjeta</label>           
 								</div>								
 						   </div>
 					  </div>
@@ -39,8 +42,7 @@
                           <span class="info-box-text"> <h3> Total </h3> </span>
                           <h1><span class="info-box-number" id="venta-total"> 0,00 </span></h1>
                         </div>
-                    </div>
-					
+                    </div>					
 				</div>
 				
 				<div class="modal-footer justify-content-between">
@@ -48,8 +50,13 @@
 					<button type="button" class="btn btn-default">Aceptar sin imprimir</button>
 					<button type="button" onclick=" return $('#codigo').focus();  " class="btn btn-danger" data-dismiss="modal">Cerrar</button>					
 				</div>
+				
+				<input type="hidden" name="tipopago" id="tipopago" value="efectivo">
 			</form>
 		
 		</div>
 	</div>
 </div>
+
+
+	

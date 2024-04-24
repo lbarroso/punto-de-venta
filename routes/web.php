@@ -92,7 +92,7 @@ Route::controller(ImageController::class)->name('images.')->group(function () {
 // menu reportes
 Route::prefix('reports')->group(function(){
     Route::get('diarios',[App\Http\Controllers\ProductController::class,'reportsdiarios'])->name('daily.days');
-    Route::get('descendente',[App\Http\Controllers\ProductController::class,'reportsdescendente'])->name('descendente');
+    Route::get('descendente',[App\Http\Controllers\VentaController::class,'descendente'])->name('descendente');
 });
 
 
@@ -110,8 +110,10 @@ Route::get('pvproducts/find/{texto}',[App\Http\Controllers\VentaController::clas
 // catalogo con imagenes
 Route::get('catalogopdf',[App\Http\Controllers\ProductController::class,'downloadDompdf'])->name('catalogo.pdf');
 
-// posicion excel
+// reportes Excel
 Route::get('/posicionalmacen', [App\Http\Controllers\ProductController::class, 'posicionexport'])->name('posicion.almacen');
+Route::get('/descendente/export', [App\Http\Controllers\VentaController::class, 'descendenteexport'])->name('descendente.export');
+Route::get('/descendente/print', [App\Http\Controllers\VentaController::class, 'descendenteprint'])->name('descendente.print');
 
 // users
 Route::get('/change-password',[App\Http\Controllers\UserController::class,'passwordForm'])->name('password.change');
@@ -128,12 +130,25 @@ Route::post('/cash/sale', [App\Http\Controllers\CashRegisterController::class, '
 // cierres
 Route::get('cierre',[App\Http\Controllers\CierreController::class,'index'])->name('cierre.index');
 Route::post('cierre/store',[App\Http\Controllers\CierreController::class,'store'])->name('cierre.store');
+Route::get('cierre/ticket',[App\Http\Controllers\CierreController::class,'ticket'])->name('cierre.ticket');
 
-// entradas y salidas inventario
+// menu entradas y salidas 
 Route::prefix('inventario')->group(function(){
     Route::get('entrada/index',[App\Http\Controllers\DocdetaController::class,'entradaindex'])->name('entrada.index');
+    // compras
+    Route::get('compras', [App\Http\Controllers\CompraController::class, 'index'])->name('compras.index');
     Route::get('salida/index',[App\Http\Controllers\DocdetaController::class,'salidaindex'])->name('salida.index');
 });
-
+// entradas de proveedor
 Route::get('entrada/find/{code}',[App\Http\Controllers\DocdetaController::class,'findcode'])->name('entrada.find.code');
+Route::get('entrada/modal/find/{texto}',[App\Http\Controllers\DocdetaController::class,'entradafindproduct'])->name('entrada.find.product');
+Route::get('entrada/docdeta/store',[App\Http\Controllers\DocdetaController::class,'entradadocdetastore'])->name('entrada.docdeta.store');
 Route::get('entrada/index/table',[App\Http\Controllers\DocdetaController::class,'entradaindex'])->name('entrada.index.table');
+Route::post('entrada/ajax/product',[App\Http\Controllers\DocdetaController::class,'entradaajaxproduct'])->name('entrada.ajax.product');
+Route::get('entrada/product/show/{id}',[App\Http\Controllers\DocdetaController::class,'entradaproductshow'])->name('entrada.product.show');
+Route::get('entrada/product/delete/{id}',[App\Http\Controllers\DocdetaController::class,'entradaproductdelete'])->name('entrada.product.delete');
+Route::get('entrada/product/update/{id}',[App\Http\Controllers\DocdetaController::class,'entradaproductupdate'])->name('entrada.product.update');
+Route::get('entrada/total',[App\Http\Controllers\DocdetaController::class,'entradatotal'])->name('entrada.total');
+// 
+Route::post('compras/store',[App\Http\Controllers\CompraController::class,'store'])->name('compras.store');
+Route::get('compras/pdf/{id}',[App\Http\Controllers\CompraController::class,'pdf'])->name('compras.pdf');

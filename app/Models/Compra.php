@@ -5,8 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Cierre extends Model
+class Compra extends Model
 {
     use HasFactory;
-    protected $fillable = ['entrada', 'salida', 'venta', 'saldo_actual', 'saldo_anterior'];
+    protected $fillable = ['fecha', 'factura', 'total', 'prvcve', 'comentarios', 'user_name', 'status'];
+
+    
 }

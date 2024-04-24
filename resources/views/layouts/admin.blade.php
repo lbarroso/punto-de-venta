@@ -211,6 +211,10 @@
                                   <i class="fas fa-plus-square nav-icon"></i>
                                   <p>Entradas</p>
                                 </a>
+                                <a href="{{ route('compras.index') }}" class="nav-link {{ active_menu(route('compras.index')) }}" >
+                                  <i class="fas fa-plus-square nav-icon"></i>
+                                  <p>Compras</p>
+                                </a>								
                               </li>
                             </ul>
                             <ul class="nav nav-treeview">

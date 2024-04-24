@@ -31,8 +31,10 @@ class PvproductController extends Controller
             ->get() ]);
         }
         
+        $appUrl = env('APP_URL');
+
         // Mostrar ventana emergente ticket
-        return view('pventa.index', compact('docord'));
+        return view('pventa.index', compact('docord','appUrl'));
     } // index
 
     /**
@@ -53,8 +55,20 @@ class PvproductController extends Controller
      */
     public function store(Request $request)
     {
+        date_default_timezone_set('America/Mexico_City');
         
         $codigo = trim($request->codigo);
+
+        if($codigo[0] == '+'){
+            $docdeta = new Docdeta();
+            $docdeta->artdesc = "PRODUCTO SIN DESCRIPCION";
+            $docdeta->artprventa = $codigo;
+            $docdeta->docimporte = $codigo;
+            $docdeta->user_id = Auth::user()->id;
+            $docdeta->docsession = Auth::user()->name;
+            $docdeta->save();
+            return true;
+        }
                 
         $resultado = DB::select(" SELECT p.id, p.artcve, p.codbarras, p.artdesc, p.artpesoum, p.artpesogrm, p.artprcosto, p.artprventa, p.stock
         FROM products p
@@ -81,14 +95,6 @@ class PvproductController extends Controller
             $docdeta->docsession = Auth::user()->name;
             // $docdeta->docsession = $sesionActual['_token'];
             $docdeta->save();
-        }elseif($codigo[0] == '+'){
-            $docdeta = new Docdeta();
-            $docdeta->artdesc = "PRODUCTO SIN DESCRIPCION";
-            $docdeta->artprventa = $codigo;
-            $docdeta->docimporte = $codigo;
-            $docdeta->user_id = Auth::user()->id;
-            $docdeta->docsession = Auth::user()->name;
-            $docdeta->save();
         }
         
         return false;
@@ -101,6 +107,8 @@ class PvproductController extends Controller
      */
     public function docdetaStore(Request $request)
     {
+        date_default_timezone_set('America/Mexico_City');
+
         $id = !empty($request->id) ? $request->id : 0;
 
         $product = Product::find($id);

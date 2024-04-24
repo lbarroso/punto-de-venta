@@ -13,8 +13,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Excel;
 use App\Exports\PosicionExport;
-use App\Exports\CatalogoExport;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\CatalogoExport;
+
 use Illuminate\Support\Facades\Auth;
 
 
@@ -90,10 +91,13 @@ class ProductController extends Controller
     public function productStore(Request $request)
     {
         
+        // 'artdesc' => 'required|max:255|unique:products,artdesc',
+
         $reglas = [
-            'artdesc' => 'required|max:255|unique:products,artdesc',
+            'artdesc' => 'required|max:255',
             'category_id' => 'required',
-            'artprventa' => 'required|gt:artprcosto'
+            'stock' => 'required',
+            'artprventa' => 'required'
         ];
         
         $request->validate($reglas);
@@ -226,7 +230,7 @@ class ProductController extends Controller
     {
         // request from view products/formcreate
         $error = $this->existeCodigo(trim($request->codbarras));        
-        $error .= $this->existeProducto(trim($request->artdesc));                
+        // $error .= $this->existeProducto(trim($request->artdesc));                
         $error .= ((float)$request->artprcosto > (float)$request->artprventa) ?  'El precio de costo No puede ser mayor que de venta' : false;
         if($error == false) echo 'success';
         else echo $error;
@@ -278,11 +282,7 @@ class ProductController extends Controller
         return view('reports.diarios');
     }    
 
-    // vista reportes diarios
-    function reportsDescendente()
-    {
-        return view('reports.inventarios');
-    }        
+      
 
     // Catalogo Pdf
     public function downloadDompdf( )

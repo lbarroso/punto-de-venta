@@ -26,7 +26,7 @@
 
                     <div class="form-group">
 						<label for="artprcosto">Costo</label>
-						<input type="number" name="artprcosto" id="artprcosto" class="form-control" onKeyPress="return handleEnter(this, event)">
+						<input type="number" name="artprcosto" id="artprcosto" onchange="artGanancia()" class="form-control" onKeyPress="return handleEnter(this, event)">
 					</div>
 
                     <div class="form-group">

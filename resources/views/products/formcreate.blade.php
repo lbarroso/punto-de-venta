@@ -122,7 +122,7 @@
 							<div class="col">
 								<div class="form-group">
 									<label for="artprcosto" class="form-label">Precio costo</label>
-									<input type="number" min="0" step="0.01" class="form-control" id="artprcosto" name="artprcosto" onchange="artGanancia()" onKeyPress="return handleEnter(this, event)">
+									<input type="number" min="0" step="0.01" class="form-control" id="artprcosto" name="artprcosto" value="0" onchange="artGanancia()" onKeyPress="return handleEnter(this, event)">
 								</div>            
 							</div>
 							<div class="col-1">
@@ -134,7 +134,7 @@
 							<div class="col">
 								<div class="form-group">
 									<label for="artprventa" class="form-label">Precio venta*</label>
-									<input type="number" min="0.01" step="0.01" class="form-control" id="artprventa" name="artprventa"  onKeyPress="return handleEnter(this, event)">
+									<input type="number" min="0.01" step="0.01" class="form-control" id="artprventa" value="0" name="artprventa"  onKeyPress="return handleEnter(this, event)">
 								</div>            
 							</div>
 						</div>    
@@ -144,7 +144,7 @@
 							<div class="col-6">
 								<div class="form-group">
 									<label for="stock" class="form-label">Existencia actual</label>
-									<input type="number" class="form-control" id="stock" name="stock"  onKeyPress="return handleEnter(this, event)">														
+									<input type="number" class="form-control" id="stock" name="stock" value="0" onKeyPress="return handleEnter(this, event)">														
 								</div>            
 							</div>												
 						</div>    

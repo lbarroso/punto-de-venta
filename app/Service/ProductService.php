@@ -8,14 +8,16 @@ use Illuminate\Validation\Rule;
 
 class ProductService{
 
+    /*
+    'artdesc' => [ 
+        'required',
+        Rule::unique('products')
+    ],
+    */
 
     public function validationStore(Request $request){
         $validator = Validator::make($request->all(),[
-            'artdesc' => [
-                'required',
-                Rule::unique('products')
-            ],
-                        
+            'artdecs' => 'required',            
             'artprventa' => 'required',
             'category_id' => 'required',
         ]);

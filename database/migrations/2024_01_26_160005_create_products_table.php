@@ -31,7 +31,7 @@ class CreateProductsTable extends Migration
             $table->string('artcolor')->nullable();
             $table->string('artseccion')->nullable();
             $table->string('arttalla')->nullable();
-            $table->integer('stock')->default(0);            
+            $table->decimal('stock', 8, 2)->default(0.00);         
             $table->float('artprcosto')->unsigned()->default(0);
             $table->float('artprventa')->unsigned()->default(0);
             $table->string('artpesogrm',6)->default('1');

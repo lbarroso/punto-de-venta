@@ -33,8 +33,8 @@
 </head>
 <body>
     <img src="{{ asset('admin/dist/img/welcome.jpg') }}" alt="Imagen de Bienvenida" width="480">
-    <h1>Bienvenido al Sistema de Inventario</h1>
-    <p>Administra fácilmente el inventario de tu negocio.</p>
-    <a href="{{ route('products.index') }}" class="enter-btn">Entrar al Sistema</a>
+    <h1>Bienvenido al Sistema de Inventario </h1>
+    <p>Administra fácilmente el inventario de tu negocio.  </p>
+    <a href="{{ route('products.index') }}" class="enter-btn">Entrar al Sistema {{ config('app.name', 'Laravel') }}</a>
 </body>
 </html>

@@ -66,7 +66,7 @@
 		  </div>
 		  <!-- /.card-body -->
 		  <div class="card-footer">
-			&nbsp;
+			&nbsp; 
 		  </div>
 		  <!-- /.card-footer-->
 		</div>
@@ -116,9 +116,9 @@
             // Mostrar ventana emergente al cargar la página
             console.log('Mostrar ventana emergente');
 			// Abre una ventana emergente con el nombre 'ticketWindow' y el URL de la página de ticket
-			var ticketWindow = window.open('https://puntoventa.sistemasloop.com/public/venta/ticket/{{ $docord }}', 'ticketWindow', 'width=400,height=500');
+			var ticketWindow = window.open('{{ $appUrl }}/venta/ticket/{{ $docord }}', 'ticketWindow', 'width=400,height=500');
 			// En caso de que el navegador bloquee la ventana emergente, puedes mostrar un mensaje de alerta
-			// https://puntoventa.sistemasloop.com/public/pvproducts
+			// 
 			if (ticketWindow === null || typeof(ticketWindow) === "undefined") {
 				alert('¡Por favor, habilite las ventanas emergentes para ver el ticket de venta!');
 			}			

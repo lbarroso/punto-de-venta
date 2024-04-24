@@ -6,33 +6,17 @@ use App\Models\Venta;
 use App\Models\Product;
 use App\Models\Docdeta;
 use App\Models\Empresa;
+use App\Models\Compra;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\ImporteLetra;
 use Illuminate\Support\Facades\DB;
+use Excel;
+use App\Exports\DescendenteExport;
+use Carbon\Carbon;
 
 class VentaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
     /**
      * Guardar venta y actualizar stock
      *
@@ -49,7 +33,7 @@ class VentaController extends Controller
         ->where('docord', 0)
         ->sum('docimporte');
 
-        if($total <= 0 || $total < $request->input('cash')) return redirect()->route('pvproducts.index', ['docord' => 0]);        
+        if($total <= 0 || $request->input('cash') < $total ) return redirect()->route('pvproducts.index', ['docord' => 0]);        
 
         // Actualizar el stock de los productos vendidos
         $docdetas = Docdeta::where('movcve', 51)
@@ -105,7 +89,7 @@ class VentaController extends Controller
         ->where('docord', $id)
         ->sum('docimporte');
                 
-        if($request->ajax()) return response()->json(['total' => number_format($total,2)]);
+        if($request->ajax()) return response()->json(['total' => $total]);
         
         return $total;
     }
@@ -117,6 +101,7 @@ class VentaController extends Controller
 
         $articulos = Docdeta::where('docord', $id)
         ->where('user_id', Auth::user()->id)
+        ->where('movcve', 51)
         ->sum('doccant');
                 
         if($request->ajax()) return response()->json(['articulos' => number_format($articulos,2)]);
@@ -160,7 +145,7 @@ class VentaController extends Controller
         
         $articulos = Docdeta::where('docord', $id)->sum('doccant');
 
-        $venta = Venta::find($id);
+        $venta = Venta::find($id);        
 
         return view('pventa.ticket', compact('docdetas','total','empresa','id','articulos','venta') );
     }
@@ -195,40 +180,115 @@ class VentaController extends Controller
      * @param  \App\Models\Venta  $venta
      * @return \Illuminate\Http\Response
      */
-    public function dailySales()
+    public function dailySales(Request $request)
     {
-        //
+        
         date_default_timezone_set('America/Mexico_City');
 
-        $ventas = Venta::whereDate('created_at', now()->toDateString())
-        ->get();
+        if($request->fecha_inicio){
 
-        $total = Venta::whereDate('created_at', now()->toDateString())
-        ->sum('pvtotal');        
+            $this->validate($request, [
+                'fecha_inicio' => 'required|date',
+                'fecha_fin' => 'required|date|after_or_equal:fecha_inicio'
+            ]);
+                        
+            $ventas = Venta::whereBetween('pvfecha', [$request->fecha_inicio, $request->fecha_fin])->get();
+            $total = Venta::whereBetween('pvfecha', [$request->fecha_inicio, $request->fecha_fin])->sum('pvtotal');
+            $totales = Venta::selectRaw('pvtipopago, SUM(pvtotal) as total')
+            ->whereBetween('pvfecha', [$request->fecha_inicio, $request->fecha_fin])
+            ->groupBy('pvtipopago')
+            ->get();
 
-        return view('pventa.ventas-diarias', compact('ventas','total'));
+        }else{
+            $ventas = Venta::whereDate('created_at', now()->toDateString())->get();
+            $total = Venta::whereDate('created_at', now()->toDateString())->sum('pvtotal');
+            $totales = Venta::selectRaw('pvtipopago, SUM(pvtotal) as total')
+            ->whereDate('created_at', now()->toDateString())
+            ->groupBy('pvtipopago')
+            ->get();            
+        }
+
+        return view('pventa.ventas-diarias', compact('ventas','total', 'totales'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Venta  $venta
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Venta $venta)
+
+    // vista reporte
+    function descendente()
     {
-        //
+        return view('reports.descendente');
+    }  
+
+    //reporte descendente Excel
+    public function descendenteExport(Request $request)
+    {
+        $request->validate([
+            'fecha_inicio' => 'required|date',
+            'fecha_fin' => 'required|date',
+            'movcve' => 'required',
+        ]);
+        if($request->movcve==51) $titulo = "VentaMostrador";
+        else if($request->movcve==52) $titulo = "Entradas";
+        else $titulo = "Salidas";
+
+        return Excel::download(new DescendenteExport($request->fecha_inicio, $request->fecha_fin, $request->movcve), 'Descendente'.$titulo.'.xlsx');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Venta  $venta
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Venta $venta)
+
+    //reporte descendente Excel
+    public function descendentePrint(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'fecha_inicio' => 'required|date',
+            'fecha_fin' => 'required|date',
+            'movcve' => 'required',
+        ]);
+
+        if($request->movcve == 51) $titulo = "VentaMostrador";        
+        else if($request->movcve == 52) $titulo = "Entradas";
+        else $titulo = "Salidas";
+    
+        $fechaInicio = Carbon::createFromFormat('Y-m-d', $request->fecha_inicio)->startOfDay();
+        $fechaFin = Carbon::createFromFormat('Y-m-d', $request->fecha_fin)->endOfDay();
+
+        $movcve = $request->movcve;
+
+        // ventas mostrador
+        if($movcve == 51){
+            
+            $docdetas = DB::select("SELECT docdetas.codbarras, docdetas.artdesc, docdetas.artprcosto, docdetas.artprventa, docdetas.artdescto, SUM(docdetas.doccant) cant, SUM(docdetas.docimporte) importe
+            FROM ventas
+            INNER JOIN docdetas ON docdetas.docord = ventas.id
+            WHERE ventas.pvfecha BETWEEN '$fechaInicio' AND '$fechaFin' AND docdetas.movcve =51
+            GROUP BY docdetas.codbarras ORDER BY importe Desc");
+
+            $total = Venta::whereBetween('pvfecha', [$fechaInicio, $fechaFin])->sum('pvtotal');
+
+            $titulo ='VENTAS MOSTRADOR';
+        }
+
+        // entradas de proveedor
+        if($movcve == 52){
+            
+            $docdetas = DB::select("SELECT docdetas.codbarras, docdetas.artdesc, docdetas.artprcosto, docdetas.artprventa, docdetas.artdescto, SUM(docdetas.doccant) cant, SUM(docdetas.docimporte) importe
+            FROM compras
+            INNER JOIN docdetas ON docdetas.docord = compras.id
+            WHERE compras.fecha BETWEEN '$fechaInicio' AND '$fechaFin' AND docdetas.movcve = 52
+            GROUP BY docdetas.codbarras ORDER BY importe Desc");
+
+            $total = Compra::whereBetween('fecha', [$fechaInicio, $fechaFin])
+            ->sum('total');
+
+            $titulo ='ENTRADAS DE PROVEEDOR';
+        }       
+
+        $fecha_inicio = Carbon::parse($request->fecha_inicio);
+        $fechaInicio = $fecha_inicio->format('d/m/Y');
+
+        $fecha_fin = Carbon::parse($request->fecha_fin);
+        $fechaFin = $fecha_fin->format('d/m/Y');
+
+        return view('exports.descendente-print', compact('docdetas','total','titulo', 'fechaInicio', 'fechaFin') );
+    }    
+
+
 }

@@ -61,7 +61,7 @@ $(document).ready(function(){
       
     });	
 	    
-// 	var form = document.querySelector("#formProduct"); // form	
+	// 	actualizar cantidad
 	var btn = document.querySelector("#formProductBtn"); // boton
 	btn.addEventListener("click",updatePvproduct);
 	
@@ -204,10 +204,19 @@ function total(){
 		url: totalUrl,
 		success: function(response){				
 			
-			$('#total').html("$" + response.total);
+			$('#total').html(formatCurrency(response.total) );
 			totalProducts()			
 		}			
 	});	
+}
+
+function formatCurrency(number) {
+    return new Intl.NumberFormat('es-MX', {
+        style: 'currency',
+        currency: 'MXN',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    }).format(number);
 }
 
 // total productos
@@ -237,17 +246,24 @@ function enterCodigo(event, flat){
 		if (codigo.trim() == 'BUSCAR' || codigo.trim() == 'buscar') $('#modal-findproduct').modal(); // abrir modal	
 		if (codigo.trim() == 'VENDER' || codigo.trim() == 'vender') $('#modal-confirm').modal();
 		
-		if(codigo.length <= 0 || codigo == '') return false;
+		if(codigo.length <= 0 || codigo == ''){ 
+			$('#modal-findproduct').modal();
+			$('#textoId').focus();
+			return false;
+		}
 				
 		$.ajax({
 			url: storeUrl,
 			type: 'post',
 			data: { 'codigo' : codigo },
-			success:function(){
+			success:function(response){
+				
+				// console.log(response);
 				
 				$("#formCodigo")[0].reset();
 				
 				datatable.ajax.reload();
+				
 				total();
 
 			},
@@ -364,3 +380,39 @@ function handleEnter(field, event)
     }else return true;
     
 } 
+
+
+	// metodo_pago
+	function uncheckOther(checkedCheckbox) {
+		const checkboxes = document.querySelectorAll('input[type="checkbox"][name="metodo_pago"]');
+		checkboxes.forEach(ch => {
+			if (ch !== checkedCheckbox) ch.checked = false;
+		});
+		
+	}
+	// clic tarjeta
+	document.addEventListener('DOMContentLoaded', function () {
+		
+		var tarjetaInput = document.getElementById('tarjeta');
+		
+		tarjetaInput.addEventListener('click', function() {
+			
+			$.ajax({
+				type: 'GET',
+				data: { "id" : 0 },
+				url: totalUrl,
+				success: function(response){				
+					
+					$('#cash').val(response.total);
+					
+					$('#venta-cash').html('');
+										
+					$('#tipopago').val('tarjeta');
+					
+					$('#cash').focus();			
+					$('#cash').select();					
+				}			
+			});					
+			
+		});
+	});	

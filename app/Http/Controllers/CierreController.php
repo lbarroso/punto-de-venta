@@ -12,6 +12,8 @@ class CierreController extends Controller
     //
     public function index()
     {
+        date_default_timezone_set('America/Mexico_City');
+        
         $today = Carbon::today();
 
         // Total de ventas de hoy
@@ -36,7 +38,7 @@ class CierreController extends Controller
         // Saldo anterior, asumiendo que 'cierre' guarda el último saldo al final del día
         $saldoAnterior = Cierre::orderBy('created_at', 'desc')
         ->first()
-        ->saldo ?? 0;
+        ->saldo_actual ?? 0;
 
         // Sumar los montos de las transacciones filtradas
         $totalAmount = Transaction::whereDate('created_at', $today)
@@ -58,11 +60,11 @@ class CierreController extends Controller
         }
 
         $cierre = Cierre::create([
-            'saldo_anterior' => $request->saldo_anterior,
-            'entrada' => $request->entrada,
-            'salida' => $request->salida,
-            'venta' => $request->venta,
-            'saldo_actual' => $request->saldo_actual
+            'saldo_anterior' => $request->input('saldo_anterior'),
+            'entrada' => $request->input('entrada'),
+            'salida' => $request->input('salida'),
+            'venta' => $request->input('venta'),
+            'saldo_actual' => $request->input('saldo_actual')
         ]);
 
         // Redireccionar o responder de acuerdo al resultado
@@ -77,7 +79,15 @@ class CierreController extends Controller
 
     public function ticket(Request $request)
     {
+        date_default_timezone_set('America/Mexico_City');
 
+        $fecha = date('d-m-Y');
+        $hora = date('H:i:s');
+
+        $cierre = Cierre::orderBy('created_at', 'desc')->first();
+
+        return view('cash.ticket',compact('cierre','fecha','hora'));
+        
     } 
 
     public function sendEmeail()

@@ -12,11 +12,12 @@
 		  <div class="card-body">               
 		   
 			<h1>Cierre del Día</h1>
+			
 			@if(session('success'))
-		<div class="alert alert-success">
-			{{ session('success') }}
-		</div>
-	@endif		
+				<div class="alert alert-success">
+					{{ session('success') }}
+				</div>
+			@endif		
 	
 			@if($errors->any())
 				<div class="alert alert-danger">
@@ -32,7 +33,7 @@
 			<!-- Botones de acción -->
 			<div class="mb-3">
 				<button class="btn btn-success" onclick="guardarCierre()">Guardar Cierre</button>
-				<button class="btn btn-primary" onclick="window.print()">Imprimir Cierre</button>
+				<a href="{{ route('cierre.ticket') }}" target="_cierre" class="btn btn-primary"> Imprimir Cierre </a>
 			</div>
 
 			<!-- Tarjetas de totales -->
@@ -43,7 +44,7 @@
 					<div class="card">
 						<div class="card-header">Saldo Anterior</div>
 						<div class="card-body">
-							<h5 class="card-title">$ {{ $saldoAnterior }}</h5>
+							<h5 class="card-title">$ {{ number_format( $saldoAnterior, 2,'.',',') }} </h5>
 						</div>
 					</div>
 				</div>
@@ -52,7 +53,7 @@
 					<div class="card">
 						<div class="card-header">Inicio de caja</div>
 						<div class="card-body">
-							<h5 class="card-title">$ {{ $inicio }}</h5>
+							<h5 class="card-title">$ {{ number_format($inicio, 2,'.',',') }}</h5>
 						</div>
 					</div>
 				</div>				
@@ -62,7 +63,7 @@
 					<div class="card">
 						<div class="card-header">Ventas Diarias</div>
 						<div class="card-body">
-							<h5 class="card-title">$ {{ $ventasDiarias }}</h5>
+							<h5 class="card-title">$ {{ number_format($ventasDiarias, 2,'.',',') }}</h5>
 						</div>
 					</div>
 				</div>
@@ -72,7 +73,7 @@
 					<div class="card">
 						<div class="card-header">Total Entradas</div>
 						<div class="card-body">
-							<h5 class="card-title">$ {{ $totalEntradas }}</h5>
+							<h5 class="card-title">$ {{ number_format($totalEntradas, 2,'.',',') }}</h5>
 						</div>
 					</div>
 				</div>
@@ -82,7 +83,7 @@
 					<div class="card">
 						<div class="card-header">Total Salidas</div>
 						<div class="card-body">
-							<h5 class="card-title">$ {{ $totalSalidas }}</h5>
+							<h5 class="card-title">$ {{ number_format($totalSalidas, 2,'.',',')  }}</h5>
 						</div>
 					</div>
 				</div>
@@ -128,9 +129,8 @@
 <!-- /.content -->
 
     <script>
-        function guardarCierre() {
-            alert('Guardar cierre aún no implementado.');
-			document.getElementById("myForm").submit();
-			
+        function guardarCierre() {            
+			document.getElementById("myForm").submit();			
         }
     </script>
+
