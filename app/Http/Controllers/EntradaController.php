@@ -10,25 +10,6 @@ use Illuminate\Support\Facades\Auth;
 
 class EntradaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -64,9 +45,9 @@ class EntradaController extends Controller
         // guardar entrada
         $entrada = new Entrada();
         $entrada->fecha = now();
-        $entrada->prvcve = 1;
+        $entrada->prvcve = $request->input('prvcve');
         $entrada->total = $total;
-        $entrada->comentarios = "comentarios";
+        $entrada->comentarios = $request->input('comentarios');
         $entrada->save();
         
         // último ID insertado
@@ -83,48 +64,5 @@ class EntradaController extends Controller
 
     } // store
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

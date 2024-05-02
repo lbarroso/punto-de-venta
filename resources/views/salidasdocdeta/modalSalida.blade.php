@@ -2,11 +2,11 @@
 	<div class="modal-dialog ">
 		<div class="modal-content">
 		
-			<form id="formCompra" action="{{ route('compras.store') }}" method="post">
+			<form id="formCompra" action="{{ route('salidas.store') }}" method="post">
 			@csrf
 			
 				<div class="modal-header">
-					<h4 class="modal-title"> Confirmar datos compra </h4>
+					<h4 class="modal-title"> Confirmar datos salida </h4>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -19,16 +19,11 @@
 					</div>		
 
                     <div class="form-group">
-						<label for="prvcve" class="mb-2 mr-sm-2">Proveedor:</label>
-						<select class="form-control mb-2 mr-sm-2" name="prvcve" id="prvcve" required>
+						<label for="ctecve" class="mb-2 mr-sm-2">Cliente:</label>
+						<select class="form-control mb-2 mr-sm-2" name="ctecve" id="ctecve" required>
 							
 						</select>
 					</div>
-					
-                    <div class="form-group">
-						<label for="factura" class="mb-2 mr-sm-2">No. Factura (referencia):</label>
-						<input type="text" id="factura" class="form-control mb-2 mr-sm-2" name="factura">
-					</div>	
 
                     <div class="form-group">
 						<label for="factura" class="mb-2 mr-sm-2">Comentarios:</label>
@@ -46,3 +41,26 @@
 	</div>
 </div>
 
+<script>
+// Function to format date as YYYY-MM-DD
+function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Set the fecha_inicio and fecha_fin fields to today's date
+    var today = formatDate(new Date());
+    document.getElementById('fecha').value = today;
+
+});
+</script>

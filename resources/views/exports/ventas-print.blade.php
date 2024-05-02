@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Descendente</title>
+  <title>Ventas</title>
 
   <!-- Theme style -->
  <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -17,7 +17,7 @@
       <!-- Default box -->
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">DESCENDENTE {{ $titulo }} ACUMULADO DEL PERIODO: {{ $fechaInicio }}  AL {{ $fechaFin }}</h3>
+          <h3 class="card-title">VENTAS  DEL PERIODO: {{ $fechaInicio }}  AL {{ $fechaFin }}</h3>
 
         </div>
 		
@@ -26,57 +26,57 @@
 			<table class="table table-striped table-bordered ">
 
 				<thead>
-
 					<tr>
+						<th><strong>FECHA</strong></th>
 						<th><strong>CODIGO</strong></th>
 						<th><strong>DESCRIPCION</strong></th>
-						<th><strong>PRECIO COSTO</strong></th>
+						<th><strong>CANTIDAD</strong></th>
 						<th><strong>PRECIO VENTA</strong></th>
 						<th><strong>DESCTO.%</strong></th>
-						<th><strong>VENTA ACUM.</strong></th>
-						<th><strong>PARTIC. % </strong></th>
-						<th><strong>CANTIDAD</strong></th>
-						
+						<th><strong>IMPORTE</strong></th>				
+						<th><strong>FORMA PAGO</strong></th>						
 					</tr>
 				</thead>
 				<tbody>
 		
 					@foreach ($docdetas as $item)
-						<tr>			
+						<tr>
+							<td>{{ $item->pvfecha  }}</td>
 							<td>{{ $item->codbarras  }}</td>
 							<td>{{ $item->artdesc }}</td>
-							<td>{{ number_format($item->artprcosto,2) }}</td>
-							<td>{{ number_format($item->artprventa,2) }}</td>
-							<td>{{ number_format($item->artdescto,2) }}</td>
-							<td>{{ number_format($item->importe,2) }}</td>		
-							@if ($item->importe > 0) 
-								<td width="13">{{  $item->importe / $total * 100 }} </td>
-							@else
-								<td width="13">{{  $item->importe }} </td>
-							@endif							
 							<td>{{ $item->cant }}</td>
+							<td>{{ number_format($item->artprventa,2) }}</td>
+							<td>{{ number_format($item->artdescto,2) }}</td>							
+							<td>{{ number_format($item->importe,2) }}</td>						 
+							<td>{{ $item->pvtipopago }}</td>							
 						</tr>
 					@endforeach
 					
 				</tbody>
 				<tfoot>
 					<tr>
-
 						<td></td>
 						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td>{{ number_format($total,2) }}</td>
 						<td> </td>
-						<td> </td>
-						<td> </td>
-						<td> {{ $total }} </td>
-						<td> </td>
-						<td> </td>
-						
-
 					</tr>
 				</tfoot>
 			</table>		
 		
         </div>
+
+		<div class="card-footer">
+			@foreach ($totales as $row) 
+
+				Total de ventas por {{ $row->pvtipopago }} : {{ number_format($row->total,2) }}  <br>
+				
+			@endforeach			
+
+			Total general de ventas: $ {{ number_format($total,2) }} 
+		</div>
 
       </div>
       <!-- /.card -->

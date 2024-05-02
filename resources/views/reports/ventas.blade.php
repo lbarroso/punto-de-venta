@@ -23,10 +23,21 @@
   
       <div class="card card-default">
           <div class="card-header">
-              <h3 class="card-title">Descendente </h3>
+              <h3 class="card-title"> Reporte de Ventas </h3>
           </div>
 
           <div class="card-body">
+
+			   <!-- Muestra errores de validación -->
+				@if ($errors->any())
+					<div class="alert alert-danger">
+						<ul>
+							@foreach ($errors->all() as $error)
+								<li>{{ $error }}</li>
+							@endforeach
+						</ul>
+					</div>
+				@endif		  
 
               <div class="row">
                 
@@ -35,29 +46,29 @@
 						<div class="card card-primary card-outline">
 						
 							<div class="card-header">
-							  <h5 class="card-title m-0">Descende de ventas acumulado</h5>
+							  <h5 class="card-title m-0"> seleccionar filtros </h5>
 							</div>
 							
 							<div class="card-body">
 								
-								<form id="reportForm" action="{{ route('descendente.export') }}" method="GET">
+								<form id="reportForm" action="{{ route('sales.report') }}" method="GET">
 								
 									<label for="fecha_inicio" class="mb-2 mr-sm-2">Fecha Inicio:</label>
-									<input type="date" id="fecha_inicio" class="form-control mb-2 mr-sm-2" name="fecha_inicio" style="width:auto;" required>
+									<input type="date" id="fecha_inicio" class="form-control mb-2 mr-sm-2" style="width:auto;" name="fecha_inicio" required>
 									
 									<label for="fecha_fin" class="mb-2 mr-sm-2">Fecha Final:</label>
-									<input type="date" id="fecha_fin" class="form-control mb-2 mr-sm-2" name="fecha_fin" style="width:auto;" required>
+									<input type="date" id="fecha_fin" class="form-control mb-2 mr-sm-2" style="width:auto;" name="fecha_fin" required>
 									
 									<label for="cvemov" class="mb-2 mr-sm-2">Movimiento:</label>
 									<select id="cvemov" class="form-control mb-2 mr-sm-2" name="movcve" style="width:auto;" required>
 										<option value="51">VENTAS MOSTRADOR</option>
-										<option value="52">ENTRADAS DE PROVEEDORES</option>                                
+										                              
 									</select>
 									
 									<label for="formato_salida" class="mb-2 mr-sm-2">Salida:</label>
 									<select id="formato_salida" class="form-control mb-2 mr-sm-2" name="formato_salida" style="width:auto;" required>
-										<option value="1">FORMATO EXCEL</option>
-										<option value="2">PANTALLA</option>                                
+										<option value="2">PANTALLA</option>
+										<option value="1">FORMATO EXCEL</option>										
 									</select>                                  
 									
 									<button type="submit" class="btn btn-primary mb-2">Generar Reporte</button>
@@ -116,7 +127,7 @@ document.getElementById('reportForm').addEventListener('submit', function(event)
         this.action = '{{ route('descendente.export') }}';
     } else if (salida === '2') {
         this.target = '_blank';
-		this.action = '{{ route('descendente.print') }}';
+		this.action = '{{ route('sales.report') }}';
 		
     }
 

@@ -106,4 +106,12 @@ class ClienteController extends Controller
         return redirect()->route('clientes.index')
             ->with('success', 'Cliente deleted successfully');
     }
+
+    /**
+     * listado clientes llamada desde salida.js
+     */
+    public function clientes(){
+        return response()->json(Cliente::orderBy('ctenom')->get());
+    }
+
 }

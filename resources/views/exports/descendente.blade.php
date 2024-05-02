@@ -24,7 +24,11 @@
                 <td width="13">{{ $item->artprventa }}</td>
 				<td width="13">{{ $item->artdescto }}</td>
 				<td width="13">{{ $item->importe }}</td>          
-                <td width="13">{{ $item->importe / $total * 100 }} </td>
+				@if ($item->importe > 0) 
+					<td width="13">{{  $item->importe / $total * 100 }} </td>
+				@else
+					<td width="13">{{  $item->importe }} </td>
+				@endif
                 <td width="13">{{ $item->cant }}</td>
             </tr>
         @endforeach

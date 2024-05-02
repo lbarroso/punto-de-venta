@@ -211,6 +211,45 @@ class VentaController extends Controller
         return view('pventa.ventas-diarias', compact('ventas','total', 'totales'));
     }
 
+    // reporte de ventas en pantalla
+    public function SalesReport(Request $request){
+
+        date_default_timezone_set('America/Mexico_City');
+
+        $this->validate($request, [
+            'fecha_inicio' => 'required|date',
+            'fecha_fin' => 'required|date|after_or_equal:fecha_inicio'
+        ]);
+        
+        $docdetas = DB::select("SELECT docdetas.codbarras, ventas.pvtipopago, ventas.pvfecha, docdetas.artdesc, docdetas.artprcosto, docdetas.artprventa, docdetas.artdescto, SUM(docdetas.doccant) cant, SUM(docdetas.docimporte) importe
+        FROM ventas
+        INNER JOIN docdetas ON docdetas.docord = ventas.id
+        WHERE ventas.pvfecha BETWEEN '$request->fecha_inicio' AND '$request->fecha_fin' AND docdetas.movcve = 51
+        GROUP BY docdetas.codbarras 
+        ORDER BY ventas.pvfecha");        
+
+        $total = Venta::whereBetween('pvfecha', [$request->fecha_inicio, $request->fecha_fin])->sum('pvtotal');
+
+        $totales = Venta::selectRaw('pvtipopago, SUM(pvtotal) as total')
+        ->whereBetween('pvfecha', [$request->fecha_inicio, $request->fecha_fin])
+        ->groupBy('pvtipopago')
+        ->get();
+
+        $fechaInicio = Carbon::parse($request->fecha_inicio);
+        $fechaInicio = $fechaInicio->format('d/m/Y');
+
+        $fechaFin = Carbon::parse($request->fecha_fin);
+        $fechaFin = $fechaFin->format('d/m/Y');
+
+        return view('exports.ventas-print', compact('docdetas','total', 'totales', 'fechaInicio', 'fechaFin'));
+
+    }
+
+    // vista reporte
+    function ventas()
+    {
+        return view('reports.ventas');
+    }  
 
     // vista reporte
     function descendente()
@@ -273,7 +312,8 @@ class VentaController extends Controller
             FROM compras
             INNER JOIN docdetas ON docdetas.docord = compras.id
             WHERE compras.fecha BETWEEN '$fechaInicio' AND '$fechaFin' AND docdetas.movcve = 52
-            GROUP BY docdetas.codbarras ORDER BY importe Desc");
+            GROUP BY docdetas.codbarras 
+            ORDER BY importe Desc, cant Desc");
 
             $total = Compra::whereBetween('fecha', [$fechaInicio, $fechaFin])
             ->sum('total');
@@ -290,5 +330,26 @@ class VentaController extends Controller
         return view('exports.descendente-print', compact('docdetas','total','titulo', 'fechaInicio', 'fechaFin') );
     }    
 
+    // descuento sobre venta
+    public function desctoVenta(Request $request){
+        
+        $docdetas = Docdeta::where('movcve', 51)
+        ->where('user_id', Auth::user()->id)
+        ->where('docord', 0)
+        ->get();
 
-}
+        foreach ($docdetas as $row) {
+            $docdeta = Docdeta::find($row->id);
+            $docdeta->artdescto = $request->input('porcentaje');
+            
+            $subtotal = $row->artprventa * ($request->input('porcentaje') / 100);
+            $artprventa = $row->artprventa - $subtotal;
+            $docdeta->docimporte = $artprventa * $row->doccant;
+            $docdeta->save();
+        }
+
+        return redirect('pvproducts');
+
+    }
+
+} //class

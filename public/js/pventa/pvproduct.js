@@ -4,18 +4,12 @@ var datatable;
 $(document).ready(function(){
 		
     datatable = $('#table').DataTable({
-		
-		order: [[0, 'asc']], 
+		order: [[7, 'desc']],
         ajax: indexUrl,
 		
         columns: [
-            // La primera columna ahora es un número consecutivo
-            {
-                data: null,
-                render: function (data, type, row, meta) {
-                    return meta.row + 1;
-                }
-            },
+            // La primera columna
+			{ data:'product_id' },
             { data:'artdesc' },			
             { data:'doccant' },
             {
@@ -243,8 +237,13 @@ function enterCodigo(event, flat){
 
 		event.preventDefault();
 		var codigo = document.getElementById("codigo").value;
-		if (codigo.trim() == 'BUSCAR' || codigo.trim() == 'buscar') $('#modal-findproduct').modal(); // abrir modal	
-		if (codigo.trim() == 'VENDER' || codigo.trim() == 'vender') $('#modal-confirm').modal();
+		if (codigo.trim() == 'BUSCAR' || codigo.trim() == 'buscar'){ 
+			$('#modal-findproduct').modal();
+			$('#textoId').focus();
+			$("#formCodigo")[0].reset();
+			return false;
+		}
+		if (codigo.trim() == 'CONFIRMAR' || codigo.trim() == 'confirmar') $('#modal-confirm').modal();
 		
 		if(codigo.length <= 0 || codigo == ''){ 
 			$('#modal-findproduct').modal();
@@ -258,13 +257,21 @@ function enterCodigo(event, flat){
 			data: { 'codigo' : codigo },
 			success:function(response){
 				
-				// console.log(response);
-				
 				$("#formCodigo")[0].reset();
 				
 				datatable.ajax.reload();
 				
 				total();
+				
+				// restaurar anuncio
+				var imagen = document.createElement('img');
+				imagen.src = "admin/dist/img/welcome.jpg";
+				imagen.alt = "Anuncio";
+				imagen.className = "ad";
+
+				$('#ad-container').html(imagen);			
+				
+				if(response == 'noexiste') alert("El codigo ingresado no corresponde a ningun producto del inventario");				
 
 			},
 			error:function(res){

@@ -14,7 +14,7 @@
 					
                     <div class="form-group">
 						<label for="doccant">Descto.</label>
-						<input type="number" value="0" min="0" step="1" max="15" onKeyPress="return handleEnter(this, event)" name="artdescto" id="artdescto" class="form-control">
+						<input type="number" value="0" min="0" step="1" max="15" onKeyPress="return handleEnter(this, event)" name="artdescto" id="artdescto" onFocus="this.select()" class="form-control">
 					</div>					
 
                     <div class="form-group">
@@ -32,3 +32,4 @@
 		</div>
 	</div>
 </div>
+

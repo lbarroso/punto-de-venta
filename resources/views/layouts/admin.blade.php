@@ -205,24 +205,21 @@
                                 <i class="fas fa-angle-left right"></i>
                               </p>
                             </a>
+							
                             <ul class="nav nav-treeview">
                               <li class="nav-item">
-                                <a href="{{ route('entrada.index') }}" class="nav-link {{ active_menu(route('entrada.index')) }}" >
-                                  <i class="fas fa-plus-square nav-icon"></i>
-                                  <p>Entradas</p>
-                                </a>
                                 <a href="{{ route('compras.index') }}" class="nav-link {{ active_menu(route('compras.index')) }}" >
                                   <i class="fas fa-plus-square nav-icon"></i>
                                   <p>Compras</p>
-                                </a>								
+                                </a>	
                               </li>
-                            </ul>
+                            </ul>							
                             <ul class="nav nav-treeview">
-                              <li class="nav-item">
-                                <a href="{{ route('salida.index') }}"  class="nav-link {{ active_menu(route('salida.index')) }}">
+                              <li class="nav-item">							  
+                                <a href="{{ route('salidas.index') }}"  class="nav-link {{ active_menu(route('salidas.index')) }}">
                                   <i class="fas fa-minus-square nav-icon"></i>
                                   <p>Salidas</p>
-                                </a>
+                                </a>        								
                               </li>
                             </ul>							
                         </li>		
@@ -252,7 +249,15 @@
                                   <p>Descendente</p>
                                 </a>
                               </li>
-                            </ul>							
+                            </ul>
+                            <ul class="nav nav-treeview">
+                              <li class="nav-item">
+                                <a href="{{ route('ventas') }}" class="nav-link {{ active_menu(route('ventas')) }}">
+                                  <i class="far fa-circle nav-icon"></i>
+                                  <p>Ventas</p>
+                                </a>
+                              </li>
+                            </ul>								
                         </li>					
 						
 						@endif

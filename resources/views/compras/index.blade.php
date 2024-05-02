@@ -49,13 +49,15 @@
                   <div class="col">
 
                     <div class="table-responsive-sm">  
+					
                       <table class="table table-striped table-bordered table-hover" id="table" class="display" style="width:100%; font-size:11pt">                        
                           <thead class="thead-dark">
                               <tr>
 								<th>Fecha</th>
+								<th>Folio</th>
 								<th>Proveedor</th>
 								<th>No. Factura</th>
-								<th>Comentarios</th>
+								<th>Status</th>
 								<th>Total</th>
 								<th>Acciones</th>
                               </tr>
@@ -63,16 +65,25 @@
 						  <tbody>
 							@foreach ($compras as $compra)
 							<tr>
-								<td>{{ $compra->fecha }}</td>
+								<td>{{ $compra->fecha->format('d/m/y') }}</td>
+								<td>{{ $compra->id }} </td>
 								<td>{{ $compra->proveedor }}</td>
 								<td>{{ $compra->factura }}</td>
-								<td>{{ $compra->comentarios }}</td>
+								<td>{{ $compra->status }}</td>
 								<td align="right">$ {{ number_format($compra->total,2) }}</td>
-								<td> <a href="{{ route('compras.pdf', ['id' => $compra->id]) }}" target="_pdf" class="btn btn-info btn-sm mr-1"> <i class="fas fa-print"> </i> </a> </td>
+								<td> 
+									<a href="{{ route('compras.pdf', ['id' => $compra->id]) }}" target="_pdf" class="btn btn-info btn-sm mr-1"> <i class="fas fa-print"> </i> </a> 
+									<a href="#" title="cancelar" class="btn btn-danger btn-sm mr-1"> <i class="fa fa-times"></i> </a>  
+								</td>
 							</tr>
 							@endforeach
 						</tbody>
                       </table>
+					  
+					  <div>
+						{{ $compras->links() }}
+					  </div>
+					  
                     </div>
 
                   </div>

@@ -8,6 +8,7 @@ use App\Models\Docdeta;
 use App\Models\Proveedor;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class CompraController extends Controller
 {
@@ -34,7 +35,8 @@ class CompraController extends Controller
             ->whereBetween('compras.fecha', [$request->fecha_inicio, $request->fecha_fin])
             ->orderBy('compras.created_at', 'desc')
             ->select('compras.*', 'proveedores.prvrazon as proveedor') // ejemplo de selección de columnas
-            ->get();
+            ->paginate(15);
+
             $total = Compra::whereBetween('fecha', [$request->fecha_inicio, $request->fecha_fin])->sum('total');
 
         }else{
@@ -43,7 +45,7 @@ class CompraController extends Controller
             ->whereDate('compras.created_at', now()->toDateString())
             ->orderBy('compras.created_at', 'desc')
             ->select('compras.*', 'proveedores.prvrazon as proveedor') // ejemplo de selección de columnas
-            ->get();
+            ->paginate(15);
 
             $total = Compra::whereDate('created_at', now()->toDateString())->sum('total');
         }

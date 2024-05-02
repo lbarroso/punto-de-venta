@@ -142,8 +142,8 @@
 @endsection
 
 @section('modal')
-	@include('entradas.modalProduct')
-	@include('entradas.modalCompra')
-	@include('entradas.modalFindProduct')
+	@include('entradasdocdeta.modalProduct')
+	@include('entradasdocdeta.modalCompra')
+	@include('entradasdocdeta.modalFindProduct')
 @endsection
 

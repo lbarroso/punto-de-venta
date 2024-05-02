@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Docdeta;
+use App\Models\Venta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -23,18 +24,25 @@ class PvproductController extends Controller
     {
         $docord = !empty($request->session()->get('docord')) ? $request->session()->get('docord') : 0;
         
+        // products details
+        $docdeta = Docdeta::where('movcve', 51)
+        ->where('user_id', Auth::user()->id)
+        ->where('docord', $docord)
+        ->orderByDesc('id')
+        ->get();
+
+        // venta creada
+        $venta = Venta::where('id', $docord)->first();
+        
         // datatable:pvproducts.js
         if($request->ajax()){
-            return response()->json(['data' => Docdeta::where('movcve', 51)
-            ->where('user_id', Auth::user()->id)
-            ->where('docord', $docord)
-            ->get() ]);
+            return response()->json(['data' => $docdeta]);
         }
         
         $appUrl = env('APP_URL');
 
         // Mostrar ventana emergente ticket
-        return view('pventa.index', compact('docord','appUrl'));
+        return view('pventa.index', compact('docord','appUrl','venta'));
     } // index
 
     /**
@@ -95,7 +103,7 @@ class PvproductController extends Controller
             $docdeta->docsession = Auth::user()->name;
             // $docdeta->docsession = $sesionActual['_token'];
             $docdeta->save();
-        }
+        }else return 'noexiste';
         
         return false;
         
@@ -166,19 +174,29 @@ class PvproductController extends Controller
     {
         
         $docdeta = Docdeta::find($request->id);
+        $porcentaje = (int)$request->input('artdescto');
         // Calcular el descuento
-        $descuento = $docdeta->artprventa * ($request->input('artdescto') / 100);
+        $descuento = $docdeta->artprventa * ( $porcentaje / 100);
+        
+        // Si el descuento es mayor a 15% y el usuario autenticado no es el ID 1, no permitir la actualización
+        if ($porcentaje > 15 && auth()->user()->id != 1) {
+            return false;
+        }
+        
         // Calcular el subtotal
-        $subtotal = $docdeta->artprventa - $descuento;        
+        $subtotal = $docdeta->artprventa - $descuento;
+        
+        // Calcular el importe total
         $docimporte = $request->input('doccant') * $subtotal;
-
+    
+        // Actualizar los datos
         $docdeta->update([
             'doccant' => $request->input('doccant'),
-            'artdescto' => $request->input('artdescto'),
-            'docimporte' =>  $docimporte
+            'artdescto' => $porcentaje,
+            'docimporte' => $docimporte
         ]);
-
-        return response()->json(['success'=>'Producto Guardado']);
+    
+        return response()->json(['success'=>'Producto actualizado correctamente']);
     }
 
     /**

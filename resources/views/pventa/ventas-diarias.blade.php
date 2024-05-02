@@ -33,12 +33,12 @@
 					@csrf
 							
 					<label for="email2" class="mb-2 mr-sm-2">Fecha Inicio:</label>
-					<input type="date" id="fecha_inicio" class="form-control mb-2 mr-sm-2" name="fecha_inicio" required>
+					<input type="date" id="fecha_inicio" class="form-control mb-2 mr-sm-2" name="fecha_inicio" style="width:auto;" required>
 					
 					<label for="pwd2" class="mb-2 mr-sm-2">Fecha Final:</label>
-					<input type="date" id="fecha_fin" class="form-control mb-2 mr-sm-2" name="fecha_fin" required>
+					<input type="date" id="fecha_fin" class="form-control mb-2 mr-sm-2" name="fecha_fin" style="width:auto;" required>
 				  
-					<button type="submit" class="btn btn-primary mb-2">Generar Reporte</button>
+					<button type="submit" class="btn btn-primary mb-2" style="width:auto;">Generar Reporte</button>
 					
 				  </form>	
 				@endif

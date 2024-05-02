@@ -30,7 +30,7 @@
 						  <table class="table table-hover" id="table" class="display" style="width:100% ">                        
 							  <thead>
 								  <tr>
-									  <th>#</th>                                  
+									  <th>Id</th>                                  
 									  <th>Descripci&oacute;n</th>                                  
 									  <th>Cant.</th>
 									  <th>Precio</th>
@@ -40,26 +40,41 @@
 									  <th>Acciones</th>
 								  </tr>
 							  </thead>
+
 							  <!-- tbody:datatable /pvproducts.js -->
 
-						  </table>
+						  </table>						 
+						  
 						  </div>
 					  
 					</div>
 				</div>
 
 				<div id="total-section">
-					<!-- Totales -->
+					<!-- total venta -->
 					<div id="total"> </div>
+					<!-- total articulos -->
 					<div id="total-products" class="text-muted"></div>
+					
 					<!-- Agrega anuncios aquí -->
 					<div id="ad-container">
-						<img class="ad" src="{{ asset('admin/dist/img/welcome.jpg') }}" alt="Anuncio 1">
+						@if($docord > 0)
+							<div class="alert alert-success alert-dismissible">
+								<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+								<h5><i class="icon fas fa-check"></i> Venta registrada con éxito!</h5>							
+								Total $ {{ number_format($venta->pvtotal,2) }}  <br>
+								Recibido $ {{ number_format($venta->pvcash,2) }}  <br>
+								Cambio $ {{ number_format($venta->pvtotal - $venta->pvcash,2) }} <br>
+								último folio: {{ $venta->id }} 
+							</div>
+						@else
+							<img class="ad" src="{{ asset('admin/dist/img/welcome.jpg') }}" alt="Anuncio">
+							
+						@endif						
+						
 						<!-- Agrega más anuncios según sea necesario -->
 					</div>
-
-					<img id="logo" src="{{ asset('admin/dist/img/credit/visa.png') }}" alt="Logo de la Empresa">
-				
+					<img id="logo" src="{{ asset('admin/dist/img/credit/visa.png') }}" alt="Logo de la Empresa">				
 				</div>
 			</div>
 						
@@ -83,7 +98,6 @@
 @section('styles')
 <link rel="stylesheet" href="{{ asset('pventa/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset('pventa/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
-
 @endsection
 
 @section('scripts')
@@ -105,7 +119,6 @@
 	var findUrl = '{{ route("pvproducts.find",["texto" => 0]) }}';
 	var docdetaStoreUrl = '{{ route("docdeta.store") }}';
 	var totalProductsUrl = '{{ route("venta.totalproducts") }}';
-	
 	
 </script>
 <!--contiene el metodo buscar data tables-->
@@ -189,15 +202,22 @@
 				console.log(res);
 			}
 		});
-	}			
+	}	
+
+	function openModalDescto( )
+	{
+		$('#modal-descto').modal();
+		$('#porcentaje').focus();
+	}	
 	</script>
 @endsection
 
-<!--buscar producto-->
+<!--modal-->
 @section('modal')
     @include('pventa.modalProduct')
 	@include('pventa.modalFindProduct')
     @include('pventa.modalConfirmVenta')
+	@include('pventa.modalDescto')
 @endsection
 
 

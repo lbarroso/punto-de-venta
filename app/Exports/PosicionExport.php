@@ -41,15 +41,11 @@ class PosicionExport implements FromView, WithColumnFormatting
     {
 
         //$products = Product::all();
-
-        $products = Product::select('id', 'codbarras', 'artdesc', 'artprcosto', 'artprventa', 'stock')
-
-        ->where('stock', '>', 0)
-
-        ->orderBy('artdesc', 'asc')
-
+        $products = Product::select('products.artdetalle', 'products.id', 'products.codbarras', 'products.artdesc', 'products.artprcosto', 'products.artprventa', 'products.stock', 'products.artmarca','proveedores.prvrazon', 'artstatus')
+        ->join('proveedores', 'proveedores.id', '=', 'products.proveedor_id') // Añadiendo el INNER JOIN
+        //->where('products.stock', '>=', 0)
+        ->orderBy('products.artdesc', 'asc')
         ->get();        
-
         
 
         $total_stock = Product::where('stock', '>', 0)->sum('stock');
@@ -72,7 +68,7 @@ class PosicionExport implements FromView, WithColumnFormatting
 
             'A' => NumberFormat::FORMAT_NUMBER,
 
-            'B' => NumberFormat::FORMAT_TEXT,
+            'B' => NumberFormat::FORMAT_NUMBER,
 
             'C' => NumberFormat::FORMAT_TEXT,
 

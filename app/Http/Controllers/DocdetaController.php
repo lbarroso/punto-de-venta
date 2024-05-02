@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class DocdetaController extends Controller
 {
 
-
+    // entradas table
     public function entradaIndex(Request $request)
     {
 
@@ -20,8 +20,21 @@ class DocdetaController extends Controller
             ->get() ]);
         }
 
-        return view('entradas.index');        
+        return view('entradasdocdeta.index');        
     }
+
+    // salidas table
+    public function salidaIndex(Request $request)
+    {
+
+        if($request->ajax()){
+            return response()->json(['data' => Docdeta::where('movcve', 53)
+            ->where('docord', 0)
+            ->get() ]);
+        }
+
+        return view('salidasdocdeta.index');        
+    }    
 
     // crear un nuevo registro en la tabla docdetas
     // movcve 52 entrada
@@ -87,6 +100,62 @@ class DocdetaController extends Controller
 
         }        
     }
+
+    // crear un nuevo registro en la tabla docdetas
+    // movcve 53 salida
+    public function salidaAjaxProduct(Request $request)
+    {
+
+        date_default_timezone_set('America/Mexico_City');
+
+        if($request->ajax()){
+
+            // Validar los datos del formulario
+            $validatedData = $request->validate([
+                'codbarras' => 'required|string|max:255',
+                'doccant' => 'required|numeric',
+                'artprventa' => 'required|numeric',
+            ]);
+
+            // importe
+            $descto = $validatedData['doccant'] * $validatedData['artprventa'] / 100;
+            $artprventa = $validatedData['artprventa'] - $descto ;
+            $importe = $validatedData['doccant'] * $artprventa;
+
+            // Calcular el descuento
+            $descuento = $validatedData['artprventa'] * ($request->input('artdescto') / 100);
+
+            // Calcular el subtotal
+            $subtotal = $validatedData['artprventa'] - $descuento;
+
+            $docimporte = $validatedData['doccant'] * $subtotal;
+
+            // Crear un nuevo registro en la tabla DocDeta
+            $docDeta = new Docdeta([
+                'product_id' => $request->input('id'),
+                'movcve' => 53,
+                'artcve' => $request->input('artcve'),
+                'codbarras' => $validatedData['codbarras'],
+                'artdesc' => $request->input('artdesc'),
+                'artprcosto' => $request->input('artprcosto'),
+                'artdescto' => $request->input('artdescto'),
+                'artprventa' => $validatedData['artprventa'],
+                'docimporte' => $docimporte,
+                'artpesogrm' => $request->input('artpesogrm'),
+                'artpesoum' => $request->input('artpesoum'),
+                'artganancia' => $request->input('artganancia'),
+                'doccant' => $validatedData['doccant'],
+                'stock' => $request->input('stock'),
+                'docsession' => Auth::user()->name,
+                'user_id' => Auth::user()->id,
+            ]);
+            
+            $docDeta->save();
+
+            return response()->json(['success' => 'Producto añadido correctamente', 'data' => $docDeta]);
+
+        }        
+    }    
 
     /******************************
      * buscar codigo               *
@@ -217,6 +286,36 @@ class DocdetaController extends Controller
         return response()->json(['success'=>'Producto Guardado']);
     }    
 
+
+
+    /**
+     * editar cantidad y artdescto
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Venta  $venta
+     * @return \Illuminate\Http\Response
+     */
+    public function salidaProductUpdate(Request $request)
+    {
+        
+        $docdeta = Docdeta::find($request->input('id'));
+        // Calcular el descuento
+        $descuento = $request->input('artprventa') * ($request->input('artdescto') / 100);
+        // Calcular el subtotal
+        $subtotal = $request->input('artprventa') - $descuento;     
+
+        $docimporte = $request->input('doccant') * $subtotal;
+
+        $docdeta->update([
+            'doccant' => $request->input('doccant'),
+            'artprventa' => $request->input('artprventa'),
+            'artdescto' => $request->input('artdescto'),
+            'docimporte' =>  $docimporte
+        ]);
+
+        return response()->json(['success'=>'Producto Guardado']);
+    }     
+
     /**
      * Display the specified resource.
      *
@@ -236,10 +335,24 @@ class DocdetaController extends Controller
         return $total;
     }    
 
-    public function salidaIndex(Request $request)
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Venta  $venta
+     * @return \Illuminate\Http\Response
+     */
+    public function salidaTotal(Request $request)
     {
+        $docord = !empty($request->docord) ? $request->docord : 0;
 
-        return view('salidas.index');        
-    }    
+        $total = Docdeta::where('movcve', 53)
+        ->where('docord', $docord)
+        ->sum('docimporte');
+                
+        if($request->ajax()) return response()->json(['total' => $total]);
+        
+        return $total;
+    }
+
 
 } // class

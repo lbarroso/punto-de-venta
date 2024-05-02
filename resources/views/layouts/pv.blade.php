@@ -106,7 +106,11 @@
 	  
       <li class="nav-item d-none d-sm-inline-block">
         <a href="#" onClick="openModalFindProduct()" class="nav-link"> [F9] Buscar producto</a>
-      </li>	  	  
+      </li>	  	
+
+	  <li class="nav-item d-none d-sm-inline-block">
+       <a href="#" onClick="openModalDescto()" class="btn btn-default"> <i class="fa fa-percent"></i></a>
+      </li>	 
 
     </ul>
 

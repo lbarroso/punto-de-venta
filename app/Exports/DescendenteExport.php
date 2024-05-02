@@ -63,7 +63,8 @@ class DescendenteExport implements FromView, WithColumnFormatting
             FROM compras
             INNER JOIN docdetas ON docdetas.docord = compras.id
             WHERE compras.fecha BETWEEN '$fechaInicio' AND '$fechaFin' AND docdetas.movcve = 52
-            GROUP BY docdetas.codbarras ORDER BY importe Desc");
+            GROUP BY docdetas.codbarras 
+            ORDER BY importe Desc, cant Desc");
 
             $total = Compra::whereBetween('fecha', [$fechaInicio, $fechaFin])
             ->sum('total');
