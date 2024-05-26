@@ -46,21 +46,12 @@
 							
 							<div class="col-auto">
 								<label for="artprcosto" class="visually-hidden">Costo</label>
-								<input type="text" class="form-control" id="artprcosto" name="artprcosto" placeholder="Costo" onFocus="this.select()" onchange="artGanancia(); alert('Seleccione actua. =SI  para modificar su precio de venta en todo el iventario')"  onKeyPress=" return handleEnter(this, event); ">
+								<input type="text" class="form-control" id="artprcosto" name="artprcosto" placeholder="Costo" onFocus="this.select()" onchange="confirmChange()"  onKeyPress=" return handleEnter(this, event); ">
 							</div>
 							
 							<div class="col-md-2">
 								<label for="artganancia" class="visually-hidden">Ganancia</label>
-								<input type="number" class="form-control" id="artganancia" name="artganancia" placeholder="Utilidad (%)"  onFocus="this.select()" onchange="artGanancia(); alert('Seleccione actua. =SI  para modificar su precio de venta en todo el iventario')" onKeyPress="return handleEnter(this, event)">
-							</div>
-							
-							<div class="col-auto">
-								<label for="updateArtprventa" class="visually-hidden">Actua.</label>
-								<select class="form-control" id="updateArtprventa" name="updateArtprventa" onKeyPress="return handleEnter(this, event)">
-									<option value="0"> NO </option>
-									<option value="1"> SI </option>
-									
-								</select>
+								<input type="number" class="form-control" id="artganancia" name="artganancia" placeholder="Utilidad (%)"  onFocus="this.select()" onchange="confirmChange()" onKeyPress="return handleEnter(this, event)">
 							</div>
 							
 							<div class="col-auto">
@@ -75,11 +66,13 @@
 							
 							<!--ocultos-->
 							<input type="hidden" name="id" id="id" value="0">
+							<input type="hidden" name="codigo" id="codigo" value="">
 							<input type="hidden" name="artdesc" id="artdesc" value="">
 							<input type="hidden" name="artcve" id="artcve" value="0">
 							<input type="hidden" name="stock" id="stock" value="0">
 							<input type="hidden" name="artpesogrm" id="artpesogrm" value="1">
-							<input type="hidden" name="artpesoum" id="artpesoum" value="PZA">						
+							<input type="hidden" name="artpesoum" id="artpesoum" value="PZA">	
+							<input type="hidden" name="updateArtprventa" id="updateArtprventa" value="NO">
 							
 						</form>
 					
@@ -112,6 +105,7 @@
             </div>
         </div>
     </section>
+	
 @endsection
 
 @section('styles')
@@ -138,6 +132,19 @@
 	var deleteProductUrl = '{{ route("entrada.product.delete",["id" => 0]) }}';
 	var updateProductUrl = '{{ route("entrada.product.update",["id" => 0]) }}';
 	var entradaTotalUrl = '{{ route("entrada.total") }}';		
+</script>
+<script>
+function confirmChange() {
+	artGanancia(); 
+    // Mostrar diálogo de confirmación
+    var confirmacion = confirm("¿Cambiar el precio de costo dentro del inventario?");
+
+    // Si el usuario selecciona "Sí"
+    if (confirmacion) {
+        // Cambiar el valor del input 'updateArtprventa' a 'SI'
+        document.getElementById('updateArtprventa').value = 'SI';
+    }
+}
 </script>
 @endsection
 

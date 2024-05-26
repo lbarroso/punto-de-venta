@@ -27,10 +27,10 @@
 
 						  <!--listado productos solo encabazados-->	
 						  <div class="table-responsive-sm">
-						  <table class="table table-hover" id="table" class="display" style="width:100% ">                        
+						  <table class="table table-hover" id="table" class="display" style="width:100% "> 
 							  <thead>
 								  <tr>
-									  <th>Id</th>                                  
+									  <th>C&oacute;digo</th>                                  
 									  <th>Descripci&oacute;n</th>                                  
 									  <th>Cant.</th>
 									  <th>Precio</th>
@@ -168,7 +168,7 @@
 				
 				const total = parseFloat(response.total);
 				
-				if(!isNaN(total) && total > 0){
+				if(!isNaN(total) && total >= 0){
 					
 					$('#modal-confirm').modal();
 					$('#venta-total').html(response.total);

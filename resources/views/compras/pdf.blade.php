@@ -84,6 +84,7 @@
 						  <th>Cant.</th>
 						  <th>Codigo</th>
 						  <th>Descripcion Producto</th>
+						  <th>Stock</th>
 						  <th>P.Compra</th>
 						  <th>Importe</th>
 						</tr>
@@ -94,8 +95,9 @@
 						  <td>{{ $docdeta->doccant }}</td>
 						  <td>{{ $docdeta->codbarras }}</td>						  
 						  <td>{{ $docdeta->artdesc }}</td>
-						  <td>{{ $docdeta->artprcosto }}</td>
-						  <td>{{ $docdeta->docimporte }}</td>
+						  <td>{{ $docdeta->stock }}</td>
+						  <td>{{ number_format($docdeta->artprcosto, 2,) }}</td>
+						  <td>{{ number_format($docdeta->docimporte, 2,) }}</td>
 						</tr>
 						@endforeach
 						</tbody>
@@ -123,7 +125,7 @@
 						<table class="table">
 						  <tr>
 							<th style="width:50%">Subtotal: </th>
-							<td>$ {{ $compra->total }} </td>
+							<td>$ {{ number_format($compra->total, 2) }} </td>
 						  </tr>
 						  <tr>
 							<th>IVA (0%)</th>
@@ -135,7 +137,7 @@
 						  </tr>
 						  <tr>
 							<th>Total:</th>
-							<td>$ {{ $compra->total }} </td>
+							<td>$ {{ number_format($compra->total, 2) }} </td>
 						  </tr>
 						</table>
 					  </div>

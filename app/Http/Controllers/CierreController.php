@@ -17,7 +17,7 @@ class CierreController extends Controller
         $today = Carbon::today();
 
         // Total de ventas de hoy
-        $ventasDiarias = Venta::whereDate('created_at', $today)->sum('pvtotal');        
+        $ventasDiarias = Venta::whereDate('created_at', $today)->where('pvstatus','A')->sum('pvtotal');        
 
         // Inicio de caja de hoy
         $inicio = Transaction::where('type', 'inicio')

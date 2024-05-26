@@ -27,7 +27,7 @@ class CashRegisterController extends Controller
         $totalAmount = $transactions->sum('amount');     
         
         // Filtrar las ventas por la fecha de hoy
-        $ventas = Venta::whereDate('created_at', $today)->get();
+        $ventas = Venta::whereDate('created_at', $today)->where('pvstatus','A')->get();
 
        // Calcular el total de las ventas de hoy
        $totalSales = $ventas->sum('pvtotal');        

@@ -13,7 +13,13 @@ class Docdeta extends Model
     protected $table = 'docdetas';
 
     protected $fillable = [ 'product_id', 'movcve', 'docord', 'artcve', 'codbarras', 'artdesc', 'artprcosto', 'artdescto', 'artprventa',
-        'docimporte', 'artpesogrm', 'artpesoum', 'artganancia', 'doccant', 'docstatus', 'stock', 'docsession', 'numberid', 'user_id', 'uuid',
+        'referencia', 'docimporte', 'artpesogrm', 'artpesoum', 'artganancia', 'doccant', 'docstatus', 'stock', 'docsession', 'numberid', 'user_id', 'uuid',
     ];
+
+    // Definir la relación con Movimiento
+    public function movimiento()
+    {
+        return $this->belongsTo(Movimiento::class, 'movcve', 'id');
+    }    
 
 }

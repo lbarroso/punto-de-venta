@@ -178,7 +178,7 @@ function enterCodbarras(field, event){
 				$('#stock').val(product.stock);
 				$('#artpesogrm').val(product.artpesogrm);
 				$('#artpesoum').val(product.artpesoum);
-				
+				$('#codigo').val(product.codbarras);
 				$('#doccant').val(1);
 				$('#artprcosto').val(parseFloat(product.artprcosto).toFixed(2));
 				$('#artganancia').val(product.artganancia);

@@ -14,7 +14,7 @@
 					<input type="hidden" name="id" id="id">
 
 					<div class="form-group">
-						<label for="artdesc">Descripción </label>
+						<label for="artdesc">Descripci&oacute;n </label>
 						<input type="text" name="artdesc" id="artdesc" class="form-control" onKeyPress="return handleEnter(this, event)">
 					</div>
 					
@@ -38,11 +38,15 @@
 						<label for="artprventa">Precio</label> 
 						<input type="number" name="artprventa" id="artprventa" class="form-control" onKeyPress="return handleEnter(this, event)">
 					</div>
-
+					
+					@if(Auth::user()->id == 5)
                     <div class="form-group">
 						<label for="stock">Stock</label>
 						<input type="number" name="stock" id="stock" class="form-control" onKeyPress="return handleEnter(this, event)">
 					</div>
+					@else
+						<input type="hidden" name="stock" id="stock">
+					@endif
 					
 					<div class="form-group">
 						<label for="artmarca">Marca </label>

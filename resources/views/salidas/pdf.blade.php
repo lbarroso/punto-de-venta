@@ -120,9 +120,9 @@
 					  <td>{{ $docdeta->doccant }}</td>
 					  <td>{{ $docdeta->codbarras }}</td>						  
 					  <td>{{ $docdeta->artdesc }}</td>
-					  <td>{{ number_format($docdeta->artprventa,2) }}</td>
-					  <td>{{ number_format($docdeta->artdescto,2) }}</td>
-					  <td>{{ number_format($docdeta->docimporte,2) }}</td>
+					  <td>{{ number_format( $docdeta->artprventa, 2) }}</td>
+					  <td>{{ number_format($docdeta->artdescto, 2) }}</td>
+					  <td>{{ number_format($docdeta->docimporte, 2) }}</td>
 					</tr>
 					@endforeach
 					</tbody>

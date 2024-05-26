@@ -23,21 +23,21 @@
   <div class="col-12">
       <div class="card card-default">
           <div class="card-header">
-              <h3 class="card-title">Listado compras</h3>
+              <h3 class="card-title">Listado compras del periodo: <span class="text-muted"> del {{ $fecha_inicio ?? date('d/m/Y') }} al {{ $fecha_fin ?? date('d/m/Y') }} </span> </h3>
           </div>
 
           <div class="card-body">
 		  
               <div class="row">
                   <div class="col-12 mb-3">
-					<form action="{{ route('compras.index') }}" class="form-inline" method="GET">
+					<form action="{{ route('compras.history') }}" class="form-inline" method="post">
 						@csrf
 								
 						<label for="email2" class="mb-2 mr-sm-2">Fecha Inicio:</label>
-						<input type="date" id="fecha_inicio" class="form-control mb-2 mr-sm-2" name="fecha_inicio" required>
+						<input type="date" id="fecha_inicio" class="form-control mb-2 mr-sm-2" name="fecha_inicio"  required>
 						
 						<label for="pwd2" class="mb-2 mr-sm-2">Fecha Final:</label>
-						<input type="date" id="fecha_fin" class="form-control mb-2 mr-sm-2" name="fecha_fin" required>
+						<input type="date" id="fecha_fin" class="form-control mb-2 mr-sm-2" name="fecha_fin"   required>
 						
 						<button type="submit" class="btn btn-primary mb-2">Generar Reporte</button>
 					</form>				  

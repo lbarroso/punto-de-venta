@@ -87,7 +87,7 @@
 				<tr>
 					<td></td>
 					<td align="right"> Cambio </td>
-					<td align="right">  {{ number_format( $venta->pvcash - $venta->pvtotal, 2,'.','') }} </td>
+					<td align="right">  {{ number_format( $venta->pvcash - $total, 2,'.','') }} </td>
 				</tr>				
 			</table>            
         </center>

@@ -35,10 +35,10 @@
 						
 						<div class="card card-primary card-outline">
 							<div class="card-header">
-							  <h5 class="card-title m-0">Reporte</h5>
+							  <h5 class="card-title m-0">Posición de almacen con existencias</h5>
 							</div>
 							<div class="card-body">
-							  <h6 class="card-title">Posición de almacen con existencias</h6>
+							  <h6 class="card-title"> &nbsp; </h6>
 			  
 							  <p class="card-text"> Incluye importes valorizados a precio de costo y precio venta </p>
 							  <a href="{{ route('posicion.almacen') }}" class="btn btn-primary"><i class="fas fa-download"></i> Descargar Excel</a>
@@ -51,12 +51,11 @@
 						
 						<div class="card card-primary card-outline">
 							<div class="card-header">
-							  <h5 class="card-title m-0">Reporte</h5>
+							  <h5 class="card-title m-0"> Catalogo Digital con Imágenes </h5>
 							</div>
 							<div class="card-body">
-							  <h6 class="card-title">Productos</h6>
-			  
-							  <p class="card-text"> Con existencia </p>
+							  <img src="{{ asset('admin/dist/img/catalogo-digital.png') }}" class="rounded" width="310">
+							  <br>
 							  <a href="{{ route('catalogo.pdf') }}" class="btn btn-primary"><i class="fas fa-download"></i> Descargar PDF</a>
 							</div>
 						</div>                        

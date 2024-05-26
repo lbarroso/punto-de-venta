@@ -9,7 +9,7 @@ $(document).ready(function(){
 		
         columns: [
             // La primera columna
-			{ data:'product_id' },
+			{ data:'codbarras' },
             { data:'artdesc' },			
             { data:'doccant' },
             {

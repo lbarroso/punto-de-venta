@@ -46,8 +46,8 @@ class DescendenteExport implements FromView, WithColumnFormatting
             
             $docdetas = DB::select("SELECT docdetas.codbarras, docdetas.artdesc, docdetas.artprcosto, docdetas.artprventa, docdetas.artdescto, SUM(docdetas.doccant) cant, SUM(docdetas.docimporte) importe
             FROM ventas
-            INNER JOIN docdetas ON docdetas.docord = ventas.id
-            WHERE ventas.pvfecha BETWEEN '$fechaInicio' AND '$fechaFin' AND docdetas.movcve =51
+            INNER JOIN docdetas ON docdetas.docord = ventas.id AND docdetas.movcve = 51
+            WHERE ventas.pvfecha BETWEEN '$fechaInicio' AND '$fechaFin' 
             GROUP BY docdetas.codbarras ORDER BY importe Desc");
 
             $total = Venta::whereBetween('pvfecha', [$fechaInicio, $fechaFin])
@@ -61,8 +61,8 @@ class DescendenteExport implements FromView, WithColumnFormatting
             
             $docdetas = DB::select("SELECT docdetas.codbarras, docdetas.artdesc, docdetas.artprcosto, docdetas.artprventa, docdetas.artdescto, SUM(docdetas.doccant) cant, SUM(docdetas.docimporte) importe
             FROM compras
-            INNER JOIN docdetas ON docdetas.docord = compras.id
-            WHERE compras.fecha BETWEEN '$fechaInicio' AND '$fechaFin' AND docdetas.movcve = 52
+            INNER JOIN docdetas ON docdetas.docord = compras.id AND docdetas.movcve = 52
+            WHERE compras.fecha BETWEEN '$fechaInicio' AND '$fechaFin' 
             GROUP BY docdetas.codbarras 
             ORDER BY importe Desc, cant Desc");
 

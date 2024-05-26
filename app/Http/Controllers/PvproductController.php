@@ -82,7 +82,7 @@ class PvproductController extends Controller
         FROM products p
         LEFT JOIN codigos c ON p.id = c.product_id
         WHERE (p.id ='$codigo' OR p.artcve ='$codigo' OR p.codbarras = '$codigo') OR  c.codigo ='$codigo' LIMIT 1 ");
-
+        
         $product = count($resultado) > 0 ? (object) $resultado[0] : false;
 
         // guardar datos en db        
@@ -179,7 +179,7 @@ class PvproductController extends Controller
         $descuento = $docdeta->artprventa * ( $porcentaje / 100);
         
         // Si el descuento es mayor a 15% y el usuario autenticado no es el ID 1, no permitir la actualización
-        if ($porcentaje > 15 && auth()->user()->id != 1) {
+        if ($porcentaje > 100 && auth()->user()->id != 1) {
             return false;
         }
         

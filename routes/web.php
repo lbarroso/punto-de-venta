@@ -105,6 +105,11 @@ Route::get('venta/total',[App\Http\Controllers\VentaController::class,'ventatota
 Route::get('venta/totalproducts',[App\Http\Controllers\VentaController::class,'totalproducts'])->name('venta.totalproducts');
 Route::get('venta/{cash}',[App\Http\Controllers\VentaController::class,'ventacash'])->name('venta.cash');
 Route::post('ventastore',[App\Http\Controllers\VentaController::class,'store'])->name('venta.store');
+Route::post('venta/cancelar/{id}',[App\Http\Controllers\VentaController::class,'cancelar'])->name('venta.cancelar');
+Route::get('ventas/cancelar/{id}',[App\Http\Controllers\VentaController::class,'ventacancelar'])->name('ventas.cancelar');
+// cobro en espera
+Route::get('cobro/espera/{id}',[App\Http\Controllers\CobroEsperaController::class,'cobroespera'])->name('cobro.espera');
+
 Route::post('descto/venta',[App\Http\Controllers\VentaController::class,'desctoventa'])->name('descto.venta');
 Route::get('venta/ticket/{id}',[App\Http\Controllers\VentaController::class,'ticket'])->name('venta.ticket');
 Route::get('salida/ticket/{id}',[App\Http\Controllers\SalidaController::class,'ticket'])->name('salida.ticket');
@@ -139,17 +144,21 @@ Route::get('cierre/ticket',[App\Http\Controllers\CierreController::class,'ticket
 
 // menu entradas y salidas
 Route::prefix('inventario')->group(function(){
-    // Route::get('transferencia', [App\Http\Controllers\TransferenciaController::class, 'index'])->name('transferencias.index');
     Route::get('compras', [App\Http\Controllers\CompraController::class, 'index'])->name('compras.index');
+    Route::get('entrada/index/table',[App\Http\Controllers\DocdetaController::class,'entradaindex'])->name('entrada.index.table');
+    Route::match(['get', 'post'], '/compras/history',[App\Http\Controllers\CompraController::class,'history'])->name('compras.history');
     Route::get('salidas',[App\Http\Controllers\SalidaController::class,'index'])->name('salidas.index');
+    Route::match(['get', 'post'], '/salidas/history',[App\Http\Controllers\SalidaController::class,'history'])->name('salidas.history');
+    Route::get('salida/index/table',[App\Http\Controllers\DocdetaController::class,'salidaindex'])->name('salida.index.table');
 });
+
+
 // entradas de proveedor
 Route::get('entrada/find/{code}',[App\Http\Controllers\DocdetaController::class,'findcode'])->name('entrada.find.code');
 
 Route::get('entrada/modal/find/{texto}',[App\Http\Controllers\DocdetaController::class,'entradafindproduct'])->name('entrada.find.product');
 Route::get('entrada/docdeta/store',[App\Http\Controllers\DocdetaController::class,'entradadocdetastore'])->name('entrada.docdeta.store');
-Route::get('entrada/index/table',[App\Http\Controllers\DocdetaController::class,'entradaindex'])->name('entrada.index.table');
-Route::get('salida/index/table',[App\Http\Controllers\DocdetaController::class,'salidaindex'])->name('salida.index.table');
+
 Route::post('entrada/ajax/product',[App\Http\Controllers\DocdetaController::class,'entradaajaxproduct'])->name('entrada.ajax.product');
 Route::post('salida/ajax/product',[App\Http\Controllers\DocdetaController::class,'salidaajaxproduct'])->name('salida.ajax.product');
 
@@ -165,3 +174,7 @@ Route::post('compras/store',[App\Http\Controllers\CompraController::class,'store
 Route::get('compras/pdf/{id}',[App\Http\Controllers\CompraController::class,'pdf'])->name('compras.pdf');
 Route::get('salidas/pdf/{id}',[App\Http\Controllers\SalidaController::class,'pdf'])->name('salidas.pdf');
 Route::post('salidas/store',[App\Http\Controllers\SalidaController::class,'store'])->name('salidas.store');
+
+// reporte de inventario
+Route::get('inventory/report',[App\Http\Controllers\InventoryReportController::class,'index'])->name('inventory.report');
+Route::post('inventory/results',[App\Http\Controllers\InventoryReportController::class,'result'])->name('inventory.result');

@@ -16,6 +16,9 @@
         </tr>
     </thead>
     <tbody>
+        @php
+            $parti_acum = 0;
+        @endphp
         @foreach ($docdetas as $item)
             <tr>                
                 <td width="16">{{ $item->codbarras  }}</td>
@@ -24,8 +27,11 @@
                 <td width="13">{{ $item->artprventa }}</td>
 				<td width="13">{{ $item->artdescto }}</td>
 				<td width="13">{{ $item->importe }}</td>          
-				@if ($item->importe > 0) 
-					<td width="13">{{  $item->importe / $total * 100 }} </td>
+				@if ($item->importe > 0)
+                    @php
+                        $parti_acum =  $parti_acum + number_format($item->importe / $total * 100,2)
+                    @endphp	                
+					<td width="13">{{  $parti_acum  }} </td>
 				@else
 					<td width="13">{{  $item->importe }} </td>
 				@endif

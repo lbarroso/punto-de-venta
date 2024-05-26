@@ -60,7 +60,7 @@
 								<div class="form-group">
 									<div class="mb-3">
 										<label for="artdesc" class="form-label">Descripción del Artículo*</label>
-										<input onkeyup="this.value = this.value.toUpperCase();" value="{{ old('artdesc') }}" type="text" class="form-control" id="artdesc" name="artdesc" placeholder="Ingrese la descripción del artículo" onKeyPress="return handleEnter(this, event)">
+										<input onkeyup="this.value = this.value.toUpperCase();" value="{{ old('artdesc') }}" type="text" class="form-control" id="artdesc" name="artdesc" placeholder="Ingrese la descripción del artículo" onKeyPress="return handleEnter(this, event)" required>
 									</div>			
 								</div>            
 							</div>
@@ -71,7 +71,7 @@
 								<div class="form-group">
 									<div class="input-group mb-3">
 										<label for="category_id" class="form-label">Categoría*</label>
-										<select name="category_id" id="category_id" class="form-control select2bs4" style="width: 100%;" onKeyPress="return handleEnter(this, event)">
+										<select name="category_id" id="category_id" class="form-control select2bs4" style="width: 100%;" onKeyPress="return handleEnter(this, event)" required>
 											<option value="">Selecciona una opción</option>								
 										</select>	                                             
 									</div>
@@ -113,7 +113,7 @@
 							<div class="col">
 								<div class="form-group">
 									<label for="prvcve" class="form-label">Proveedor</label>
-									<select name="prvcve" id="prvcve" class="form-control" onKeyPress="return handleEnter(this, event)">
+									<select name="prvcve" id="prvcve" class="form-control" onKeyPress="return handleEnter(this, event)" required>
 										<option value="">Selecciona una opción</option>	
 									</select>
 								</div>            

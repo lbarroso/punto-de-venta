@@ -6,6 +6,7 @@ use App\Models\Venta;
 use App\Models\Product;
 use App\Models\Docdeta;
 use App\Models\Empresa;
+use App\Models\User;
 use App\Models\Compra;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,9 +15,18 @@ use Illuminate\Support\Facades\DB;
 use Excel;
 use App\Exports\DescendenteExport;
 use Carbon\Carbon;
+use App\Http\Controllers\InventoryController;
 
 class VentaController extends Controller
 {
+
+    // Constructor para instanciar el controlador de inventario
+    public function __construct(InventoryController $inventoryController)
+    {
+        $this->inventoryController = $inventoryController;
+    }
+
+
     /**
      * Guardar venta y actualizar stock
      *
@@ -32,8 +42,10 @@ class VentaController extends Controller
         ->where('user_id', Auth::user()->id)
         ->where('docord', 0)
         ->sum('docimporte');
+        
+        $count = Docdeta::where('movcve', 51)->where('docord', 0)->count();
 
-        if($total <= 0 || $request->input('cash') < $total ) return redirect()->route('pvproducts.index', ['docord' => 0]);        
+        if($count == 0 || (float)$request->input('cash') < $total ) return redirect()->route('pvproducts.index', ['docord' => 0]);        
 
         // Actualizar el stock de los productos vendidos
         $docdetas = Docdeta::where('movcve', 51)
@@ -48,6 +60,9 @@ class VentaController extends Controller
                 $product->stock -= $docdeta['doccant'];
                 $product->save();
             }
+
+            // Llamada al método addToInventory
+            $this->inventoryController->removeFromInventory($docdeta->product_id, $docdeta['doccant']);
         }
 
         // guardar venta registrada
@@ -193,17 +208,27 @@ class VentaController extends Controller
             ]);
                         
             $ventas = Venta::whereBetween('pvfecha', [$request->fecha_inicio, $request->fecha_fin])->get();
-            $total = Venta::whereBetween('pvfecha', [$request->fecha_inicio, $request->fecha_fin])->sum('pvtotal');
+            
+            $total = Venta::whereBetween('pvfecha', [$request->fecha_inicio, $request->fecha_fin])
+            ->where('pvstatus','A')
+            ->sum('pvtotal');
+            
             $totales = Venta::selectRaw('pvtipopago, SUM(pvtotal) as total')
             ->whereBetween('pvfecha', [$request->fecha_inicio, $request->fecha_fin])
+            ->where('pvstatus','A')
             ->groupBy('pvtipopago')
             ->get();
 
-        }else{
+        }else{            
             $ventas = Venta::whereDate('created_at', now()->toDateString())->get();
-            $total = Venta::whereDate('created_at', now()->toDateString())->sum('pvtotal');
+            
+            $total = Venta::whereDate('created_at', now()->toDateString())
+            ->where('pvstatus','A')
+            ->sum('pvtotal');
+
             $totales = Venta::selectRaw('pvtipopago, SUM(pvtotal) as total')
             ->whereDate('created_at', now()->toDateString())
+            ->where('pvstatus','A')
             ->groupBy('pvtipopago')
             ->get();            
         }
@@ -221,17 +246,19 @@ class VentaController extends Controller
             'fecha_fin' => 'required|date|after_or_equal:fecha_inicio'
         ]);
         
-        $docdetas = DB::select("SELECT docdetas.codbarras, ventas.pvtipopago, ventas.pvfecha, docdetas.artdesc, docdetas.artprcosto, docdetas.artprventa, docdetas.artdescto, SUM(docdetas.doccant) cant, SUM(docdetas.docimporte) importe
+        $docdetas = DB::select("SELECT docdetas.status, docdetas.codbarras, ventas.pvtipopago, ventas.pvfecha, docdetas.artdesc, docdetas.artprcosto, docdetas.artprventa, docdetas.artdescto,
+        SUM(docdetas.doccant) cant, SUM(docdetas.docimporte) importe
         FROM ventas
         INNER JOIN docdetas ON docdetas.docord = ventas.id
         WHERE ventas.pvfecha BETWEEN '$request->fecha_inicio' AND '$request->fecha_fin' AND docdetas.movcve = 51
         GROUP BY docdetas.codbarras 
         ORDER BY ventas.pvfecha");        
 
-        $total = Venta::whereBetween('pvfecha', [$request->fecha_inicio, $request->fecha_fin])->sum('pvtotal');
+        $total = Venta::whereBetween('pvfecha', [$request->fecha_inicio, $request->fecha_fin])->where('pvstatus','A')->sum('pvtotal');
 
         $totales = Venta::selectRaw('pvtipopago, SUM(pvtotal) as total')
         ->whereBetween('pvfecha', [$request->fecha_inicio, $request->fecha_fin])
+        ->where('pvstatus','A')
         ->groupBy('pvtipopago')
         ->get();
 
@@ -351,5 +378,48 @@ class VentaController extends Controller
         return redirect('pvproducts');
 
     }
+
+    // cancelar venta
+    public function cancelar(Request $request, $id)
+    {
+        $venta = Venta::findOrFail($id);
+
+        $user = User::where('email','cancelar@sistemasloop.com')->first();
+
+        // Asumiendo que guardas la contraseña de manera segura y necesitas verificarla
+        if (\Hash::check($request->input('password'), $user->password)) {
+            $venta->pvstatus = 'C'; // 'C' podría ser tu código de 'Cancelado'
+            $venta->save();
+
+            $docdetas = Docdeta::where('movcve', 51)
+            ->where('docord', $id)
+            ->get();
+            
+            foreach ($docdetas as $docdeta) {
+                $product = Product::find($docdeta->product_id);
+                if ($product) {
+                    // restablece el stock
+                    $product->stock += $docdeta['doccant'];
+                    $product->save();
+                }
+            }            
+
+            // actualizar relacion
+            Docdeta::where('movcve', 51)
+            ->where('docord', $id)
+            ->update(['status' => 'C']);
+
+            return redirect()->route('daily.sales')->with('success', 'La venta fue cancelada correctamente, folio: '.$id);
+        } else {
+            return back()->with('error', 'La contraseña es incorrecta.');
+        }
+    }
+
+    // Método para mostrar el formulario de cancelación
+    public function ventaCancelar($id)
+    {
+        $venta = Venta::findOrFail($id);
+        return view('pventa.cancelar_venta', ['venta' => $venta]);
+    }    
 
 } //class

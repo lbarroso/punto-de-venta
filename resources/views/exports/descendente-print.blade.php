@@ -34,13 +34,15 @@
 						<th><strong>PRECIO VENTA</strong></th>
 						<th><strong>DESCTO.%</strong></th>
 						<th><strong>VENTA ACUM.</strong></th>
-						<th><strong>PARTIC. % </strong></th>
+						<th><strong>PART. % </strong></th>
 						<th><strong>CANTIDAD</strong></th>
 						
 					</tr>
 				</thead>
 				<tbody>
-		
+					@php
+						$parti_acum = 0 ;
+					@endphp
 					@foreach ($docdetas as $item)
 						<tr>			
 							<td>{{ $item->codbarras  }}</td>
@@ -50,7 +52,10 @@
 							<td>{{ number_format($item->artdescto,2) }}</td>
 							<td>{{ number_format($item->importe,2) }}</td>		
 							@if ($item->importe > 0) 
-								<td width="13">{{  $item->importe / $total * 100 }} </td>
+								@php
+									$parti_acum =  $parti_acum + number_format($item->importe / $total * 100,2)
+								@endphp							
+								<td width="13">{{ $parti_acum  }} </td>
 							@else
 								<td width="13">{{  $item->importe }} </td>
 							@endif							
@@ -67,7 +72,7 @@
 						<td> </td>
 						<td> </td>
 						<td> </td>
-						<td> {{ $total }} </td>
+						<td> {{ number_format($total,2) }} </td>
 						<td> </td>
 						<td> </td>
 						

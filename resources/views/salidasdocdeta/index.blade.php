@@ -56,6 +56,7 @@
 							
 							<!--ocultos-->						
 							<input type="hidden" name="id" id="id" value="0">
+							<input type="hidden" name="codigo" id="codigo" value="">
 							<input type="hidden" name="artdesc" id="artdesc" value="">
 							<input type="hidden" name="artcve" id="artcve" value="0">
 							<input type="hidden" name="stock" id="stock" value="0">

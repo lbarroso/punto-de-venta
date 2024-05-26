@@ -1,18 +1,5 @@
 @extends('layouts.pv')
 
-@section('styles')
-    <!-- Tus estilos personalizados aquí -->
-    <style>
-		.celda-de-icono{
-			width: 40px;
-			text-align: center;
-		}
-		.icono-azul{
-			color: #1e0080
-		}
-    </style>
-@endsection
-
 <!-- Main content -->
 @section('content')
 
@@ -43,6 +30,12 @@
 				  </form>	
 				@endif
 			 </div>
+
+		    @if(session('success'))
+				<div class="alert alert-success">
+					{{ session('success') }}
+				</div>
+			@endif		
 		
 		   <!-- Muestra errores de validación -->
 			@if ($errors->any())
@@ -74,7 +67,7 @@
 							<th>Total</th>
 							<th>Usuario</th>
 							<th>Status</th>
-							<th>Ticket </th>
+							<th> Venta</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -86,9 +79,11 @@
 								<td>{{ $venta->created_at }}</td>
 								<td align="right">$ {{ number_format($venta->pvtotal,2) }}</td>
 								<td>{{ $venta->user_name }}</td>
-								<td>{{ $venta->pvstatus }}</td>
-								
-								<td class="celda-de-icono"> <a href="{{ route('venta.ticket', ['id' => $venta->id]) }}" target="_ticket" title="imprimir"> <i class="fa fa-print icono-azul"></i> </a>  </td>
+								<td>{{ $venta->pvstatus }}</td>								
+								<td class="celda-de-icono"> 
+									<a href="{{ route('venta.ticket', ['id' => $venta->id]) }}" target="_ticket" title="imprimir" class="btn btn-primary btn-sm mr-1"> <i class="fa fa-print"></i> </a>
+									<a href="{{ route('ventas.cancelar', ['id' => $venta->id]) }}" title="cancelar" class="btn btn-danger btn-sm mr-1"> <i class="fa fa-times"></i> </a>  
+								</td>
 							</tr>
 						@endforeach
 					</tbody>

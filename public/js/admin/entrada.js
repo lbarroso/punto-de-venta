@@ -161,7 +161,8 @@ function enterCodbarras(field, event){
 			success:function(response){
 				
 				var product = response.data;
-				console.log(product);
+				var codigo = product.codbarras;
+				
 				//$("#formAjaxProduct")[0].reset();
 				$('#artdesc-output').html('CAPTURAR PRODUCTO');
 				
@@ -170,15 +171,20 @@ function enterCodbarras(field, event){
 					return $('#textoId').focus();
 				}
 				
-				$('#artdesc-output').html(product.artdesc);
-				
+				$('#artdesc-output').html(product.artdesc + ' <span class="badge badge-warning float-right">' + product.stock + '</span>');
 				$('#id').val(product.id);
+				
+				//console.log(String(codigo).length);
+				
+				// if (String(codigo).length > 0) $('#codbarras').val(product.codbarras);
+				// else $('#codbarras').val(product.id);	
+				
 				$('#artdesc').val(product.artdesc);
 				$('#artcve').val(product.artcve);
 				$('#stock').val(product.stock);
 				$('#artpesogrm').val(product.artpesogrm);
 				$('#artpesoum').val(product.artpesoum);
-				
+				$('#codigo').val(product.codbarras);
 				$('#doccant').val(1);
 				$('#artprcosto').val(parseFloat(product.artprcosto).toFixed(2));
 				$('#artganancia').val(product.artganancia);
@@ -341,9 +347,14 @@ function findProduct(event, flat){
 				// Recorrer los productos y agregarlos a la tabla
 				for (var i = 0; i < products.length; i++){
 					var product = products[i];
+					var codigo = product.codbarras;
+					
+					if( (String(codigo).length > 0) ) ;
+					else codigo = product.id;					
+					
 					tableBody +='<tr>';
 					tableBody +='<td> <i class="fa fa-check-square"></i> </td>';
-					tableBody +='<td>' + product.codbarras + '</td>';
+					tableBody +='<td>' + codigo + '</td>';
 					tableBody +='<td> <a onClick="entradaDocdetaStore(' + product.id + ')" href="#" title="insertar">'+product.artdesc+'</a> </td>';
 					tableBody +='<td align="right">'+parseFloat(product.artprventa).toFixed(2)+'</td> <td align="right">'+product.stock+'</td>';
 					tableBody +='</tr>';
@@ -377,12 +388,16 @@ function entradaDocdetaStore(id){
 		type: 'get',
 		data: { 'id' : id },			
 		success:function(response){
-			
+		
 			var product = response.data;
-			console.log(product);
+			var codigo = product.codbarras;
+
 			// lo agregar para editarlo
-			$('#artdesc-output').html(product.artdesc);
-			$('#codbarras').val(product.codbarras);
+			$('#artdesc-output').html(product.artdesc + ' <span class="badge badge-warning float-right">' + product.stock + '</span>');
+			
+			if ((String(codigo).length > 0)) $('#codbarras').val(product.codbarras);
+			else $('#codbarras').val(product.id);
+			
 			$('#id').val(product.id);
 			$('#artdesc').val(product.artdesc);
 			$('#artcve').val(product.artcve);

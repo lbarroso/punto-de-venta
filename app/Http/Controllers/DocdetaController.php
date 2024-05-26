@@ -89,9 +89,11 @@ class DocdetaController extends Controller
             $docDeta->save();
 
             // actualizar inventario precio venta
-            if($request->input('updateArtprventa') == '1'){
+            if($request->input('updateArtprventa') == 'SI'){
                 $product = Product::find($request->input('id'));
                 $product->update([
+                    'artprcosto' => $request->input('artprcosto'),
+                    'artganancia' => $request->input('artganancia'),
                     'artprventa' => $request->input('artprventa')
                 ]);
             }

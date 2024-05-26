@@ -221,7 +221,17 @@
                                   <p>Salidas</p>
                                 </a>        								
                               </li>
+                            </ul>
+
+                           <ul class="nav nav-treeview">
+                              <li class="nav-item">							  
+                                <a target="_mov" href="{{ route('inventory.report') }}"  class="nav-link {{ active_menu(route('inventory.report')) }}">
+                                  <i class="fas fa-truck"></i>
+                                  <p>Movimientos por clave</p>
+                                </a>        								
+                              </li>
                             </ul>							
+							
                         </li>		
 
 						

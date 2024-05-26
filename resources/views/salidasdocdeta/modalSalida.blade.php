@@ -2,7 +2,7 @@
 	<div class="modal-dialog ">
 		<div class="modal-content">
 		
-			<form id="formCompra" action="{{ route('salidas.store') }}" method="post">
+			<form id="formSalida" action="{{ route('salidas.store') }}" method="post">
 			@csrf
 			
 				<div class="modal-header">
@@ -15,12 +15,12 @@
 					
                     <div class="form-group">
 						<label for="fecha" class="mb-2 mr-sm-2">Fecha:</label>
-						<input type="date" id="fecha" class="form-control mb-2 mr-sm-2" name="fecha" required>
+						<input type="date" id="fecha" class="form-control mb-2 mr-sm-2" name="fecha" onKeyPress="return handleEnter(this, event)" required>
 					</div>		
 
                     <div class="form-group">
 						<label for="ctecve" class="mb-2 mr-sm-2">Cliente:</label>
-						<select class="form-control mb-2 mr-sm-2" name="ctecve" id="ctecve" required>
+						<select class="form-control mb-2 mr-sm-2" name="ctecve" id="ctecve" onKeyPress="return handleEnter(this, event)" required>
 							
 						</select>
 					</div>
@@ -32,14 +32,26 @@
 
 				</div>
 				<div class="modal-footer justify-content-between">
-					<button type="button" class="btn btn-default" onKeyPress="return handleEnter(this, event)" data-dismiss="modal">Cerrar</button>
-					<button type="submit" class="btn btn-primary">Guardar compra</button>
+					<button type="button" class="btn btn-default" onKeyPress="return handleEnter(this, event)" data-dismiss="modal">Cerrar</button>			
+					<button type="button" id="guardarSalidaBtn" class="btn btn-primary">Guardar compra</button>
 				</div>
 			</form>
 		
 		</div>
 	</div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var guardarBtn = document.getElementById('guardarSalidaBtn');
+    var form = document.getElementById('formSalida');
+
+    guardarBtn.addEventListener('click', function(event) {
+        event.preventDefault();
+        form.submit();
+    });
+});
+</script>
 
 <script>
 // Function to format date as YYYY-MM-DD

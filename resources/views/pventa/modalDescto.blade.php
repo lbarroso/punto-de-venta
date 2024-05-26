@@ -21,7 +21,7 @@
 
 							<div class="form-group">
 								<label for="porcentaje">Descto. %</label>
-								<input type="number" value="0" min="0" step="1" max="15" onKeyPress="return handleEnter(this, event)" name="porcentaje" id="porcentaje" onFocus="this.select()" class="form-control">
+								<input type="number" value="0" min="0" step="1" max="100" onKeyPress="return handleEnter(this, event)" name="porcentaje" id="porcentaje" onFocus="this.select()" class="form-control">
 							</div>	
 						   
 						</div>

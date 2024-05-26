@@ -56,8 +56,8 @@
 									
 									<label for="formato_salida" class="mb-2 mr-sm-2">Salida:</label>
 									<select id="formato_salida" class="form-control mb-2 mr-sm-2" name="formato_salida" style="width:auto;" required>
-										<option value="1">FORMATO EXCEL</option>
-										<option value="2">PANTALLA</option>                                
+										<option value="2">PANTALLA</option>                           
+										<option value="1">FORMATO EXCEL</option>										
 									</select>                                  
 									
 									<button type="submit" class="btn btn-primary mb-2">Generar Reporte</button>

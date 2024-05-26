@@ -111,6 +111,10 @@
 	  <li class="nav-item d-none d-sm-inline-block">
        <a href="#" onClick="openModalDescto()" class="btn btn-default"> <i class="fa fa-percent"></i></a>
       </li>	 
+	  &nbsp;
+	  <li class="nav-item d-none d-sm-inline-block">
+       <a href="{{ route('cobro.espera', ['id' => 1]) }}" class="btn btn-default"> Cobro esp. </a>
+      </li>	 	  
 
     </ul>
 

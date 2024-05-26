@@ -34,7 +34,8 @@
 						<th><strong>PRECIO VENTA</strong></th>
 						<th><strong>DESCTO.%</strong></th>
 						<th><strong>IMPORTE</strong></th>				
-						<th><strong>FORMA PAGO</strong></th>						
+						<th><strong>FORMA PAGO</strong></th>
+						<th><strong>STATUS</strong></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -48,7 +49,8 @@
 							<td>{{ number_format($item->artprventa,2) }}</td>
 							<td>{{ number_format($item->artdescto,2) }}</td>							
 							<td>{{ number_format($item->importe,2) }}</td>						 
-							<td>{{ $item->pvtipopago }}</td>							
+							<td>{{ $item->pvtipopago }}</td>
+							<td>{{ $item->status }}</td>
 						</tr>
 					@endforeach
 					

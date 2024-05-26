@@ -97,6 +97,7 @@ class ProductController extends Controller
             'artdesc' => 'required|max:255',
             'category_id' => 'required',
             'stock' => 'required',
+            'prvcve' => 'required',
             'artprventa' => 'required'
         ];
         
@@ -296,7 +297,7 @@ class ProductController extends Controller
         ->leftJoin('media', 'products.id', '=', 'media.model_id')
         ->join('categories', 'products.category_id', '=', 'categories.id')
         ->where('products.artstatus', 'A')
-        ->where('stock', '>', 20)
+        ->where('stock', '>', 0)
         ->orderBy('products.category_id')
         ->orderBy('products.artcve')
         ->groupBy('products.artcve') // Agrupar por products.artcve para evitar duplicados
@@ -305,7 +306,7 @@ class ProductController extends Controller
        // familias
        $categories = Product::select('name')        
        ->join('categories', 'products.category_id', '=', 'categories.id')
-       ->where('stock', '>', 20)    
+       ->where('stock', '>', 0)    
        ->orderBy('categories.name')
        ->distinct()
        ->get();           

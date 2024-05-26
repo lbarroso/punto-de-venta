@@ -11,9 +11,16 @@ use App\Models\Cliente;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use App\Http\Controllers\InventoryController;
 
 class SalidaController extends Controller
 {
+
+    // Constructor para instanciar el controlador de inventario
+    public function __construct(InventoryController $inventoryController)
+    {
+        $this->inventoryController = $inventoryController;
+    }
 
     /**
      * Display a listing of purchases within a specified date range.
@@ -25,35 +32,41 @@ class SalidaController extends Controller
     {
         date_default_timezone_set('America/Mexico_City');
 
-        $docord = !empty($request->session()->get('docord')) ? $request->session()->get('docord') : 0;
+        $salidas = Salida::join('clientes', 'salidas.ctecve', '=', 'clientes.id')
+        ->whereDate('salidas.created_at', now()->toDateString())
+        ->orderBy('salidas.created_at', 'desc')
+        ->select('salidas.*', 'clientes.ctenom as cliente') // ejemplo de selección de columnas
+        ->paginate(10);
 
-        if($request->fecha_inicio){
+        return view('salidas.index', compact('salidas'));
 
-            $request->validate([
-                'fecha_inicio' => 'required|date',
-                'fecha_fin' => 'required|date|after_or_equal:fecha_inicio'
-            ]);
+    }
 
-            $salidas = Salida::join('clientes', 'salidas.ctecve', '=', 'clientes.id')
-            ->whereBetween('salidas.fecha', [$request->fecha_inicio, $request->fecha_fin])
-            ->orderBy('salidas.created_at', 'desc')
-            ->select('salidas.*', 'clientes.ctenom as cliente') // ejemplo de selección de columnas
-            ->paginate(15);
+    // salidas
+    public function history(Request $request){
+        
+        date_default_timezone_set('America/Mexico_City');
 
-            $total = Salida::whereBetween('fecha', [$request->fecha_inicio, $request->fecha_fin])->sum('total');
-
-        }else{
-
-            $salidas = Salida::join('clientes', 'salidas.ctecve', '=', 'clientes.id')
-            ->whereDate('salidas.created_at', now()->toDateString())
-            ->orderBy('salidas.created_at', 'desc')
-            ->select('salidas.*', 'clientes.ctenom as cliente') // ejemplo de selección de columnas
-            ->paginate(15);
-
-            $total = Salida::whereDate('created_at', now()->toDateString())->sum('total');
+        if ($request->isMethod('post')) {
+            // Guarda los criterios de búsqueda en la sesión
+            $request->session()->put('search', $request->all());
         }
+    
+        $search = $request->session()->get('search');
+    
+        $salidas = Salida::join('clientes', 'salidas.ctecve', '=', 'clientes.id')
+        ->whereBetween('salidas.fecha', [ $search['fecha_inicio'], $search['fecha_fin'] ])
+        ->orderBy('salidas.created_at', 'desc')
+        ->select('salidas.*', 'clientes.ctenom as cliente') // ejemplo de selección de columnas
+        ->paginate(10);
 
-        return view('salidas.index', compact('salidas','total'));
+        $fecha_inicio = Carbon::parse($search['fecha_inicio']);
+        $fecha_inicio = $fecha_inicio->format('d/m/Y');
+
+        $fecha_fin = Carbon::parse( $search['fecha_fin']);
+        $fecha_fin = $fecha_fin->format('d/m/Y');
+
+        return view('salidas.index', compact('salidas','fecha_inicio','fecha_fin'));
 
     }
 
@@ -90,11 +103,15 @@ class SalidaController extends Controller
                 $product->stock -= $docdeta['doccant'];
                 $product->save();
             }
+            
+            // Llamada al método addToInventory
+            $this->inventoryController->removeFromInventory($docdeta->product_id, $docdeta['doccant']);
+
         }        
 
         // guardar salida
         $salida = new Salida();
-        $salida->fecha = now();
+        $salida->fecha = $request->input('fecha');
         $salida->ctecve = $request->input('ctecve');
         $salida->total = $total;
         $salida->user_name = Auth::user()->name;
@@ -103,11 +120,13 @@ class SalidaController extends Controller
         
         // last Id
         $ID = $salida->id;
+        
+        $cliente = Cliente::find($request->input('ctecve'));
 
         // relacionar
         Docdeta::where('movcve', 53)
         ->where('docord', 0)
-        ->update(['docord' => $ID]);        
+        ->update(['docord' => $ID, 'created_at' => $request->input('fecha'), 'referencia' => $cliente->ctenom ]);        
 
         // EntradaController@index
         return redirect()->route('salidas.index')->with('docord', $ID);
