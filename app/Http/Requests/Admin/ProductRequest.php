@@ -25,14 +25,10 @@ class ProductRequest extends FormRequest
     public function rules()
     {
         return  [
-            'name' => [
-                'required',
-                Rule::unique('products')->ignore($this->id)
-            ],
-            'sku' => 'required',
-            'description' => 'required',
-            'price' => 'required',
+
+            'artprventa' => 'required',
             'category_id' => 'required',
+            'prvcve' => 'required',            
         ];
     }
 }

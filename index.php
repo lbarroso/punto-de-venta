@@ -1,4 +1,4 @@
 <?php
-	header('Location: http://localhost/puntoventa/public');
+	header('Location: https://macro.sistemasloop.com/public');
 	exit;
 ?>

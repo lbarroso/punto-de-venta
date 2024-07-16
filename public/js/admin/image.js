@@ -25,6 +25,8 @@ $(document).ready(function(){
     $('#modal-images').on('shown.bs.modal', function (event) {
         var button = $(event.relatedTarget)
         product_id_images = button.data('product_id');
+        let name = button.data('name')
+        $('#titleImage').text(name);        
         $("#formImages #images_product_id").val(product_id_images);
         getImages(product_id_images);
     

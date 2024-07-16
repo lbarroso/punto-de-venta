@@ -53,7 +53,10 @@ class CompraController extends Controller
         $search = $request->session()->get('search');
     
         $compras = Compra::join('proveedores', 'compras.prvcve', '=', 'proveedores.id')
-        ->whereBetween('compras.fecha', [ $search['fecha_inicio'], $search['fecha_fin'] ])
+        ->where(function($query) use ($search) {
+            $query->whereBetween('compras.fecha', [ $search['fecha_inicio'], $search['fecha_fin'] ])
+                  ->orWhere('compras.id', $search['docord']);
+        })
         ->orderBy('compras.created_at', 'asc')
         ->select('compras.*', 'proveedores.prvrazon as proveedor') // ejemplo de selección de columnas
         ->paginate(10);

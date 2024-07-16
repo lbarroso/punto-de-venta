@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Http\Requests\ProductRequest;
+use App\Http\Requests\Admin\ProductRequest;
 use App\Models\Category;
 use App\Models\Proveedor;
 use App\Models\Product;
@@ -15,6 +15,7 @@ use Excel;
 use App\Exports\PosicionExport;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\CatalogoExport;
+
 
 use Illuminate\Support\Facades\Auth;
 
@@ -43,7 +44,7 @@ class ProductController extends Controller
         
         if($request->ajax()){
                
-            return response()->json(['data' => Product::with('category')->Where('artstatus','A')->orderByDesc('id')->get()]);
+            return response()->json(['data' => Product::with('category')->orderByDesc('id')->get()]);
 
         }
 
@@ -74,8 +75,8 @@ class ProductController extends Controller
             return response()->json(['errors' => $validator->errors()->all()],400);
         }        
 
-        //
         $data = $request->all();
+        $data['slug'] = '';       
 
         Product::create($data);
 
@@ -88,11 +89,9 @@ class ProductController extends Controller
      * formulario personalizado formcreate.blade.php
      * 
      */    
-    public function productStore(Request $request)
+    public function productStore(Request $request )
     {
         
-        // 'artdesc' => 'required|max:255|unique:products,artdesc',
-
         $reglas = [
             'artdesc' => 'required|max:255',
             'category_id' => 'required',
@@ -100,10 +99,10 @@ class ProductController extends Controller
             'prvcve' => 'required',
             'artprventa' => 'required'
         ];
-        
         $request->validate($reglas);
 
         $data = $request->all();
+        $data['slug'] = '';     
 
         Product::create($data);
         

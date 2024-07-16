@@ -30,6 +30,7 @@
 						  <table class="table table-hover" id="table" class="display" style="width:100% "> 
 							  <thead>
 								  <tr>
+									  <th>Id</th>
 									  <th>C&oacute;digo</th>                                  
 									  <th>Descripci&oacute;n</th>                                  
 									  <th>Cant.</th>

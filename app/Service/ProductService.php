@@ -17,7 +17,7 @@ class ProductService{
 
     public function validationStore(Request $request){
         $validator = Validator::make($request->all(),[
-            'artdecs' => 'required',            
+            'artdesc' => 'required',            
             'artprventa' => 'required',
             'category_id' => 'required',
         ]);

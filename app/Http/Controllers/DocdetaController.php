@@ -170,8 +170,9 @@ class DocdetaController extends Controller
             $searchTerm = trim($request->code);
 
             $product = Product::where('codbarras', $searchTerm)
-            ->orWhere('artcve', $searchTerm)
             ->orWhere('id', $searchTerm)
+            ->orWhere('artcve', $searchTerm)
+            
             ->first();
 
             if (!$product) {

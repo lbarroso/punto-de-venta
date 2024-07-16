@@ -42,7 +42,6 @@
                                   <th>Id</th>                                  
                                   <th>Descripci&oacute;n</th>
                                   <th>Marca</th>
-								  <th>Detalle</th>
                                   <th>codbarras</th>
                                   <th>Costo</th>
                                   <th>Venta</th>
@@ -91,6 +90,9 @@
     var urlProductCodes = '{{ route("product.codes",["id" => 0]) }}';
 	var urlDeleteCodes = '{{ route("delete.codes",["id" => 0]) }}';
 	var urlStoreCodes = '{{ route("store.codes") }}';
+    var getProperty = '{{ route("properties.table",["product" => 0]) }}'
+    var storeProperty = '{{ route("properties.store")  }}'
+    var deletProperty = '{{ route("properties.destroy",["property" => 0]) }}'    
 
 </script>
 <!--contiene el metodo buscar data tables-->

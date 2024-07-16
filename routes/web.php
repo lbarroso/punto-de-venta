@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\DiscountController;
 
 
 
@@ -27,68 +28,52 @@ use App\Http\Controllers\ProductController;
 
 */
 
-
-
 Route::get('/', function () {
-
     return view('welcome');
-
 });
-
-
 
 Auth::routes();
 
-
-
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
 // view test adminLte
-
 //Route::get('/plantilla', [App\Http\Controllers\HomeController::class, 'adminlte'])->name('adminlte');
 
-
-
 // productos
-
 Route::apiResource('products',App\Http\Controllers\ProductController::class)->middleware('auth');
 
 Route::get('products/categories/all',[App\Http\Controllers\ProductController::class,'categories'])->name('products.categories');
 Route::get('products/proveedores/all',[App\Http\Controllers\ProductController::class,'proveedores'])->name('products.proveedores');
 Route::get('salidas/clientes/all',[App\Http\Controllers\ClienteController::class,'clientes'])->name('salidas.clientes');
-
 Route::get('productcreate',[App\Http\Controllers\ProductController::class,'productcreate'])->name('product.create')->middleware('auth');
-
 Route::post('productstore',[App\Http\Controllers\ProductController::class,'productstore'])->name('product.store')->middleware('auth');
-
 Route::get('productvalidate',[App\Http\Controllers\ProductController::class,'productvalidate'])->name('product.validation');
-
 Route::get('productcodes/{id}',[App\Http\Controllers\ProductController::class,'productcodes'])->name('product.codes');
-
 Route::get('deletecodes/{id}',[App\Http\Controllers\ProductController::class,'deletecodes'])->name('delete.codes');
-
 Route::post('storecodes',[App\Http\Controllers\ProductController::class,'storecodes'])->name('store.codes');
 
+// propiedades de producto
+Route::get('properties/product/table/{product}',[App\Http\Controllers\PropertyController::class,'table'])->name('properties.table');
+Route::post('properties/store',[App\Http\Controllers\PropertyController::class,'store'])->name('properties.store');
+Route::delete('properties/{property}',[App\Http\Controllers\PropertyController::class,'destroy'])->name('properties.destroy');
+
+// descuento
+Route::controller(DiscountController::class)->name('discounts.')->group(function(){
+    Route::get('discounts/product/table/{product}','table');
+    Route::post('discounts/store','store')->name('store');
+    Route::delete('discounts/{discount}','destroy')->name('delete');
+});
 
 Route::resource('categories',App\Http\Controllers\CategoryController::class)->middleware('auth');
-
 Route::resource('proveedores',App\Http\Controllers\ProveedoreController::class)->middleware('auth');
-
 Route::resource('clientes',App\Http\Controllers\ClienteController::class)->middleware('auth');
-
 Route::resource('empresas',App\Http\Controllers\EmpresaController::class)->middleware('auth');
 
 // imagenes
 Route::controller(ImageController::class)->name('images.')->group(function () {
-
     Route::get('images/product/table/{product}','table');
-
     Route::post('images/store','store')->name('store');
-
     Route::delete('images/{image}','destroy');
-
 });
-
 
 // menu reportes
 Route::prefix('reports')->group(function(){
@@ -96,7 +81,6 @@ Route::prefix('reports')->group(function(){
     Route::get('descendente',[App\Http\Controllers\VentaController::class,'descendente'])->name('descendente');
     Route::get('ventas',[App\Http\Controllers\VentaController::class,'ventas'])->name('ventas');
 });
-
 
 // punto de venta
 Route::apiResource('pvproducts',App\Http\Controllers\PvproductController::class)->middleware('auth');

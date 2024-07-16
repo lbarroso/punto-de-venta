@@ -3,7 +3,7 @@
         
         <div class="form-group">
             Nombre de proveedor:
-            {{ Form::text('prvrazon', $proveedore->prvrazon, ['class' => 'form-control' . ($errors->has('prvrazon') ? ' is-invalid' : ''), 'placeholder' => 'Prvrazon']) }}
+            {{ Form::text('prvrazon', $proveedore->prvrazon, ['onkeyup'=> 'this.value = this.value.toUpperCase()', 'class' => 'form-control' . ($errors->has('prvrazon') ? ' is-invalid' : ''), 'placeholder' => 'Prvrazon']) }}
             {!! $errors->first('prvrazon', '<div class="invalid-feedback">:message</div>') !!}
         </div>
         

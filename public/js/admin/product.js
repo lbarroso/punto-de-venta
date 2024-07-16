@@ -11,7 +11,7 @@ $(document).ready(function(){
             { data:'id' },            
             { data:'artdesc' },
 			{ data:'artmarca' },
-            { data:'artdetalle' },
+
             { data:'codbarras' },
             { 
 				data:'artprcosto',
@@ -39,11 +39,11 @@ $(document).ready(function(){
 
                     edit = '<button title="editar" data-id="'+data+'" data-toggle="modal" data-target="#modal-product" class="btn btn-warning btn-sm mr-1"><i class="fas fa-edit"></i></button>';                    
                     pDiscount = '<button data-product_id="'+data+'" data-toggle="modal" data-target="#modal-discount" class="btn btn-secondary btn-sm mr-1"><i class="fas fa-table"></i></button>';                    
-                    pProperty = '<button data-name="'+row.name+'" data-product_id="'+data+'" data-toggle="modal" data-target="#modal-property" class="btn btn-info btn-sm mr-1"><i class="fas fa-table"></i></button>';
-					pImages = '<button title="imagen" data-name="'+row.name+'" data-product_id="'+data+'" data-toggle="modal" data-target="#modal-images" class="btn btn-info btn-sm mr-1"><i class="fa fa-image"></i></button>';
+                    pProperty = '<button data-name="'+row.artdesc+'" data-product_id="'+data+'" data-toggle="modal" data-target="#modal-property" class="btn btn-info btn-sm mr-1"><i class="fas fa-table"></i></button>';
+					pImages = '<button title="imagen" data-name="'+row.artdesc+'" data-product_id="'+data+'" data-toggle="modal" data-target="#modal-images" class="btn btn-info btn-sm mr-1"><i class="fa fa-image"></i></button>';
 					pCodes = '<button title="claves" onClick="codesModel('+data+')" data-product_id="'+data+'"  class="btn btn-secondary btn-sm mr-1"><i class="fas fa-barcode"></i></button>';
 					pDelete = '<button title="eliminar" onclick="if(confirm(\'eliminar\')) deleteModel('+data+'); else return false;"  class="btn btn-danger btn-sm mr-1"><i class="fas fa-trash"></i></button>';
-				   return edit+pImages+pCodes+pDelete;
+				   return edit+pDelete+pProperty+pImages;
                 }
             }
         ]
@@ -164,7 +164,7 @@ function find(id){
         url:url,
         success:function(response){            
 			$('#artdesc').focus();	
-			
+			$('#artstatus').val(response.artstatus);
             $('#artdesc').val(response.artdesc);
 			$('#artdetalle').val(response.artdetalle);          
             $('#artprcosto').val(parseFloat(response.artprcosto).toFixed(2));

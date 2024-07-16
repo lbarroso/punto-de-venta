@@ -120,12 +120,15 @@ class PvproductController extends Controller
         $id = !empty($request->id) ? $request->id : 0;
 
         $product = Product::find($id);
-
+		
+		if( strlen($product->codbarras) > 0 ) $codigo = $product->codbarras;
+		else $codigo = $product->id;
+		
         $docdeta = new Docdeta();
         $docdeta->artdesc = $product->artdesc;
         $docdeta->product_id = $product->id;
         $docdeta->artcve = $product->artcve;
-        $docdeta->codbarras = $product->codbarras;
+        $docdeta->codbarras = $codigo;
         $docdeta->artpesoum = $product->artpesoum;
         $docdeta->artpesogrm = $product->artpesogrm;
         $docdeta->artprcosto = $product->artprcosto;

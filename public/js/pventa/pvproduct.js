@@ -4,11 +4,12 @@ var datatable;
 $(document).ready(function(){
 		
     datatable = $('#table').DataTable({
-		order: [[7, 'desc']],
+		order: [[8, 'desc']],
         ajax: indexUrl,
 		
         columns: [
             // La primera columna
+			{ data:'product_id' },
 			{ data:'codbarras' },
             { data:'artdesc' },			
             { data:'doccant' },

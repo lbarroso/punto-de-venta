@@ -25,7 +25,7 @@ class CobroEsperaController extends Controller
             ->where('user_id', Auth::user()->id)
             ->count();		   
             
-        if($pventa == 0 && $espera == 0) return redirect()->route('pvproducts.index', ['docord' => 0]);
+        if($pventa == 0 && $espera == 0) return redirect()->route('pvproducts.index');
         
         if($pventa > 0 && $espera == 0) $this->esperar($id);
 
@@ -37,7 +37,7 @@ class CobroEsperaController extends Controller
             $this->cola($id + 1);
         } 
         
-        return redirect()->route('pvproducts.index', ['docord' => 0]); 
+        return redirect()->route('pvproducts.index'); 
     }
 
     public function esperar($id){

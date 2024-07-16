@@ -37,8 +37,11 @@
 						<input type="date" id="fecha_inicio" class="form-control mb-2 mr-sm-2" name="fecha_inicio"  required>
 						
 						<label for="pwd2" class="mb-2 mr-sm-2">Fecha Final:</label>
-						<input type="date" id="fecha_fin" class="form-control mb-2 mr-sm-2" name="fecha_fin"   required>
+						<input type="date" id="fecha_fin" class="form-control mb-2 mr-sm-2" name="fecha_fin" required>
 						
+						<label for="docord" class="mb-2 mr-sm-2">Folio:</label>
+						<input type="text" id="docord" class="form-control mb-2 mr-sm-2" name="docord" value="0" required>
+												
 						<button type="submit" class="btn btn-primary mb-2">Generar Reporte</button>
 					</form>				  
                   </div>

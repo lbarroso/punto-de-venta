@@ -55,7 +55,10 @@ class SalidaController extends Controller
         $search = $request->session()->get('search');
     
         $salidas = Salida::join('clientes', 'salidas.ctecve', '=', 'clientes.id')
-        ->whereBetween('salidas.fecha', [ $search['fecha_inicio'], $search['fecha_fin'] ])
+        ->where(function($query) use ($search) {
+            $query->whereBetween('salidas.fecha', [ $search['fecha_inicio'], $search['fecha_fin'] ])
+                  ->orWhere('salidas.id', $search['docord']);
+        })
         ->orderBy('salidas.created_at', 'desc')
         ->select('salidas.*', 'clientes.ctenom as cliente') // ejemplo de selección de columnas
         ->paginate(10);

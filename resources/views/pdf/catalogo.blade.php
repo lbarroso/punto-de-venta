@@ -51,7 +51,7 @@
     </header>
 
     <div class="text-center">
-        <img src="{{ asset('admin/dist/img/products.png') }}" width="700" height="650" class="" >
+        <img src="{{ asset('admin/dist/img/catalogo-digital.png') }}" width="700" height="650" class="" >
     <div>        
     
     <div class="jumbotron text-center">

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Category;
+use App\Models\Category;
 use Illuminate\Http\Request;
+
+use App\Http\Requests\Admin\CategoryRequest;
 
 /**
  * Class CategoryController
@@ -41,18 +43,20 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        request()->validate(Category::$rules);
+        // request()->validate(Category::$rules);
 
-        $category = Category::create($request->all());
+        $data = $request->only('name');
+        $data['slug'] = '';
 
-        if($request->agregado_rapido == 'si'){
-            
+        $category = Category::create($data);
+
+        if($request->agregado_rapido == 'si'){            
             return  $category->id ;
         }else{
             return redirect()->route('categories.index')
-            ->with('success', 'Category created successfully.');
+            ->with('success', 'Category created successfully.'); // sesion flash
         }
 
 
@@ -93,11 +97,12 @@ class CategoryController extends Controller
      * @param  Category $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(CategoryRequest $request, Category $category)
     {
-        request()->validate(Category::$rules);
+        $data = $request->only('name');
+        $data['slug'] = '';
 
-        $category->update($request->all());
+        $category->update($data);
 
         return redirect()->route('categories.index')
             ->with('success', 'Category updated successfully');

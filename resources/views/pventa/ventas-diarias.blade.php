@@ -15,7 +15,7 @@
 			<h1>Consulta ventas diarias</h1>
 
 			 <div class="row">
-				@if(Auth::user()->role > 0)
+				
 				 <form action="{{ route('daily.sales') }}" class="form-inline" method="GET">
 					@csrf
 							
@@ -28,7 +28,7 @@
 					<button type="submit" class="btn btn-primary mb-2" style="width:auto;">Generar Reporte</button>
 					
 				  </form>	
-				@endif
+				
 			 </div>
 
 		    @if(session('success'))
