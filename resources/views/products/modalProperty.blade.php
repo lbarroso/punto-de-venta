@@ -24,7 +24,7 @@
 
                                 <div class="form-group mx-sm-3 py-4">
                                     <label for="" class="col-form-label pt-3">&nbsp;</label>
-                                    <button type="submit" class="btn btn-primary">Guardar</button>
+                                    <button type="submit" class="btn btn-success">Guardar</button>
 
                                 </div>
 

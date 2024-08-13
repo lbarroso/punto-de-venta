@@ -39,7 +39,7 @@ class Empresa extends Model
      *
      * @var array
      */
-    protected $fillable = ['regnom','regtel','regemail','regmun','regloc','regedo'];
+    protected $fillable = ['regnom','regtel','regemail','regmun','regloc','regedo','facebook','instagram'];
 
 
 

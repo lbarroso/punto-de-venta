@@ -90,7 +90,7 @@
 					
 				</div>
 				<div class="modal-footer justify-content-between">
-					<button type="button" class="btn btn-danger" onKeyPress="return handleEnter(this, event)" data-dismiss="modal">Cerrar</button>
+					<button type="button" class="btn btn-secondary" onKeyPress="return handleEnter(this, event)" data-dismiss="modal">Cerrar</button>
 					<button type="submit" class="btn btn-success">Guardar</button>
 				</div>
 			</form>

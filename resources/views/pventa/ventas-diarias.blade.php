@@ -16,16 +16,19 @@
 
 			 <div class="row">
 				
-				 <form action="{{ route('daily.sales') }}" class="form-inline" method="GET">
+				 <form action="{{ route('daily.sales') }}" class="form-inline d-flex align-items-center" method="GET">
 					@csrf
 							
-					<label for="email2" class="mb-2 mr-sm-2">Fecha Inicio:</label>
-					<input type="date" id="fecha_inicio" class="form-control mb-2 mr-sm-2" name="fecha_inicio" style="width:auto;" required>
+					<label for="fecha_inicio" class="mb-2 mr-sm-2">Fecha Inicio:</label>
+					<input type="date" id="fecha_inicio" class="form-control mr-2" name="fecha_inicio" style="width:auto;">
 					
-					<label for="pwd2" class="mb-2 mr-sm-2">Fecha Final:</label>
-					<input type="date" id="fecha_fin" class="form-control mb-2 mr-sm-2" name="fecha_fin" style="width:auto;" required>
+					<label for="fecha_fin" class="mb-2 mr-sm-2">Fecha Final:</label>
+					<input type="date" id="fecha_fin" class="form-control mr-2" name="fecha_fin" style="width:auto;">
 				  
-					<button type="submit" class="btn btn-primary mb-2" style="width:auto;">Generar Reporte</button>
+					<label for="id" class="mb-2 mr-sm-2">Folio :</label>
+					<input type="number" id="id" class="form-control mr-2" name="id" style="width:auto;" placeholder="Ingrese folio">
+				  
+					<button type="submit" class="btn btn-primary" style="width:auto;">Generar Reporte</button>
 					
 				  </form>	
 				

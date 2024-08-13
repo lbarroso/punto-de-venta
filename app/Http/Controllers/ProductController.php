@@ -315,7 +315,7 @@ class ProductController extends Controller
         
         $pdf = Pdf::loadView('pdf.catalogo',['products' => $products, 'categories'=>$categories, 'empresa'=>$empresa, 'releases'=>$releases]);
         
-        return $pdf->stream('CatalogDigital'.$fecha.'.pdf');
+        return $pdf->stream('CatalogDigital'.$fecha.'-'.fecha.'.pdf');
     }    
 
 } // class

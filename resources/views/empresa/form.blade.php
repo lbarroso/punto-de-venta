@@ -31,6 +31,23 @@
             {{ Form::text('regedo', $empresa->regedo, ['class' => 'form-control' . ($errors->has('regedo') ? ' is-invalid' : ''), 'placeholder' => 'Regedo']) }}
             {!! $errors->first('regedo', '<div class="invalid-feedback">:message</div>') !!}
         </div>
+		
+		<div class="form-row">
+			<div class="form-group col-md-6">
+				<div class="form-group">
+					Facebook:
+					{{ Form::text('facebook', $empresa->facebook, ['class' => 'form-control' . ($errors->has('facebook') ? ' is-invalid' : ''), 'placeholder' => 'http://www.facebook.com']) }}
+					{!! $errors->first('facebook', '<div class="invalid-feedback">:message</div>') !!}
+				</div>			
+			</div>
+			<div class="form-group col-md-6">
+				<div class="form-group">
+					Instagram:
+					{{ Form::text('instagram', $empresa->instagram, ['class' => 'form-control' . ($errors->has('instagram') ? ' is-invalid' : ''), 'placeholder' => 'http://www.instagram.com']) }}
+					{!! $errors->first('instagram', '<div class="invalid-feedback">:message</div>') !!}
+				</div>				
+			</div>			
+		</div>
 
     </div>
     <div class="box-footer mt20">

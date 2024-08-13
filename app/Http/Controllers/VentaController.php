@@ -198,43 +198,40 @@ class VentaController extends Controller
     public function dailySales(Request $request)
     {
         
-        date_default_timezone_set('America/Mexico_City');
+		date_default_timezone_set('America/Mexico_City');
+		
+		$query = Venta::query();
+		$totalQuery = Venta::query();
 
-        if($request->fecha_inicio){
+		if (!empty($request->id)) {
+			$query->where('id', $request->id);
+			$totalQuery->where('id', $request->id);
+		} elseif ($request->fecha_inicio) {
+			$this->validate($request, [
+				'fecha_inicio' => 'required|date',
+				'fecha_fin' => 'required|date|after_or_equal:fecha_inicio'
+			]);
 
-            $this->validate($request, [
-                'fecha_inicio' => 'required|date',
-                'fecha_fin' => 'required|date|after_or_equal:fecha_inicio'
-            ]);
-                        
-            $ventas = Venta::whereBetween('pvfecha', [$request->fecha_inicio, $request->fecha_fin])->get();
-            
-            $total = Venta::whereBetween('pvfecha', [$request->fecha_inicio, $request->fecha_fin])
-            ->where('pvstatus','A')
-            ->sum('pvtotal');
-            
-            $totales = Venta::selectRaw('pvtipopago, SUM(pvtotal) as total')
-            ->whereBetween('pvfecha', [$request->fecha_inicio, $request->fecha_fin])
-            ->where('pvstatus','A')
-            ->groupBy('pvtipopago')
-            ->get();
+			$query->whereBetween('pvfecha', [$request->fecha_inicio, $request->fecha_fin]);
+			$totalQuery->whereBetween('pvfecha', [$request->fecha_inicio, $request->fecha_fin]);
+		} else {
+			$today = now()->toDateString();
+			$query->whereDate('created_at', $today);
+			$totalQuery->whereDate('created_at', $today);
+		}
 
-        }else{            
-            $ventas = Venta::whereDate('created_at', now()->toDateString())->get();
-            
-            $total = Venta::whereDate('created_at', now()->toDateString())
-            ->where('pvstatus','A')
-            ->sum('pvtotal');
+		$ventas = $query->get();
 
-            $totales = Venta::selectRaw('pvtipopago, SUM(pvtotal) as total')
-            ->whereDate('created_at', now()->toDateString())
-            ->where('pvstatus','A')
-            ->groupBy('pvtipopago')
-            ->get();            
-        }
+		$total = $totalQuery->where('pvstatus', 'A')->sum('pvtotal');
 
-        return view('pventa.ventas-diarias', compact('ventas','total', 'totales'));
-    }
+		$totales = $totalQuery->selectRaw('pvtipopago, SUM(pvtotal) as total')
+			->where('pvstatus', 'A')
+			->groupBy('pvtipopago')
+			->get();
+
+		return view('pventa.ventas-diarias', compact('ventas', 'total', 'totales'));
+    
+	} // fin metodo
 
     // reporte de ventas en pantalla
     public function SalesReport(Request $request){

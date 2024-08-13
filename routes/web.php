@@ -162,3 +162,6 @@ Route::post('salidas/store',[App\Http\Controllers\SalidaController::class,'store
 // reporte de inventario
 Route::get('inventory/report',[App\Http\Controllers\InventoryReportController::class,'index'])->name('inventory.report');
 Route::post('inventory/results',[App\Http\Controllers\InventoryReportController::class,'result'])->name('inventory.result');
+
+// webpages
+Route::get('paginaweb',[App\Http\Controllers\WebPageController::class,'index'])->name('webpages.home');

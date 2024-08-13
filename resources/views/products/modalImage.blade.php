@@ -19,7 +19,7 @@
                                 <option value="1">SI</option>
                                 <option value="0">NO</option>
                             </select>
-                            <button type="submit" class="btn btn-primary mt-3 mb-2">Guardar</button>
+                            <button type="submit" class="btn btn-success mt-3 mb-2">Guardar</button>
                         </form>
 
                     </div>
@@ -27,7 +27,7 @@
                 <div class="row" id="targetImages"></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>

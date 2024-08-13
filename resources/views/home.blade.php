@@ -30,7 +30,16 @@
 	  </div>
   </div>
   
-  <div class="col-md-6"></div>
+  <div class="col-md-6">
+	  <div class="card" >
+		<img src="{{ asset('mimity-retail/img/webpages.jpg') }}" class="rounded" width="210"/>
+		<div class="card-body">
+		  <h4 class="card-title">Página Web</h4>
+		  <p class="card-text"> &nbsp; </p>
+		  <a href="{{ route('webpages.home') }}" class="btn btn-primary" target="_webpages"> Ir a mi sitio </a>
+		</div>
+	  </div>  
+  </div>
   
 </div>
   
