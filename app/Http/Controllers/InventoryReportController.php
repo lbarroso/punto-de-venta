@@ -34,11 +34,10 @@ class InventoryReportController extends Controller
         $codbarras = !empty($request->input('codbarras')) ? trim($request->input('codbarras')) : 0;
 
         $product = Product::where('codbarras', $codbarras)
-        ->orWhere('artcve', $codbarras)
         ->orWhere('id', $codbarras)
         ->first();
 
-        $movimientos = Docdeta::join('movimientos', 'docdetas.movcve', '=', 'movimientos.id')
+        $movimientos = Docdeta::leftjoin('movimientos', 'docdetas.movcve', '=', 'movimientos.id')
         ->where('docdetas.created_at', '>=', '2024-01-01 00:00:00')
         ->where('docdetas.status', 'A')
         ->where('docdetas.docord', '>', 0)

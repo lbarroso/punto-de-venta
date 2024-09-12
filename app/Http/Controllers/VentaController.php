@@ -35,59 +35,78 @@ class VentaController extends Controller
      */
     public function store(Request $request)
     {
-
+        // Establecer zona horaria
         date_default_timezone_set('America/Mexico_City');
+
+        $user = Auth::user();
         
+        // Calcular el total de la venta
         $total = Docdeta::where('movcve', 51)
-        ->where('user_id', Auth::user()->id)
-        ->where('docord', 0)
-        ->sum('docimporte');
-        
-        $count = Docdeta::where('movcve', 51)->where('docord', 0)->count();
+            ->where('user_id', $user->id)
+            ->where('docord', 0)
+            ->sum('docimporte');
 
-        if($count == 0 || (float)$request->input('cash') < $total ) return redirect()->route('pvproducts.index', ['docord' => 0]);        
-
-        // Actualizar el stock de los productos vendidos
-        $docdetas = Docdeta::where('movcve', 51)
-        ->where('user_id', Auth::user()->id)
-        ->where('docord', 0)
-        ->get();
-
-        foreach ($docdetas as $docdeta) {
-            $product = Product::find($docdeta->product_id);
-            if ($product) {
-                // Restar la cantidad vendida del stock
-                $product->stock -= $docdeta['doccant'];
-                $product->save();
-            }
-
-            // Llamada al método addToInventory
-            $this->inventoryController->removeFromInventory($docdeta->product_id, $docdeta['doccant']);
+        // Verificar si hay productos en la venta y si el efectivo es suficiente
+        $count = Docdeta::where('movcve', 51)
+            ->where('user_id', $user->id)
+            ->where('docord', 0)
+            ->count();
+    
+        if ($count == 0 || (float)$request->input('cash') < $total) {
+            return redirect()->route('pvproducts.index', ['docord' => 0])
+                ->with('error', 'La cantidad en efectivo es insuficiente para completar la venta.');
         }
+    
+        // Iniciar una transacción para asegurar consistencia en la base de datos        
+        DB::beginTransaction();
+    
+        try {
+            // Actualizar el stock de los productos vendidos
+            $docdetas = Docdeta::where('movcve', 51)
+                ->where('user_id', $user->id)
+                ->where('docord', 0)
+                ->get();
+    
+            foreach ($docdetas as $docdeta) {
+                $product = Product::find($docdeta->product_id);
+                if ($product) {
+                    // Restar la cantidad vendida del stock
+                    $product->decrement('stock', $docdeta['doccant']);
+                    // Llamada al método removeFromInventory del InventoryController
+                    // $this->inventoryController->removeFromInventory($docdeta->product_id, $docdeta['doccant']);
+                }
+            }
+    
+            // Guardar venta registrada
+            $venta = Venta::create([
+                'pvfecha' => now(),
+                'ctecve' => 1,
+                'pvtotal' => $total,
+                'pvcash' => $request->input('cash'),
+                'user_id' => Auth::id(),
+                'user_name' => Auth::user()->name,
+                'pvtipopago' => $request->input('tipopago', 'efectivo'),
+            ]);
+    
+            // Obtener el último ID insertado
+            $ID = $venta->id;
+    
+            // Actualizar los registros de detalle de documento
+            Docdeta::where('movcve', 51)
+                ->where('user_id', $user->id)
+                ->where('docord', 0)
+                ->update(['docord' => $ID]);
+    
+            DB::commit();
+    
+            return redirect()->route('pvproducts.index')->with('docord', $ID);
 
-        // guardar venta registrada
-        $venta = new Venta();        
-        $venta->pvfecha = now();
-        $venta->ctecve = 1;
-        $venta->pvtotal = $total;
-        $venta->pvcash = $request->input('cash');
-        $venta->user_id = Auth::user()->id;
-        $venta->user_name = Auth::user()->name;
-        $venta->pvtipopago = !empty($request->input('tipopago')) ? $request->input('tipopago') : 'efectivo';
-        $venta->save();
-
-        // Obtener el último ID insertado
-        $ID = $venta->id;
-
-        // guardar
-        Docdeta::where('movcve', 51)
-        ->where('user_id', Auth::user()->id)
-        ->where('docord', 0)
-        ->update(['docord' => $ID]);
-
-        // confirmar venta
-        return redirect()->route('pvproducts.index')->with('docord', $ID);
-    } // function
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('pvproducts.index', ['docord' => 0])
+                ->with('error', 'Error al guardar la venta: ' . $e->getMessage());
+        }
+    }
 
     /**
      * Display the specified resource.
@@ -216,11 +235,12 @@ class VentaController extends Controller
 			$totalQuery->whereBetween('pvfecha', [$request->fecha_inicio, $request->fecha_fin]);
 		} else {
 			$today = now()->toDateString();
-			$query->whereDate('created_at', $today);
-			$totalQuery->whereDate('created_at', $today);
+			$query->whereDate('pvfecha', $today);
+			$totalQuery->whereDate('pvfecha', $today);
 		}
 
-		$ventas = $query->get();
+        // Paginar el resultado de ventas (10 por página)
+        $ventas = $query->paginate(15);        
 
 		$total = $totalQuery->where('pvstatus', 'A')->sum('pvtotal');
 

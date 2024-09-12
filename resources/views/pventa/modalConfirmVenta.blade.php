@@ -47,7 +47,7 @@
 				
 				<div class="modal-footer justify-content-between">
 					<button type="submit" class="btn btn-default" id="venta-confirm"  style="font-size:14px; color:#000000; font-weight:bold; "> Confirmar venta </button>
-					<button type="button" class="btn btn-default">Aceptar sin imprimir</button>
+					&nbsp;
 					<button type="button" onclick=" return $('#codigo').focus();  " class="btn btn-danger" data-dismiss="modal">Cerrar</button>					
 				</div>
 				

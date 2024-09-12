@@ -1,0 +1,2 @@
+<h3> Este correo contiene los archivos adjuntos XML y PDF </h3>
+<p> descargar factura representaci&oacute;n impresa PDF Versi&oacute;n 4.0 <a href="https://facturacion.sistemasloop.com/public/invoicepdf/{{ $uuid }}"> descargar aqu&iacute; </a> </p>

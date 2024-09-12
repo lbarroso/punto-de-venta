@@ -163,5 +163,18 @@ Route::post('salidas/store',[App\Http\Controllers\SalidaController::class,'store
 Route::get('inventory/report',[App\Http\Controllers\InventoryReportController::class,'index'])->name('inventory.report');
 Route::post('inventory/results',[App\Http\Controllers\InventoryReportController::class,'result'])->name('inventory.result');
 
+// facturacion & SW services
+Route::get('invoices/ticket/{id}',[App\Http\Controllers\InvoiceController::class,'ticket'])->name('invoices.ticket');
+Route::get('invoices/ticket/qr/{id}',[App\Http\Controllers\InvoiceController::class,'create'])->name('invoices.create');
+Route::post('invoices/ticket/timbrar',[App\Http\Controllers\JsonbuildController::class,'timbrar'])->name('invoices.ticket.timbrar');
+Route::post('invoices/store',[App\Http\Controllers\InvoiceController::class,'store'])->name('invoices.store');
+Route::get('timbrado/success',[App\Http\Controllers\InvoiceController::class,'success'])->name('invoices.success');
+Route::get('invoices/pdf/{uuid}', [App\Http\Controllers\InvoicePdfController::class, 'index'])->name('invoices.pdf'); // crear pdf 
+Route::get('download/xml/{uuid}', [App\Http\Controllers\InvoicePdfController::class, 'downloadxml'])->name('download.xml'); // descargar XML
+Route::get('invoices/error', [App\Http\Controllers\InvoiceController::class, 'error'])->name('invoices.error'); 
+Route::get('jsonbuild/generarCfdi', [App\Http\Controllers\JsonbuildController::class, 'generarCfdi'])->name('jsonbuild.generarCfdi'); 
+
+
 // webpages
 Route::get('paginaweb',[App\Http\Controllers\WebPageController::class,'index'])->name('webpages.home');
+
