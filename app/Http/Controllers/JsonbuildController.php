@@ -106,18 +106,20 @@ class JsonbuildController extends Controller
 			"user"=>"luis.rey.cien@gmail.com",
 			"password"=> "SWpruebas"
 		);
+
 		// total ticket 
     	$base = (float)$this->_base;
 
-// Calcular la base (sin IVA)
-$baseSinIVA = round($base / 1.16, 2);  // Se calcula la base dividiendo por 1.16 (porque 16% de IVA)
+		// Calcular la base (sin IVA)
+		$baseSinIVA = round($base / 1.16, 2);  // Se calcula la base dividiendo por 1.16 (porque 16% de IVA)
 
-// Calcular el IVA desglosado
-$impuestoImporte = round($base - $baseSinIVA, 2);  // El IVA es la diferencia entre el total y la base sin IVA
+		// Calcular el IVA desglosado
+		$impuestoImporte = round($base - $baseSinIVA, 2);  // El IVA es la diferencia entre el total y la base sin IVA
 
-// Formatear los valores a 2 decimales
-$baseSinIVA = number_format($baseSinIVA, 2, '.', '');
-$importe = number_format($impuestoImporte, 2, '.', '');		
+		// Formatear los valores a 2 decimales
+		$baseSinIVA = number_format($baseSinIVA, 2, '.', '');
+		
+		$importe = number_format($impuestoImporte, 2, '.', '');		
 
     	// total factura
     	$total = $baseSinIVA + $importe; // 1800 + 288 = 2088
@@ -144,9 +146,9 @@ $importe = number_format($impuestoImporte, 2, '.', '');
     	$comprobante["NoCertificado"] = "";
     	$comprobante["Certificado"] = "";
     	$comprobante["CondicionesDePago"] = $this->_store;
-    	$comprobante["SubTotal"] = "$baseSinIVA";
+    	$TotalBaseSinIVA = 0;
         $comprobante["Descuento"]= "0.00";
-    	$comprobante["Total"]= "$total";
+    	$TotalImpuestosTrasladados =0;
     	$comprobante["Moneda"] = "MXN";
     	$comprobante["TipoDeComprobante"] = "I"; // Ingreso        
     	$comprobante["TipoCambio"] = "1";
@@ -178,7 +180,10 @@ $importe = number_format($impuestoImporte, 2, '.', '');
 			// Formatear los valores a 2 decimales
 			$_baseSinIVA = number_format($_baseSinIVA, 2, '.', '');
 			$_importe = number_format($_impuestoImporte, 2, '.', '');	
-            
+
+			$TotalImpuestosTrasladados += $_importe;
+			$TotalBaseSinIVA += $_baseSinIVA;
+
     		$traslado[0]["Base"] = $_baseSinIVA;        
     		$traslado[0]["Impuesto"] = "002";
     		$traslado[0]["TipoFactor"] = "Tasa";
@@ -237,19 +242,22 @@ $importe = number_format($impuestoImporte, 2, '.', '');
     
     	// Agregar los conceptos al comprobante
     	$comprobante["Conceptos"] = $conceptos;
-    	
+		$comprobante["SubTotal"] = "$TotalBaseSinIVA";
+		$Total = number_format($TotalBaseSinIVA + $TotalImpuestosTrasladados, 2, '.', '');
+		$comprobante["Total"]= "$Total";
+
     	// impuestos translados     
     	$ImpuestosTotales["Retenciones"] = null;
-    	$ImpuestosTotales["Traslados"][0]["Base"] = $baseSinIVA;
+    	$ImpuestosTotales["Traslados"][0]["Base"] = "$TotalBaseSinIVA";
     	$ImpuestosTotales["Traslados"][0]["Impuesto"] = "002";
     	$ImpuestosTotales["Traslados"][0]["TipoFactor"] = "Tasa";
     	$ImpuestosTotales["Traslados"][0]["TasaOCuota"] = "0.160000";	
-    	$ImpuestosTotales["Traslados"][0]["Importe"] = $importe;
+    	$ImpuestosTotales["Traslados"][0]["Importe"] = "$TotalImpuestosTrasladados";
     	$ImpuestosTotales["TotalImpuestosRetenidosSpecified"] = false;
-    	$ImpuestosTotales["TotalImpuestosTrasladados"] = $importe;
+    	$ImpuestosTotales["TotalImpuestosTrasladados"] = "$TotalImpuestosTrasladados";
     	$ImpuestosTotales["TotalImpuestosTrasladadosSpecified"] = true;	
     	$comprobante["Impuestos"] = $ImpuestosTotales;
-    
+
     	$json = json_encode($comprobante);	
 	
         // echo $json;

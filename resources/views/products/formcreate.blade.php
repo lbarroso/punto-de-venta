@@ -122,7 +122,7 @@
 							<div class="col">
 								<div class="form-group">
 									<label for="artprcosto" class="form-label">Precio costo</label>
-									<input type="number" min="0" step="0.01" class="form-control" id="artprcosto" name="artprcosto" value="{{ old('artprcosto') }}"  onchange="artGanancia()" onKeyPress="return handleEnter(this, event)">
+									<input type="number" min="0" step="0.01" class="form-control" id="artprcosto" name="artprcosto" value="{{ old('artprcosto', 0) }}"  onchange="artGanancia()" onKeyPress="return handleEnter(this, event)">
 								</div>            
 							</div>
 							<div class="col-1">
@@ -144,7 +144,7 @@
 							<div class="col-6">
 								<div class="form-group">
 									<label for="stock" class="form-label">Existencia actual</label>
-									<input type="number" class="form-control" id="stock" name="stock" value="{{ old('stock') }}" onKeyPress="return handleEnter(this, event)">														
+									<input type="number" class="form-control" id="stock" name="stock" value="{{ old('stock', 0) }}" onKeyPress="return handleEnter(this, event)">														
 								</div>            
 							</div>												
 						</div>    

@@ -87,9 +87,14 @@
                       <td>
                         @if(is_null($venta->uuid))
                           <a href="{{ route('invoices.ticket', ['id' => $venta->id]) }}" target="qr" class="btn btn-dark btn-sm mr-1" title="Ticket con Código QR">
-                            <i class="fa fa-qrcode" ></i> 
+                            <i class="fa fa-qrcode" ></i>
                           </a>
-                          <small class="text-muted"> Sin factura </small>
+						  <?php $url_qr = url('/invoices/ticket/qr/' . $venta->id); ?>
+		
+                          <small class="text-muted">
+							<a href="{{ $url_qr }}" target="_blank" title="generar factura"> <i class="fas fa-link"></i> </a>
+							Sin factura 
+						  </small>
                         @else
                           <a href="{{ route('download.xml', ['uuid' => $venta->uuid]) }}" target="_xml" class="btn btn-info btn-sm mr-1" title="Archivo XML"> <i class="fa fa-file-code" ></i> </a>
                           <a href="{{ route('invoices.pdf', ['uuid' => $venta->uuid]) }}" target="_pdf" class="btn btn-info btn-sm mr-1" title="Archivo PDF"> <i class="fa fa-file-pdf" ></i> </a>
